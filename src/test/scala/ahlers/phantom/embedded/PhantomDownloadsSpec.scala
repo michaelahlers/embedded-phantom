@@ -48,7 +48,7 @@ class PhantomDownloadsSpec
 
   unsupportedDistributions foreach { distribution =>
     it must s"fail on $distribution" in {
-      an[Exceptional] should be thrownBy artifactStore.checkDistribution(distribution)
+      an[Exception] should be thrownBy artifactStore.checkDistribution(distribution)
     }
   }
 
