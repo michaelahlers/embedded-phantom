@@ -18,3 +18,7 @@ scmInfo :=
     connection = "scm:git:https://github.com:michaelahlers/embedded-phantom.git",
     devConnection = Some("scm:git:git@github.com:michaelahlers/embedded-phantom.git")
   ))
+
+licenses :=
+  "MIT" -> url("http://opensource.org/licenses/MIT") ::
+    Nil
