@@ -1,3 +1,3 @@
-lazy val EmbeddedPhantomJS =
+lazy val EmbeddedPhantom =
   (project in file("."))
     .settings()
