@@ -17,7 +17,7 @@ scalacOptions in Test ++=
   "-feature" ::
     "-unchecked" ::
     "-deprecation" ::
-    "-target:jvm-1.8" ::
+    // "-target:jvm-1.8" ::
     "-Xfatal-warnings" ::
     "-Xmax-classfile-name" :: "150" ::
     Nil
