@@ -1,0 +1,26 @@
+language: scala
+
+dist: trusty
+sudo: required
+
+jdk:
+- oraclejdk8
+
+script:
+- sbt test
+# Following recommendations from http://scala-sbt.org/1.0/docs/Travis-CI-with-sbt.html.
+- find $HOME/.sbt -name "*.lock" | xargs rm
+- find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+
+after_success:
+# Coverage resets the Scala version, despite SBT argument. Therefore, perform coverage report and publish after successful test. Eventually, perform this after successful matrix (see travis-ci/travis-ci#929).
+- sbt clean coverage test coverageReport coveralls
+
+cache:
+  directories:
+  - $HOME/.ivy2/cache
+  - $HOME/.sbt/boot/
+
+env:
+  global:
+  - secure: "lmrPkLwuaXVfn6qL1P0zbG2Gycon3CT6kmq2nn9NYqC4WSfL4zfyo1SHjm7BHuZRrr6t8WBh1S1FlEICAN8rLlltUKjxVMCUR9I0mdksgFcYKFwZobDRe+rN+2JMbITA3ca9MQlTBE8Z3hJ3102k/z59ospo67w6K/vORHDs+rVia184OuRrXTNCoIHonNXJK85Vf09Prqh707g1kxfUv1jRU3chv6aX+N3kwDpZ+kwnPa8h3+7NkKlw5ehLLXy44XResjgy5pmu4VrU6ksSbtJ6vf0lnBfPA2qp4zqcCDA9gSjRKuJpHCLQ+bPOISIJbHnQOR+IjiSP4W6jvvBilwvrZ1t3gIzKsYse0Rg8mFVMJfjj7PpJLO7E8l2GsxTxxfczM2Z0SkDQpQIMagNtnuBHDhxguWvsQ1hG0lWnmBUSkr1pGJklZ8uNbcHPAzRFLmmK0bvyaooocVKz7eDMWsCuC1rbuXi6Y3U06Bt8UuVsj+2QCCSKjryikCyYGIm9dKjB8rFxg0EFi69bdN0ZCKFwiqiHusDbN0AlNx7gaaoLxCiiQ1d9pZA/bvULAeiHUv+7p2Yn0KCKHFdR7LXiF2vMwNl2JHX4dUZvlLhDu38uGf9hXPWQ5e+NxHZ0EGVerKQYDPOE5YjKW7Zv8Ir+7QacXI4qb2kR7Wri6MRqQLk="
