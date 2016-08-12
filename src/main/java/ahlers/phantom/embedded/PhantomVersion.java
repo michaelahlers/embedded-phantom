@@ -3,9 +3,12 @@ package ahlers.phantom.embedded;
 import de.flapdoodle.embed.process.distribution.IVersion;
 
 /**
- * @author [[mailto:michael@ahlers.co Michael Ahlers]]
+ * Defines supported PhantomJS versions.
+ *
+ * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum PhantomVersion implements IVersion {
+public enum PhantomVersion
+        implements IVersion {
 
     V2_1_1("2.1.1");
 
