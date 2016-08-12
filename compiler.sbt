@@ -1,19 +1,17 @@
-javacOptions in Compile ++=
+javacOptions ++=
   "-source" :: "1.7" ::
-    "-target" :: "1.7" ::
-    "-g:lines" ::
     Nil
 
-crossPaths in Compile := false
+crossPaths := false
 
-autoScalaLibrary in Compile := false
+autoScalaLibrary := false
 
-scalaVersion in Test := "2.11.8"
+scalaVersion := "2.11.8"
 
 /**
  * Strict settings to avoid common bugs. Class files are limited in length to support builds on Windows.
  */
-scalacOptions in Test ++=
+scalacOptions ++=
   "-feature" ::
     "-unchecked" ::
     "-deprecation" ::
