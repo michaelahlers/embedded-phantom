@@ -13,8 +13,8 @@ import java.util.List;
  */
 public interface IPhantomCommand {
 
-    boolean matches(final IVersion version);
+    boolean matches(IVersion version);
 
-    List<String> emit(final IPhantomConfig config, final IExtractedFileSet files) throws IOException;
+    List<String> emit(IPhantomConfig config, IExtractedFileSet files) throws IOException;
 
 }
