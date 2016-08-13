@@ -1,6 +1,7 @@
 package ahlers.phantom.embedded;
 
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
@@ -48,7 +49,7 @@ public enum PhantomCommand
     /**
      * {@link PhantomCommand#Any} is guaranteed to match.
      */
-    private static IPhantomCommand valueFor(final IVersion version) {
+    public static IPhantomCommand valueFor(final IVersion version) {
         for (final IPhantomCommand emitter : values()) {
             if (emitter.matches(version)) {
                 return emitter;
@@ -56,6 +57,10 @@ public enum PhantomCommand
         }
 
         return Any;
+    }
+
+    public static IPhantomCommand valueFor(final Distribution distribution) {
+        return valueFor(distribution.getVersion());
     }
 
 }
