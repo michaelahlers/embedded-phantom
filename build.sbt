@@ -1,3 +1,6 @@
 lazy val EmbeddedPhantom =
   (project in file("."))
-    .settings()
+    .settings(
+      //itJacoco.settings,
+      jacoco.settings
+    )
