@@ -11,10 +11,18 @@ import java.util.List;
 import static java.lang.String.format;
 
 /**
+ * Uses {{enum}} singleton pattern described by <em>Item 3</em> from <em>Effective Java</em>.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public class PhantomAnyCommandEmitter
+public enum PhantomAnyCommandEmitter
         implements ICommandEmitter {
+
+    INSTANCE;
+
+    public static ICommandEmitter getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public boolean matches(final PhantomVersion version) {
