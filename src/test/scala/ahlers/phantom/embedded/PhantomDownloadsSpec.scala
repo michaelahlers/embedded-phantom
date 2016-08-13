@@ -16,14 +16,19 @@ class PhantomDownloadsSpec
   extends FlatSpec
           with Matchers {
 
+  /** A fully-transient artifact store. */
   val artifactStore =
-    new PhantomArtifactStoreBuilder()
+  new PhantomExtractedArtifactStoreBuilder()
+    .defaults()
+    .extractDir(new TempDirInPlatformTempDir)
       .download({
         new PhantomDownloadConfigBuilder()
+          .defaults()
           .artifactStorePath(new TempDirInPlatformTempDir)
           .build()
       })
       .build()
+
 
   val supportedPlatforms = util.EnumSet.of(Platform.Linux, Platform.OS_X, Platform.Windows)
 
