@@ -43,12 +43,12 @@ public class PhantomConfig
         return debug;
     }
 
-    public static Builder defaultConfig(final PhantomVersion version) {
+    public static Builder builder(final PhantomVersion version) {
         return new Builder(version);
     }
 
-    public static Builder defaultConfig() {
-        return defaultConfig(PhantomVersion.DEFAULT);
+    public static Builder builder() {
+        return builder(PhantomVersion.DEFAULT);
     }
 
     public static class Builder {
