@@ -14,7 +14,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomExecutable
-        extends Executable<PhantomConfig, PhantomProcess> {
+        extends Executable<IPhantomConfig, PhantomProcess> {
 
     private final static Logger logger = getLogger(PhantomExecutable.class);
 
@@ -22,7 +22,7 @@ public class PhantomExecutable
 
     PhantomExecutable(
             final Distribution distribution,
-            final PhantomConfig config,
+            final IPhantomConfig config,
             final IRuntimeConfig runtimeConfig,
             final IExtractedFileSet files
     ) {
@@ -33,7 +33,7 @@ public class PhantomExecutable
     @Override
     protected PhantomProcess start(
             final Distribution distribution,
-            final PhantomConfig config,
+            final IPhantomConfig config,
             final IRuntimeConfig runtimeConfig
     ) throws IOException {
         return new PhantomProcess(distribution, config, runtimeConfig, this);

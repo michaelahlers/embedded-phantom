@@ -15,13 +15,13 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomProcess
-        extends AbstractProcess<PhantomConfig, PhantomExecutable, PhantomProcess> {
+        extends AbstractProcess<IPhantomConfig, PhantomExecutable, PhantomProcess> {
 
     private final static Logger logger = getLogger(PhantomProcess.class);
 
     public PhantomProcess(
             final Distribution distribution,
-            final PhantomConfig config,
+            final IPhantomConfig config,
             final IRuntimeConfig runtimeConfig,
             final PhantomExecutable executable)
             throws IOException {
@@ -31,7 +31,7 @@ public class PhantomProcess
     @Override
     protected List<String> getCommandLine(
             final Distribution distribution,
-            final PhantomConfig config,
+            final IPhantomConfig config,
             final IExtractedFileSet executable
     ) throws IOException {
         return PhantomCommand
