@@ -4,6 +4,8 @@ import de.flapdoodle.embed.process.config.ExecutableProcessConfig;
 import de.flapdoodle.embed.process.config.ISupportConfig;
 import de.flapdoodle.embed.process.distribution.IVersion;
 
+import static ahlers.phantom.embedded.PhantomConfig.Builder;
+
 /**
  * Command line options for PhantomJS.
  *
@@ -11,7 +13,8 @@ import de.flapdoodle.embed.process.distribution.IVersion;
  * @see <a href="http://phantomjs.org/api/command-line.html"><em>Command Line Interface</em></a>
  */
 public class PhantomConfig
-        extends ExecutableProcessConfig {
+        extends ExecutableProcessConfig
+        implements IPhantomConfig<Builder> {
 
     private final Boolean debug;
 
@@ -22,7 +25,7 @@ public class PhantomConfig
         super(version, new ISupportConfig() {
             @Override
             public String getName() {
-                return "phantomjs";
+                return "embedded-phantom";
             }
 
             @Override
@@ -39,16 +42,17 @@ public class PhantomConfig
         this.debug = debug;
     }
 
-    public Boolean getDebug() {
+    @Override
+    public Boolean debug() {
         return debug;
     }
 
-    public static Builder builder(final PhantomVersion version) {
-        return new Builder(version);
-    }
-
-    public static Builder builder() {
-        return builder(PhantomVersion.DEFAULT);
+    @Override
+    public Builder builder() {
+        return new Builder(
+                version(),
+                debug()
+        );
     }
 
     public static class Builder {
@@ -57,8 +61,12 @@ public class PhantomConfig
 
         private Boolean debug;
 
-        public Builder(final IVersion version) {
+        public Builder(
+                final IVersion version,
+                final Boolean debug
+        ) {
             this.version = version;
+            this.debug = debug;
         }
 
         public void withDebug(final Boolean debug) {
