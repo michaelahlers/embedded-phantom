@@ -12,7 +12,7 @@ public enum PhantomVersion
 
     V211("2.1.1");
 
-    public static final PhantomVersion DEFAULT = V211;
+    public static final PhantomVersion LATEST = V211;
 
     private final String name;
 

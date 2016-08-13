@@ -23,11 +23,11 @@ public enum PhantomCommand
         }
 
         @Override
-        public List<String> emit(final PhantomConfig config, final IExtractedFileSet files) throws IOException {
+        public List<String> emit(final IPhantomConfig config, final IExtractedFileSet files) throws IOException {
             return ImmutableList
                     .<String>builder()
                     .add(files.executable().getAbsolutePath())
-                    .add(format("--debug=%s", config.getDebug()))
+                    .add(format("--debug=%s", config.debug()))
                     .build();
         }
     },
@@ -39,7 +39,7 @@ public enum PhantomCommand
         }
 
         @Override
-        public List<String> emit(PhantomConfig config, IExtractedFileSet exe) throws IOException {
+        public List<String> emit(IPhantomConfig config, IExtractedFileSet exe) throws IOException {
             return ImmutableList
                     .<String>builder()
                     .addAll(Any.emit(config, exe))

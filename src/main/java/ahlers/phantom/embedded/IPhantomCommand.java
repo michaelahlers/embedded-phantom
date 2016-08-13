@@ -15,6 +15,6 @@ public interface IPhantomCommand {
 
     boolean matches(final IVersion version);
 
-    List<String> emit(final PhantomConfig config, final IExtractedFileSet files) throws IOException;
+    List<String> emit(final IPhantomConfig config, final IExtractedFileSet files) throws IOException;
 
 }
