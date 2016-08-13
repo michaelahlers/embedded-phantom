@@ -5,6 +5,7 @@ import java.util
 import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
 import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir
 import org.scalatest._
+import org.scalatest.tagobjects.{Disk, Network, Slow}
 
 import scala.collection.convert.WrapAsScala._
 
@@ -34,7 +35,7 @@ class PhantomDownloadsSpec
     } yield new Distribution(version, platform, bitsize)
 
   supportedDistributions foreach { distribution =>
-    it must s"download PhantomJS for $distribution" in {
+    it must s"download PhantomJS for $distribution" taggedAs(Slow, Network, Disk) in {
       artifactStore.checkDistribution(distribution) should be(true)
     }
   }
