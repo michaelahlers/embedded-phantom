@@ -1,8 +1,8 @@
-val versionScalaTest = "2.2.6"
+val versionScalaTest = "(,2.3["
 
 /** Compile and runtime dependencies. */
 libraryDependencies ++=
-  "de.flapdoodle.embed" % "de.flapdoodle.embed.process" % "(,1.51[" ::
+  "de.flapdoodle.embed" % "de.flapdoodle.embed.process" % "1.50.2" ::
     Nil
 
 /** Test dependencies. */
