@@ -1,6 +1,7 @@
 package ahlers.phantom.embedded;
 
 import de.flapdoodle.embed.process.builder.AbstractBuilder;
+import de.flapdoodle.embed.process.builder.IProperty;
 import de.flapdoodle.embed.process.builder.TypedProperty;
 import de.flapdoodle.embed.process.config.ExecutableProcessConfig;
 import de.flapdoodle.embed.process.config.ISupportConfig;
@@ -15,8 +16,29 @@ public class PhantomConfigBuilder
     protected static final TypedProperty<IVersion> VERSION = TypedProperty.with("version", IVersion.class);
     protected static final TypedProperty<Boolean> DEBUG = TypedProperty.with("debug", Boolean.class);
 
-    public PhantomConfigBuilder() {
+    public PhantomConfigBuilder defaults() {
         property(VERSION).setDefault(PhantomVersion.LATEST);
+        property(DEBUG).setDefault(false);
+
+        return this;
+    }
+
+    protected IProperty<IVersion> version() {
+        return property(VERSION);
+    }
+
+    public PhantomConfigBuilder version(final IVersion value) {
+        version().set(value);
+        return this;
+    }
+
+    protected IProperty<Boolean> debug() {
+        return property(DEBUG);
+    }
+
+    public PhantomConfigBuilder debug(final Boolean value) {
+        debug().set(value);
+        return this;
     }
 
     @Override
