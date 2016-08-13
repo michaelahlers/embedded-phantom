@@ -2,6 +2,7 @@ package ahlers.phantom.embedded;
 
 import de.flapdoodle.embed.process.distribution.Distribution;
 
+import static java.lang.String.format;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
@@ -11,7 +12,7 @@ public class UnsupportedPlatformException
     private final Distribution distribution;
 
     public UnsupportedPlatformException(final Distribution distribution) {
-        super(String.format("Platform \"%s\" not available for distribution \"%s\".", distribution.getPlatform(), distribution));
+        super(format("Platform \"%s\" not available for distribution \"%s\".", distribution.getPlatform(), distribution));
 
         this.distribution = distribution;
     }

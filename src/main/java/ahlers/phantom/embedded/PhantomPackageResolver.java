@@ -9,6 +9,7 @@ import de.flapdoodle.embed.process.distribution.Distribution;
 import static de.flapdoodle.embed.process.distribution.ArchiveType.TBZ2;
 import static de.flapdoodle.embed.process.distribution.ArchiveType.ZIP;
 import static de.flapdoodle.embed.process.distribution.Platform.Linux;
+import static java.lang.String.format;
 
 /**
  * Uses {{enum}} singleton pattern described by <em>Item 3</em> from <em>Effective Java</em>.
@@ -89,7 +90,7 @@ public enum PhantomPackageResolver
                 throw new UnsupportedArchiveException(distribution, getArchiveType(distribution));
         }
 
-        return String.format("phantomjs-%s-%s%s.%s", version, classifier, null == bitsize ? "" : "-" + bitsize, extension);
+        return format("phantomjs-%s-%s%s.%s", version, classifier, null == bitsize ? "" : "-" + bitsize, extension);
     }
 
     @Override
