@@ -1,7 +1,6 @@
 package ahlers.phantom.embedded;
 
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
-import de.flapdoodle.embed.process.config.RuntimeConfigBuilder;
 import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 import de.flapdoodle.embed.process.runtime.Starter;
@@ -16,12 +15,12 @@ public class PhantomStarter
         super(config);
     }
 
-    public static PhantomStarter getInstance(final IRuntimeConfig config) {
-        return new PhantomStarter(config);
+    public static PhantomStarter getInstance(final IRuntimeConfig runtimeConfig) {
+        return new PhantomStarter(runtimeConfig);
     }
 
     public static PhantomStarter getDefaultInstance() {
-        return getInstance(new RuntimeConfigBuilder().build());
+        return getInstance(new PhantomRuntimeConfigBuilder().build());
     }
 
     @Override

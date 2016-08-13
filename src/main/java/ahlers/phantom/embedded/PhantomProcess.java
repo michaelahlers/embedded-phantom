@@ -34,8 +34,8 @@ public class PhantomProcess
             final IPhantomConfig config,
             final IExtractedFileSet executable
     ) throws IOException {
-        return PhantomCommand
-                .valueFor(distribution)
+        return PhantomCommandEmitter
+                .getInstance(distribution)
                 .emit(config, executable);
     }
 
