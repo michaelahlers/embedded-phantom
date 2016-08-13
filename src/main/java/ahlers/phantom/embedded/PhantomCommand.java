@@ -6,6 +6,7 @@ import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -39,10 +40,10 @@ public enum PhantomCommand
         }
 
         @Override
-        public List<String> emit(IPhantomConfig config, IExtractedFileSet exe) throws IOException {
+        public List<String> emit(final IPhantomConfig config, final IExtractedFileSet files) throws IOException {
             return ImmutableList
                     .<String>builder()
-                    .addAll(Any.emit(config, exe))
+                    .addAll(Any.emit(config, files))
                     .build();
         }
     };
@@ -51,7 +52,7 @@ public enum PhantomCommand
      * {@link PhantomCommand#Any} is guaranteed to match.
      */
     public static IPhantomCommand valueFor(final IVersion version) {
-        for (final IPhantomCommand emitter : values()) {
+        for (final IPhantomCommand emitter : EnumSet.complementOf(EnumSet.of(Any))) {
             if (emitter.matches(version)) {
                 return emitter;
             }
