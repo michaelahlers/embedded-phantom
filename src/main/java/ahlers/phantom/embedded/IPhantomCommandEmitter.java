@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Inspired by {{com.wix.mysql.distribution.service.IPhantomCommand}}.
+ * Inspired by {{com.wix.mysql.distribution.service.IPhantomCommandEmitter}}.
  *
  * @see <a href="https://github.com/wix/wix-embedded-mysql">Wix Embedded MySQL</a>
  */
-public interface IPhantomCommand {
+public interface IPhantomCommandEmitter {
 
     boolean matches(IVersion version);
 

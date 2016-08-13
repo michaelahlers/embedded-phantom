@@ -14,10 +14,10 @@ import static java.lang.String.format;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum PhantomCommand
-        implements IPhantomCommand {
+public enum PhantomCommandEmitter
+        implements IPhantomCommandEmitter {
 
-    Any {
+    AnyVersion {
         @Override
         public boolean matches(final IVersion version) {
             return true;
@@ -33,7 +33,7 @@ public enum PhantomCommand
         }
     },
 
-    V21 {
+    Version21 {
         @Override
         public boolean matches(final IVersion version) {
             return PhantomVersion.V211 == version;
@@ -43,26 +43,26 @@ public enum PhantomCommand
         public List<String> emit(final IPhantomConfig config, final IExtractedFileSet files) throws IOException {
             return ImmutableList
                     .<String>builder()
-                    .addAll(Any.emit(config, files))
+                    .addAll(AnyVersion.emit(config, files))
                     .build();
         }
     };
 
     /**
-     * {@link PhantomCommand#Any} is guaranteed to match.
+     * {@link PhantomCommandEmitter#AnyVersion} is guaranteed to match.
      */
-    public static IPhantomCommand valueFor(final IVersion version) {
-        for (final IPhantomCommand emitter : EnumSet.complementOf(EnumSet.of(Any))) {
+    public static IPhantomCommandEmitter getInstance(final IVersion version) {
+        for (final IPhantomCommandEmitter emitter : EnumSet.complementOf(EnumSet.of(AnyVersion))) {
             if (emitter.matches(version)) {
                 return emitter;
             }
         }
 
-        return Any;
+        return AnyVersion;
     }
 
-    public static IPhantomCommand valueFor(final Distribution distribution) {
-        return valueFor(distribution.getVersion());
+    public static IPhantomCommandEmitter getInstance(final Distribution distribution) {
+        return getInstance(distribution.getVersion());
     }
 
 }
