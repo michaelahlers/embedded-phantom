@@ -2,10 +2,6 @@ javacOptions ++=
   "-source" :: "1.7" ::
     Nil
 
-crossPaths := false
-
-autoScalaLibrary := false
-
 scalaVersion := "2.11.8"
 
 /**
