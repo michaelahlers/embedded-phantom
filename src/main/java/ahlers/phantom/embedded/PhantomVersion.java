@@ -10,9 +10,9 @@ import de.flapdoodle.embed.process.distribution.IVersion;
 public enum PhantomVersion
         implements IVersion {
 
-    V2_1_1("2.1.1");
+    V211("2.1.1");
 
-    public static final PhantomVersion DEFAULT = V2_1_1;
+    public static final PhantomVersion DEFAULT = V211;
 
     private final String name;
 

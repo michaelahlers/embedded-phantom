@@ -3,6 +3,7 @@ val versionScalaTest = "(,2.3["
 /** Compile and runtime dependencies. */
 libraryDependencies ++=
   "de.flapdoodle.embed" % "de.flapdoodle.embed.process" % "1.50.2" ::
+    "com.google.guava" % "guava" % "19.0" ::
     Nil
 
 /** Test dependencies. */
