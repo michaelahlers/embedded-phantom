@@ -26,6 +26,7 @@ public enum PhantomCommand
         public List<String> emit(final PhantomConfig config, final IExtractedFileSet files) throws IOException {
             return ImmutableList
                     .<String>builder()
+                    .add(files.executable().getAbsolutePath())
                     .add(format("--debug=%s", config.getDebug()))
                     .build();
         }
