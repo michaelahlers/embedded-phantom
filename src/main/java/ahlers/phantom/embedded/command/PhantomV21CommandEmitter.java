@@ -1,12 +1,14 @@
 package ahlers.phantom.embedded.command;
 
 import ahlers.phantom.embedded.PhantomConfig;
-import ahlers.phantom.embedded.PhantomVersion;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
 import java.io.IOException;
 import java.util.List;
+
+import static ahlers.phantom.embedded.PhantomVersion.V211;
 
 /**
  * Uses {{enum}} singleton pattern described by <em>Item 3</em> from <em>Effective Java</em>.
@@ -23,13 +25,8 @@ public enum PhantomV21CommandEmitter
     }
 
     @Override
-    public boolean matches(final PhantomVersion version) {
-        switch (version) {
-            case V211:
-                return true;
-            default:
-                return false;
-        }
+    public boolean matches(final IVersion version) {
+        return V211 == version;
     }
 
     @Override

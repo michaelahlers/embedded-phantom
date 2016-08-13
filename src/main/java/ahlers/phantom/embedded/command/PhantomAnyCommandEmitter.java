@@ -1,8 +1,8 @@
 package ahlers.phantom.embedded.command;
 
 import ahlers.phantom.embedded.PhantomConfig;
-import ahlers.phantom.embedded.PhantomVersion;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public enum PhantomAnyCommandEmitter
     }
 
     @Override
-    public boolean matches(final PhantomVersion version) {
+    public boolean matches(final IVersion version) {
         return true;
     }
 
