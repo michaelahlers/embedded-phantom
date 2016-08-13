@@ -39,6 +39,14 @@ public class PhantomProcessConfig
         this.debug = debug;
     }
 
+    public static Builder defaultConfiguration(final PhantomVersion version) {
+        return new Builder(version);
+    }
+
+    public static Builder defaultConfiguration() {
+        return defaultConfiguration(PhantomVersion.DEFAULT);
+    }
+
     public static class Builder {
 
         private final IVersion version;

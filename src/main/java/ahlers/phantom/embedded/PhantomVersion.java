@@ -12,6 +12,8 @@ public enum PhantomVersion
 
     V2_1_1("2.1.1");
 
+    public static final PhantomVersion DEFAULT = V2_1_1;
+
     private final String name;
 
     PhantomVersion(final String name) {
