@@ -16,8 +16,4 @@ public interface IPhantomConfig
 
     Optional<IPhantomScript> script();
 
-    PhantomConfigBuilder builder();
-
-    IPhantomConfig withScript(IPhantomScript value);
-
 }

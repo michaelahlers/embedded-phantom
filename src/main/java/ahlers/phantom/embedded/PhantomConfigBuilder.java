@@ -108,24 +108,5 @@ public class PhantomConfigBuilder
             return script;
         }
 
-        /**
-         * Produce a {@link PhantomConfigBuilder} that'd make this exact instance to support making variants (this object is immutable).
-         */
-        @Override
-        public PhantomConfigBuilder builder() {
-            final PhantomConfigBuilder builder = new PhantomConfigBuilder();
-
-            builder.set(VERSION, version());
-            builder.set(DEBUG, debug().or((Boolean) null));
-            builder.set(SCRIPT, script().or((IPhantomScript) null));
-
-            return builder;
-        }
-
-        @Override
-        public IPhantomConfig withScript(final IPhantomScript value) {
-            return builder().script(value).build();
-        }
-
     }
 }
