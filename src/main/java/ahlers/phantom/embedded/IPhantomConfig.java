@@ -1,5 +1,6 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.base.Optional;
 import de.flapdoodle.embed.process.config.IExecutableProcessConfig;
 
 /**
@@ -11,8 +12,12 @@ import de.flapdoodle.embed.process.config.IExecutableProcessConfig;
 public interface IPhantomConfig
         extends IExecutableProcessConfig {
 
-    Boolean debug();
+    Optional<Boolean> debug();
+
+    Optional<IPhantomScript> script();
 
     PhantomConfigBuilder builder();
+
+    IPhantomConfig withScript(IPhantomScript value);
 
 }

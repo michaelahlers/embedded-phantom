@@ -1,5 +1,6 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.base.Optional;
 import de.flapdoodle.embed.process.builder.AbstractBuilder;
 import de.flapdoodle.embed.process.builder.IProperty;
 import de.flapdoodle.embed.process.builder.TypedProperty;
@@ -15,10 +16,10 @@ public class PhantomConfigBuilder
 
     protected static final TypedProperty<IVersion> VERSION = TypedProperty.with("version", IVersion.class);
     protected static final TypedProperty<Boolean> DEBUG = TypedProperty.with("debug", Boolean.class);
+    protected static final TypedProperty<IPhantomScript> SCRIPT = TypedProperty.with("script", IPhantomScript.class);
 
     public PhantomConfigBuilder defaults() {
         property(VERSION).setDefault(PhantomVersion.LATEST);
-        property(DEBUG).setDefault(false);
 
         return this;
     }
@@ -41,14 +42,25 @@ public class PhantomConfigBuilder
         return this;
     }
 
+    protected IProperty<IPhantomScript> script() {
+        return property(SCRIPT);
+    }
+
+    public PhantomConfigBuilder script(final IPhantomScript value) {
+        script().set(value);
+        return this;
+    }
+
     @Override
     public IPhantomConfig build() {
         final IVersion version = get(VERSION);
-        final Boolean debug = get(DEBUG);
+        final Optional<Boolean> debug = Optional.fromNullable(get(DEBUG, null));
+        final Optional<IPhantomScript> script = Optional.fromNullable(get(SCRIPT, null));
 
         return new ImmutablePhantomConfig(
                 version,
-                debug
+                debug,
+                script
         );
     }
 
@@ -56,11 +68,14 @@ public class PhantomConfigBuilder
             extends ExecutableProcessConfig
             implements IPhantomConfig {
 
-        private final Boolean debug;
+        private final Optional<Boolean> debug;
+
+        private final Optional<IPhantomScript> script;
 
         protected ImmutablePhantomConfig(
                 final IVersion version,
-                final Boolean debug
+                final Optional<Boolean> debug,
+                final Optional<IPhantomScript> script
         ) {
             super(version, new ISupportConfig() {
                 @Override
@@ -80,11 +95,17 @@ public class PhantomConfigBuilder
             });
 
             this.debug = debug;
+            this.script = script;
         }
 
         @Override
-        public Boolean debug() {
+        public Optional<Boolean> debug() {
             return debug;
+        }
+
+        @Override
+        public Optional<IPhantomScript> script() {
+            return script;
         }
 
         /**
@@ -95,9 +116,15 @@ public class PhantomConfigBuilder
             final PhantomConfigBuilder builder = new PhantomConfigBuilder();
 
             builder.set(VERSION, version());
-            builder.set(DEBUG, debug());
+            builder.set(DEBUG, debug().or((Boolean) null));
+            builder.set(SCRIPT, script().or((IPhantomScript) null));
 
             return builder;
+        }
+
+        @Override
+        public IPhantomConfig withScript(final IPhantomScript value) {
+            return builder().script(value).build();
         }
 
     }

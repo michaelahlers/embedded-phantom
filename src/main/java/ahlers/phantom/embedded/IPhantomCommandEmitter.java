@@ -1,10 +1,9 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Inspired by {{com.wix.mysql.distribution.service.IPhantomCommandEmitter}}.
@@ -15,6 +14,10 @@ public interface IPhantomCommandEmitter {
 
     boolean matches(IVersion version);
 
-    List<String> emit(IPhantomConfig config, IExtractedFileSet files) throws IOException;
+    String executable(IExtractedFileSet files);
+
+    ImmutableList<String> arguments(IPhantomConfig config);
+
+    ImmutableList<String> scripts(Optional<IPhantomScript> script);
 
 }
