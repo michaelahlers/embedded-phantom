@@ -6,10 +6,15 @@ libraryDependencies ++=
     "com.google.guava" % "guava" % "19.0" ::
     Nil
 
-/** Test dependencies. */
+/**
+ * Test dependencies.
+ *
+ * - Includes Google's JSR-305 library as a workaround for [https://issues.scala-lang.org/browse/SI-8978 SI-8978].
+ */
 libraryDependencies ++=
   "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
     "org.scalatest" %% "scalatest" % versionScalaTest % Test ::
+    "com.google.code.findbugs" % "jsr305" % "(,2.1[" % Test ::
     Nil
 
 
