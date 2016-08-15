@@ -14,7 +14,7 @@ libraryDependencies ++=
 libraryDependencies ++=
   "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
     "org.scalatest" %% "scalatest" % versionScalaTest % Test ::
-    "com.google.code.findbugs" % "jsr305" % "(,2.1[" % Test ::
+    "com.google.code.findbugs" % "jsr305" % "(,3.1[" % Test ::
     Nil
 
 
