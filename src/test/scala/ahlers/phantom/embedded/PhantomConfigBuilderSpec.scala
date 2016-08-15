@@ -24,12 +24,13 @@ class PhantomConfigBuilderSpec
   }
 
   it must "preserve all values" in {
-    val version = PhantomVersion.LATEST
+    val version = PhantomVersion.V211
     val debug = true
     val script = mock[IPhantomScript]
 
     val actual =
       new PhantomConfigBuilder()
+        .defaults()
         .version(version)
         .debug(debug)
         .script(script)
