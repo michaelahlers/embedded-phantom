@@ -11,7 +11,7 @@ import java.io.File;
  */
 public interface IPhantomScript {
 
-    File script();
+    File source();
 
     ImmutableList<String> arguments();
 

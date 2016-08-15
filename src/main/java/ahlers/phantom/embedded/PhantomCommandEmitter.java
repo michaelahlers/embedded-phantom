@@ -42,7 +42,7 @@ public enum PhantomCommandEmitter
                         public ImmutableList<String> apply(final IPhantomScript input) {
                             return ImmutableList
                                     .<String>builder()
-                                    .add(input.script().getAbsolutePath())
+                                    .add(input.source().getAbsolutePath())
                                     .addAll(input.arguments())
                                     .build();
                         }
