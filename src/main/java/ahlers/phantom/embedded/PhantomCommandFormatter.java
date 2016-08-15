@@ -12,8 +12,8 @@ import java.util.EnumSet;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum PhantomCommandEmitter
-        implements IPhantomCommandEmitter {
+public enum PhantomCommandFormatter
+        implements IPhantomCommandFormatter {
 
     AnyVersion {
         @Override
@@ -88,10 +88,10 @@ public enum PhantomCommandEmitter
     }
 
     /**
-     * {@link PhantomCommandEmitter#AnyVersion} is guaranteed to match.
+     * {@link PhantomCommandFormatter#AnyVersion} is guaranteed to match.
      */
-    public static IPhantomCommandEmitter getInstance(final IVersion version) {
-        for (final IPhantomCommandEmitter emitter : EnumSet.complementOf(EnumSet.of(AnyVersion))) {
+    public static IPhantomCommandFormatter getInstance(final IVersion version) {
+        for (final IPhantomCommandFormatter emitter : EnumSet.complementOf(EnumSet.of(AnyVersion))) {
             if (emitter.matches(version)) {
                 return emitter;
             }
@@ -100,7 +100,7 @@ public enum PhantomCommandEmitter
         return AnyVersion;
     }
 
-    public static IPhantomCommandEmitter getInstance(final Distribution distribution) {
+    public static IPhantomCommandFormatter getInstance(final Distribution distribution) {
         return getInstance(distribution.getVersion());
     }
 

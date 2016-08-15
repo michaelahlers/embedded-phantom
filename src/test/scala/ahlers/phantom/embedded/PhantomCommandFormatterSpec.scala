@@ -2,7 +2,7 @@ package ahlers.phantom.embedded
 
 import java.io.File
 
-import ahlers.phantom.embedded.PhantomCommandEmitter._
+import ahlers.phantom.embedded.PhantomCommandFormatter._
 import com.google.common.base.Optional
 import com.google.common.collect.ImmutableList
 import de.flapdoodle.embed.process.extract.IExtractedFileSet
@@ -14,14 +14,14 @@ import scala.collection.convert.WrapAsScala._
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-class PhantomCommandEmitterSpec
+class PhantomCommandFormatterSpec
   extends WordSpec
           with Matchers
           with MockFactory {
 
   "Executable" must {
     "format" when {
-      PhantomCommandEmitter.values foreach { emitter =>
+      PhantomCommandFormatter.values foreach { emitter =>
         s"using $emitter" in {
           val expected = new File("/executable")
 
@@ -65,7 +65,7 @@ class PhantomCommandEmitterSpec
     val arguments = ImmutableList.of("0", "1")
 
     "format" when {
-      PhantomCommandEmitter.values foreach { emitter =>
+      PhantomCommandFormatter.values foreach { emitter =>
         s"using $emitter" in {
           val script = mock[IPhantomScript]
 
@@ -80,7 +80,7 @@ class PhantomCommandEmitterSpec
 
   "Absent scripts" must {
     "format" when {
-      PhantomCommandEmitter.values foreach { emitter =>
+      PhantomCommandFormatter.values foreach { emitter =>
         s"using $emitter" in {
           emitter.scripts(Optional.absent[IPhantomScript]) should be(empty)
         }

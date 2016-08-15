@@ -6,11 +6,11 @@ import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
 /**
- * Inspired by {{com.wix.mysql.distribution.service.IPhantomCommandEmitter}}.
+ * Inspired by {{com.wix.mysql.distribution.service.IPhantomCommandFormatter}}.
  *
  * @see <a href="https://github.com/wix/wix-embedded-mysql">Wix Embedded MySQL</a>
  */
-public interface IPhantomCommandEmitter {
+public interface IPhantomCommandFormatter {
 
     boolean matches(IVersion version);
 
