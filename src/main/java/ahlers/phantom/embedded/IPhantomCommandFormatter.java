@@ -1,8 +1,6 @@
 package ahlers.phantom.embedded;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
 /**
@@ -12,12 +10,6 @@ import de.flapdoodle.embed.process.extract.IExtractedFileSet;
  */
 public interface IPhantomCommandFormatter {
 
-    boolean matches(IVersion version);
-
-    String executable(IExtractedFileSet files);
-
-    ImmutableList<String> arguments(IPhantomConfig config);
-
-    ImmutableList<String> scripts(Optional<IPhantomScript> script);
+    ImmutableList<String> format(IExtractedFileSet files, IPhantomConfig config);
 
 }

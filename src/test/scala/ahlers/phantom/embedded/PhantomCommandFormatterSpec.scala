@@ -2,110 +2,44 @@ package ahlers.phantom.embedded
 
 import java.io.File
 
-import ahlers.phantom.embedded.PhantomCommandFormatter._
-import ahlers.phantom.embedded.PhantomVersion._
-import com.google.common.base.Optional
+import ahlers.phantom.embedded.parameters.IParameter
 import com.google.common.collect.ImmutableList
-import de.flapdoodle.embed.process.distribution.{Distribution, IVersion}
+import de.flapdoodle.embed.process.distribution.IVersion
 import de.flapdoodle.embed.process.extract.IExtractedFileSet
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{Matchers, WordSpec}
-
-import scala.collection.convert.WrapAsScala._
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 class PhantomCommandFormatterSpec
-  extends WordSpec
+  extends FlatSpec
           with Matchers
           with MockFactory {
 
-  "Executable" must {
-    "format" when {
-      PhantomCommandFormatter.values foreach { emitter =>
-        s"using $emitter" in {
-          val expected = new File("/executable")
+  it must "format files and config given argument definitions" in {
+    val executable = new File("executable")
 
-          val files = mock[IExtractedFileSet]
-          (files.executable _).expects().returns(expected)
+    val files = mock[IExtractedFileSet]
+    (files.executable _).expects().returns(executable)
 
-          emitter.executable(files) should be(expected.getAbsolutePath)
-        }
-      }
-    }
-  }
+    val version = mock[IVersion]
 
-  "Present arguments" must {
-    "format" when {
+    val config = mock[IPhantomConfig]
+    (config.version _).expects().returns(version)
 
-      s"using $AnyVersion" in {
-        val config = mock[IPhantomConfig]
-        (config.debug _).expects().returns(Optional.of(true))
+    val applicable = mock[IParameter]
+    (applicable.format _).expects(config).returns(ImmutableList.of("applies"))
 
-        AnyVersion.arguments(config) should contain theSameElementsInOrderAs {
-          "--debug=true" ::
-            Nil
-        }
-      }
+    val inapplicable = mock[IParameter]
+    (inapplicable.format _).expects(*).returns(ImmutableList.of())
 
-      s"using $Version21" in {
-        val config = mock[IPhantomConfig]
-        (config.debug _).expects().returns(Optional.of(true))
+    val arguments = ImmutableList.of(applicable, inapplicable)
 
-        Version21.arguments(config) should contain theSameElementsInOrderAs {
-          "--debug=true" ::
-            Nil
-        }
-      }
-
-    }
-  }
-
-  "Present scripts" must {
-    val source = new File("source.js")
-    val arguments = ImmutableList.of("0", "1")
-
-    "format" when {
-      PhantomCommandFormatter.values foreach { emitter =>
-        s"using $emitter" in {
-          val script = mock[IPhantomScript]
-
-          (script.source _).expects().returns(source)
-          (script.arguments _).expects().returns(arguments)
-
-          emitter.scripts(Optional.of(script)) should contain theSameElementsInOrderAs (source.getAbsolutePath +: arguments)
-        }
-      }
-    }
-  }
-
-  "Absent scripts" must {
-    "format" when {
-      PhantomCommandFormatter.values foreach { emitter =>
-        s"using $emitter" in {
-          emitter.scripts(Optional.absent[IPhantomScript]) should be(empty)
-        }
-      }
-    }
-  }
-
-  "Version-specific selector" must {
-    PhantomVersion.values :+ mock[IVersion] foreach { version =>
-      val formatter =
-        version match {
-          case V211 => Version21
-          case _ => AnyVersion
-        }
-
-      s"""return "$formatter" for version "$version"""" in {
-        val distribution = new Distribution(version, null, null)
-        PhantomCommandFormatter.getInstance(distribution) should be(formatter)
-      }
-
-      s"""match "$version"""" in {
-        formatter.matches(version) should be(true)
-      }
+    PhantomCommandFormatter.format(arguments, files, config) should contain theSameElementsInOrderAs {
+      executable.getAbsolutePath ::
+        "applies" ::
+        Nil
     }
   }
 

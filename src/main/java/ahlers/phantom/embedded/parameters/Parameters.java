@@ -1,4 +1,4 @@
-package ahlers.phantom.embedded.arguments;
+package ahlers.phantom.embedded.parameters;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
@@ -6,9 +6,9 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public class Arguments {
+public class Parameters {
 
-    private Arguments() {
+    private Parameters() {
     }
 
     public static <T> ImmutableList<String> usingTemplate(final String template, final Optional<T> value) {

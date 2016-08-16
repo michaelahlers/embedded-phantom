@@ -1,6 +1,5 @@
 package ahlers.phantom.embedded;
 
-import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
@@ -33,19 +32,6 @@ public class PhantomProcess
         super(distribution, config, runtimeConfig, executable);
     }
 
-    static ImmutableList<String> getCommandLine(
-            final IPhantomCommandFormatter formatter,
-            final IPhantomConfig config,
-            final IExtractedFileSet files
-    ) {
-        return ImmutableList
-                .<String>builder()
-                .add(formatter.executable(files))
-                .addAll(formatter.arguments(config))
-                .addAll(formatter.scripts(config.script()))
-                .build();
-    }
-
     /**
      * Internal API.
      */
@@ -55,8 +41,7 @@ public class PhantomProcess
             final IPhantomConfig config,
             final IExtractedFileSet files
     ) throws IOException {
-        final IPhantomCommandFormatter formatter = PhantomCommandFormatter.getInstance(distribution);
-        return getCommandLine(formatter, config, files);
+        return PhantomCommandFormatter.getInstance().format(files, config);
     }
 
     private Writer getStandardInput() {

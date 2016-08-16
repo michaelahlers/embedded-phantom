@@ -1,13 +1,13 @@
-package ahlers.phantom.embedded.arguments
+package ahlers.phantom.embedded.parameters
 
-import ahlers.phantom.embedded.arguments.Arguments.usingTemplate
+import ahlers.phantom.embedded.parameters.Parameters.usingTemplate
 import com.google.common.base.Optional
 import org.scalatest.{Matchers, WordSpec}
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-class ArgumentsSpec
+class ParametersSpec
   extends WordSpec
           with Matchers {
 

@@ -1,24 +1,18 @@
-package ahlers.phantom.embedded.arguments;
+package ahlers.phantom.embedded.parameters;
 
 import ahlers.phantom.embedded.IPhantomConfig;
 import ahlers.phantom.embedded.IPhantomScript;
 import com.google.common.collect.ImmutableList;
-import de.flapdoodle.embed.process.distribution.IVersion;
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum ScriptArgument
-        implements IArgument {
+public enum ScriptParameter
+        implements IParameter {
     INSTANCE;
 
-    public static ScriptArgument getInstance() {
+    public static ScriptParameter getInstance() {
         return INSTANCE;
-    }
-
-    @Override
-    public boolean applies(final IVersion version) {
-        return true;
     }
 
     private ImmutableList<String> format(final IPhantomScript script) {
