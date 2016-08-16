@@ -1,62 +1,54 @@
 package ahlers.phantom.embedded
 
-import java.util
-
+import de.flapdoodle.embed.process.distribution.Platform._
 import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
 import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir
 import org.scalatest._
 import org.scalatest.tagobjects.{Disk, Network, Slow}
 
-import scala.collection.convert.WrapAsScala._
-
 /**
+ * Uses a fully-transient artifact store to avoid affecting subsequent test runs.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 class PhantomDownloadsSpec
-  extends FlatSpec
+  extends WordSpec
           with Matchers {
 
-  /** A fully-transient artifact store. */
-  val artifactStore =
-  new PhantomExtractedArtifactStoreBuilder()
-    .defaults()
-    .extractDir(new TempDirInPlatformTempDir)
-      .download({
-        new PhantomDownloadConfigBuilder()
-          .defaults()
-          .artifactStorePath(new TempDirInPlatformTempDir)
-          .build()
-      })
+  val downloadConfig =
+    new PhantomDownloadConfigBuilder()
+      .defaults()
+      .artifactStorePath(new TempDirInPlatformTempDir)
       .build()
 
+  val artifactStore =
+    new PhantomExtractedArtifactStoreBuilder()
+      .defaults()
+      .extractDir(new TempDirInPlatformTempDir)
+      .download(downloadConfig)
+      .build()
 
-  val supportedPlatforms = util.EnumSet.of(Platform.Linux, Platform.OS_X, Platform.Windows)
+  for (version <- PhantomVersion.values; platform <- Platform.values; bitsize <- BitSize.values) {
+    val distribution = new Distribution(version, platform, bitsize)
 
-  val supportedDistributions =
-    for {
-      version <- PhantomVersion.values
-      platform <- supportedPlatforms
-      bitsize <- BitSize.values
-    } yield new Distribution(version, platform, bitsize)
+    s"""Distribution "$distribution"""" must {
+      platform match {
 
-  supportedDistributions foreach { distribution =>
-    it must s"download PhantomJS for $distribution" taggedAs(Slow, Network, Disk) in {
-      artifactStore.checkDistribution(distribution) should be(true)
+        /** Supported platforms. */
+        case Linux | OS_X | Windows =>
+          s"""download and verify artifacts""" taggedAs(Slow, Network, Disk) in {
+            artifactStore.checkDistribution(distribution) should be(true)
+          }
+
+        case _ =>
+          s"not download artifacts" in {
+            an[Exception] should be thrownBy artifactStore.checkDistribution(distribution)
+          }
+
+      }
+
     }
+
   }
-
-  val unsupportedDistributions =
-    for {
-      version <- PhantomVersion.values
-      platform <- util.EnumSet.complementOf(supportedPlatforms)
-      bitsize <- BitSize.values
-    } yield new Distribution(version, platform, bitsize)
-
-  unsupportedDistributions foreach { distribution =>
-    it must s"fail on $distribution" in {
-      an[Exception] should be thrownBy artifactStore.checkDistribution(distribution)
-    }
-  }
-
 
 }
