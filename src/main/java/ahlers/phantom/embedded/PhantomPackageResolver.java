@@ -87,7 +87,7 @@ public enum PhantomPackageResolver
         final ArchiveType archiveType = getArchiveType(distribution);
         final String extension = archiveExtensionFor(distribution, archiveType);
 
-        return format("phantomjs-%s-%s%s.%s", version, platformClassifier, bitsizeClassifier.isPresent() ? "-" + bitsizeClassifier : "", extension);
+        return format("phantomjs-%s-%s%s.%s", version, platformClassifier, bitsizeClassifier.isPresent() ? "-" + bitsizeClassifier.get() : "", extension);
     }
 
     @Override

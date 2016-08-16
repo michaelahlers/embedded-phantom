@@ -159,12 +159,11 @@ class PhantomPackageResolverSpec
           val distribution = new Distribution(version, platform, B32)
 
           val platformClassifier = platformClassifierFor(distribution)
-          val bitsizeClassifier = bitsizeClassifierFor(distribution)
 
           getPath(distribution) should be {
             platform match {
               case Linux =>
-                s"phantomjs-${version.asInDownloadPath}-$platformClassifier-$bitsizeClassifier.tar.bz2"
+                s"phantomjs-${version.asInDownloadPath}-$platformClassifier-i686.tar.bz2"
               case _ =>
                 s"phantomjs-${version.asInDownloadPath}-$platformClassifier.zip"
             }
