@@ -15,6 +15,7 @@ libraryDependencies ++=
   "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
     "org.scalatest" %% "scalatest" % versionScalaTest % Test ::
     "com.google.code.findbugs" % "jsr305" % "(,3.1[" % Test ::
+    "org.feijoas" %% "mango" % "0.12" % Test ::
     Nil
 
 /**
