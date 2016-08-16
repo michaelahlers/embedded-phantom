@@ -1,12 +1,17 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 import de.flapdoodle.embed.process.runtime.AbstractProcess;
+import de.flapdoodle.embed.process.runtime.ProcessControl;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -23,30 +28,73 @@ public class PhantomProcess
             final Distribution distribution,
             final IPhantomConfig config,
             final IRuntimeConfig runtimeConfig,
-            final PhantomExecutable executable)
-            throws IOException {
+            final PhantomExecutable executable
+    ) throws IOException {
         super(distribution, config, runtimeConfig, executable);
     }
 
+    static ImmutableList<String> getCommandLine(
+            final IPhantomCommandFormatter formatter,
+            final IPhantomConfig config,
+            final IExtractedFileSet files
+    ) {
+        return ImmutableList
+                .<String>builder()
+                .add(formatter.executable(files))
+                .addAll(formatter.arguments(config))
+                .addAll(formatter.scripts(config.script()))
+                .build();
+    }
+
+    /**
+     * Internal API.
+     */
     @Override
     protected List<String> getCommandLine(
             final Distribution distribution,
             final IPhantomConfig config,
-            final IExtractedFileSet executable
+            final IExtractedFileSet files
     ) throws IOException {
-        return PhantomCommandEmitter
-                .getInstance(distribution)
-                .emit(config, executable);
+        final IPhantomCommandFormatter formatter = PhantomCommandFormatter.getInstance(distribution);
+        return getCommandLine(formatter, config, files);
+    }
+
+    private Writer getStandardInput() {
+        try {
+            final Field processControlField = AbstractProcess.class.getDeclaredField("process");
+            processControlField.setAccessible(true);
+            final ProcessControl processControl = (ProcessControl) processControlField.get(this);
+
+            final Field processField = ProcessControl.class.getDeclaredField("process");
+            processField.setAccessible(true);
+            final Process process = (Process) processField.get(processControl);
+
+            return new OutputStreamWriter(process.getOutputStream());
+        } catch (final Throwable t) {
+            throw new RuntimeException("Error creating standard input processor.", t);
+        }
     }
 
     @Override
     protected void stopInternal() {
-
+        try {
+            logger.info("Sending exit command.");
+            final Writer standardInput = getStandardInput();
+            standardInput.write("phantom.exit();\n");
+            standardInput.flush();
+            standardInput.close();
+        } catch (final Throwable t) {
+            logger.warn("Error issuing exit command (will attempt to kill the process).", t);
+            sendKillToProcess();
+            tryKillToProcess();
+        } finally {
+            logger.info("Waiting for process to exit.");
+            stopProcess();
+        }
     }
 
     @Override
     protected void cleanupInternal() {
-
     }
 
 }
