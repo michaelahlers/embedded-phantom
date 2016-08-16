@@ -7,7 +7,7 @@ libraryDependencies ++=
     Nil
 
 /**
- * Test dependencies.
+ * Unit test dependencies.
  *
  * - Includes Google's JSR-305 library as a workaround for [https://issues.scala-lang.org/browse/SI-8978 SI-8978].
  */
@@ -15,6 +15,13 @@ libraryDependencies ++=
   "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
     "org.scalatest" %% "scalatest" % versionScalaTest % Test ::
     "com.google.code.findbugs" % "jsr305" % "(,3.1[" % Test ::
+    Nil
+
+/**
+ * Integration test dependencies.
+ */
+libraryDependencies ++=
+  "org.scalatest" %% "scalatest" % versionScalaTest % IntegrationTest ::
     Nil
 
 
