@@ -1,5 +1,6 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.base.Optional;
 import de.flapdoodle.embed.process.config.store.FileSet;
 import de.flapdoodle.embed.process.config.store.FileType;
 import de.flapdoodle.embed.process.config.store.IPackageResolver;
@@ -38,59 +39,55 @@ public enum PhantomPackageResolver
         }
     }
 
+    String platformClassifierFor(final Distribution distribution) {
+        switch (distribution.getPlatform()) {
+            case Linux:
+                return "linux";
+            case OS_X:
+                return "macosx";
+            case Windows:
+                return "windows";
+            default:
+                throw new UnsupportedPlatformException(distribution);
+        }
+    }
+
+    Optional<String> bitsizeClassifierFor(final Distribution distribution) {
+        if (Linux == distribution.getPlatform()) {
+            switch (distribution.getBitsize()) {
+                case B32:
+                    return Optional.of("i686");
+                case B64:
+                    return Optional.of("x86_64");
+                default:
+                    throw new UnsupportedBitsizeException(distribution);
+            }
+        } else {
+            return Optional.absent();
+        }
+    }
+
+    String archiveExtensionFor(final Distribution distribution, final ArchiveType archiveType) {
+        switch (archiveType) {
+            case TBZ2:
+                return "tar.bz2";
+            case ZIP:
+                return "zip";
+            default:
+                throw new UnsupportedArchiveException(distribution, archiveType);
+        }
+    }
+
     @Override
     public String getPath(final Distribution distribution) {
         final String version = distribution.getVersion().asInDownloadPath();
 
-        final String classifier;
+        final String platformClassifier = platformClassifierFor(distribution);
+        final Optional<String> bitsizeClassifier = bitsizeClassifierFor(distribution);
+        final ArchiveType archiveType = getArchiveType(distribution);
+        final String extension = archiveExtensionFor(distribution, archiveType);
 
-        switch (distribution.getPlatform()) {
-            case Linux:
-                classifier = "linux";
-                break;
-            case OS_X:
-                classifier = "macosx";
-                break;
-            case Windows:
-                classifier = "windows";
-                break;
-            default:
-                throw new UnsupportedPlatformException(distribution);
-        }
-
-        final String bitsize;
-
-        if (Linux == distribution.getPlatform()) {
-            switch (distribution.getBitsize()) {
-                case B32:
-                    bitsize = "i686";
-                    break;
-                case B64:
-                    bitsize = "x86_64";
-                    break;
-
-                default:
-                    throw new UnsupportedBitsizeException(distribution);
-
-            }
-        } else {
-            bitsize = null;
-        }
-
-        final String extension;
-
-        switch (getArchiveType(distribution)) {
-            case TBZ2:
-                extension = "tar.bz2";
-                break;
-            case ZIP:
-                extension = "zip";
-                break;
-            default:
-                throw new UnsupportedArchiveException(distribution, getArchiveType(distribution));
-        }
-
-        return format("phantomjs-%s-%s%s.%s", version, classifier, null == bitsize ? "" : "-" + bitsize, extension);
+        return format("phantomjs-%s-%s%s.%s", version, platformClassifier, bitsizeClassifier.isPresent() ? "-" + bitsizeClassifier : "", extension);
     }
 
     @Override
