@@ -3,8 +3,10 @@ package ahlers.phantom.embedded
 import java.io.File
 
 import ahlers.phantom.embedded.PhantomCommandFormatter._
+import ahlers.phantom.embedded.PhantomVersion._
 import com.google.common.base.Optional
 import com.google.common.collect.ImmutableList
+import de.flapdoodle.embed.process.distribution.{Distribution, IVersion}
 import de.flapdoodle.embed.process.extract.IExtractedFileSet
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpec}
@@ -84,6 +86,25 @@ class PhantomCommandFormatterSpec
         s"using $emitter" in {
           emitter.scripts(Optional.absent[IPhantomScript]) should be(empty)
         }
+      }
+    }
+  }
+
+  "Version-specific selector" must {
+    PhantomVersion.values :+ mock[IVersion] foreach { version =>
+      val formatter =
+        version match {
+          case V211 => Version21
+          case _ => AnyVersion
+        }
+
+      s"""return "$formatter" for version "$version"""" in {
+        val distribution = new Distribution(version, null, null)
+        PhantomCommandFormatter.getInstance(distribution) should be(formatter)
+      }
+
+      s"""match "$version"""" in {
+        formatter.matches(version) should be(true)
       }
     }
   }
