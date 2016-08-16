@@ -4,7 +4,6 @@ import java.io.File
 
 import ahlers.phantom.embedded.parameters.IParameter
 import com.google.common.collect.ImmutableList
-import de.flapdoodle.embed.process.distribution.IVersion
 import de.flapdoodle.embed.process.extract.IExtractedFileSet
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
@@ -23,10 +22,7 @@ class PhantomCommandFormatterSpec
     val files = mock[IExtractedFileSet]
     (files.executable _).expects().returns(executable)
 
-    val version = mock[IVersion]
-
     val config = mock[IPhantomConfig]
-    (config.version _).expects().returns(version)
 
     val applicable = mock[IParameter]
     (applicable.format _).expects(config).returns(ImmutableList.of("applies"))
