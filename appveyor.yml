@@ -1,0 +1,13 @@
+version: '{build}'
+
+os: Windows Server 2012
+
+build_script:
+- bin\activator clean compile
+
+test_script:
+- bin\activator test it:test
+
+cache:
+- C:\Users\appveyor\.m2
+- C:\Users\appveyor\.ivy2
