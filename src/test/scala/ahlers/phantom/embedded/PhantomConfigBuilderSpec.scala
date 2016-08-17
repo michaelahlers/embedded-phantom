@@ -19,19 +19,23 @@ class PhantomConfigBuilderSpec
         .build()
 
     actual.version() should be(PhantomVersion.LATEST)
+    actual.formatter() should be(PhantomCommandFormatter.getInstance)
     actual.debug() should be(Optional.absent[Boolean])
     actual.script() should be(Optional.absent[IPhantomScript])
   }
 
   it must "preserve all values" in {
     val version = PhantomVersion.V211
+
+    val formatter = mock[IPhantomCommandFormatter]
+
     val debug = true
     val script = mock[IPhantomScript]
 
     val actual =
       new PhantomConfigBuilder()
-        .defaults()
         .version(version)
+        .formatter(formatter)
         .debug(debug)
         .script(script)
         .build()
