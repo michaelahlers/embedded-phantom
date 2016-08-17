@@ -34,7 +34,7 @@ class PhantomProcessSpec
 
   override implicit def patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(5, Seconds), interval = Span(500, Millis))
 
-  it must "provide standard input" in {
+  def withEchoCommand[T](standardOut: IStreamProcessor = Processors.silent, standardError: IStreamProcessor = Processors.silent)(block: (PhantomProcess) => T): Unit = {
 
     val distribution = Distribution.detectFor(mock[IVersion])
 
@@ -45,7 +45,6 @@ class PhantomProcessSpec
         case _ => new File("cat") -> Nil
       }
 
-
     val commandFormatter = mock[IPhantomCommandFormatter]
     (commandFormatter.format _).expects(*, *).returns(ImmutableList.copyOf(Iterable(executable.getPath) ++ arguments)).atLeastOnce()
 
@@ -55,29 +54,7 @@ class PhantomProcessSpec
     (config.script _).expects().never()
     (config.supportConfig _).expects().returns(mock[ISupportConfig]).atLeastOnce()
 
-    val expected = (0 until 10) map { i => s"message $i" }
-
-    val actual: Promise[List[String]] = Promise()
-
-    val processOutput = new ProcessOutput(
-      new IStreamProcessor {
-
-        val blocks: StringBuilder = new StringBuilder
-
-        /** Inefficient, but it's only a test. */
-        override def process(block: String): Unit = {
-          /* Cross-platform line terminator removal.*/
-          blocks.append(block.replaceAll("\r\n?|\n", ""))
-          val tokens = blocks.toString.split(";").map(_.trim).filter(_.nonEmpty).toList
-          if (!actual.isCompleted && expected.lastOption == tokens.lastOption) actual.success(tokens)
-        }
-
-        override def onProcessed(): Unit = ()
-
-      },
-      Processors.silent,
-      Processors.silent
-    )
+    val processOutput = new ProcessOutput(standardOut, Processors.silent, Processors.silent)
 
     val runtimeConfig = mock[IRuntimeConfig]
     (runtimeConfig.isDaemonProcess _).expects().returns(false).atLeastOnce()
@@ -100,20 +77,73 @@ class PhantomProcessSpec
         )
       )
 
-    val input = process.getStandardInput
+    block(process)
+  }
 
-    expected.mkString(";").grouped(15) foreach { message =>
-      input.println(message)
-      input.flush()
+  it must "provide standard input" in {
+
+    val expected = (0 until 10) map { i => s"Message number $i." }
+    val actual: Promise[List[String]] = Promise()
+
+    val consumer = new IStreamProcessor {
+      val blocks: StringBuilder = new StringBuilder
+
+      /** Inefficient, but it's only a test. */
+      override def process(block: String): Unit = {
+        /* Cross-platform line terminator removal.*/
+        blocks.append(block.replaceAll("\r\n?|\n", ""))
+        val tokens = blocks.toString.split(";").map(_.trim).filter(_.nonEmpty).toList
+        if (!actual.isCompleted && expected.lastOption == tokens.lastOption) actual.success(tokens)
+      }
+
+      override def onProcessed(): Unit = ()
     }
 
-    actual.future.futureValue should contain theSameElementsInOrderAs expected
+    withEchoCommand(standardOut = consumer) { process =>
 
-    try {
+      val standardInput = process.getStandardInput
+
+      expected.mkString(";").grouped(25) foreach { message =>
+        standardInput.println(message)
+        standardInput.flush()
+      }
+
+      actual.future.futureValue should contain theSameElementsInOrderAs expected
+
       process.stop()
-    } catch {
-      case t: Throwable =>
-        logger.warn("Failed to stop process after test.", t)
+    }
+
+  }
+
+  it must "send exit command on stop" in {
+
+    val wasShutdown: Promise[Boolean] = Promise()
+    val wasZombied: Promise[Boolean] = Promise()
+
+    val consumer = new IStreamProcessor {
+      override def process(block: String): Unit =
+        block.replaceAll("\r\n?|\n", "") match {
+          case ";phantom.exit();" => wasShutdown.success(true)
+          case "zombie" => wasZombied.success(true)
+        }
+
+
+      override def onProcessed(): Unit = ()
+    }
+
+    withEchoCommand(standardOut = consumer) { process =>
+      process.stop()
+
+      /* An exit command should have been sent. */
+      wasShutdown.future.futureValue should be(true)
+      process.isProcessRunning should be(false)
+
+      val standardInput = process.getStandardInput
+      standardInput.println("zombie")
+      standardInput.flush()
+
+      /* Of course, "cat" and "cmd /c more" won't have anything to do with the exit command. In that event, the process should be forcibly killed. If that works successfully, the following future will never complete. */
+      an[Exception] should be thrownBy wasZombied.future.futureValue
     }
   }
 
