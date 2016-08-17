@@ -14,6 +14,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
+import org.slf4j.LoggerFactory
 
 import scala.collection.convert.WrapAsJava._
 import scala.collection.mutable.StringBuilder
@@ -28,6 +29,8 @@ class PhantomProcessSpec
           with Matchers
           with ScalaFutures
           with MockFactory {
+
+  private val logger = LoggerFactory.getLogger(classOf[PhantomProcessSpec])
 
   override implicit def patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(5, Seconds), interval = Span(500, Millis))
 
@@ -106,7 +109,12 @@ class PhantomProcessSpec
 
     actual.future.futureValue should contain theSameElementsInOrderAs expected
 
-    process.stop()
+    try {
+      process.stop()
+    } catch {
+      case t: Throwable =>
+        logger.warn("Failed to stop process after test.", t)
+    }
   }
 
 }
