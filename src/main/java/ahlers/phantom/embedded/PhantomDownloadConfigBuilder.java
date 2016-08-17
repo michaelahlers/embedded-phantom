@@ -23,7 +23,9 @@ public class PhantomDownloadConfigBuilder
 
         // downloadPath().setDefault(new DownloadPath("https://bitbucket.org/ariya/phantomjs/downloads/"));
         // downloadPath().setDefault(new DownloadPath("https://cnpmjs.org/downloads/"));
-        downloadPath().setDefault(new DownloadPath("https://github.com/paladox/phantomjs/releases/download/2.1.7/"));
+        // downloadPath().setDefault(new DownloadPath("https://github.com/paladox/phantomjs/releases/download/2.1.7/"));
+        downloadPath().setDefault(new DownloadPath("http://artifacts.ahlers.consulting/phantomjs/"));
+
         packageResolver().setDefault(PhantomPackageResolver.getInstance());
 
         /* Defines where completed download files will land. */
