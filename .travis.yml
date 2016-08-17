@@ -8,11 +8,10 @@ matrix:
     - os: linux
       jdk: oraclejdk8
     - os: osx
-      osx_image: xcode8
-      jdk: oraclejdk8
+      osx_image: xcode7.2
 
 script:
-- ./bin/activator test it:test
+- sbt test it:test
 # Following recommendations from http://scala-sbt.org/1.0/docs/Travis-CI-with-sbt.html.
 - find $HOME/.sbt -name "*.lock" | xargs rm
 - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
