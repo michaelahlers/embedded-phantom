@@ -5,13 +5,13 @@ import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 import de.flapdoodle.embed.process.runtime.AbstractProcess;
 import de.flapdoodle.embed.process.runtime.ProcessControl;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -45,19 +45,21 @@ public class PhantomProcess
         return config.formatter().format(files, config);
     }
 
-    PrintWriter getStandardInput() {
+    PrintWriter getStandardInput() throws Exception {
         try {
-            final Field processControlField = AbstractProcess.class.getDeclaredField("process");
-            processControlField.setAccessible(true);
-            final ProcessControl processControl = (ProcessControl) processControlField.get(this);
+            final ProcessControl processControl =
+                    (ProcessControl) FieldUtils
+                            .getDeclaredField(AbstractProcess.class, "process", true)
+                            .get(this);
 
-            final Field processField = ProcessControl.class.getDeclaredField("process");
-            processField.setAccessible(true);
-            final Process process = (Process) processField.get(processControl);
+            final Process underlyingProcess =
+                    (Process) FieldUtils
+                            .getDeclaredField(ProcessControl.class, "process", true)
+                            .get(processControl);
 
-            return new PrintWriter(new OutputStreamWriter(process.getOutputStream()));
+            return new PrintWriter(new OutputStreamWriter(underlyingProcess.getOutputStream()));
         } catch (final Throwable t) {
-            throw new RuntimeException("Error creating standard input processor.", t);
+            throw new Exception("Error creating standard input processor.", t);
         }
     }
 
