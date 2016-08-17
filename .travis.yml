@@ -17,10 +17,11 @@ script:
 - find $HOME/.sbt -name "*.lock" | xargs rm
 - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
-after_success:
+# TODO: Employ whatever solution from travis-ci/travis-ci#929 to perform these tasks once.
 # TODO: Enable once Coveralls supports Jacoco reports.
-# Coverage resets the Scala version, despite SBT argument. Therefore, perform coverage report and publish after successful test. Eventually, perform this after successful matrix (see travis-ci/travis-ci#929).
-# - sbt clean coverage test coverageReport coveralls
+after_success:
+- jdk_switcher use oraclejdk8
+- sbt publish
 
 cache:
   directories:
