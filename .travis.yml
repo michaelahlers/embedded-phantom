@@ -1,10 +1,11 @@
-os:
-  - linux
-    dist: trusty
-    sudo: required
-  - osx
-    sudo: required
-    
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+    - os: osx
+      sudo: required
+
 language: scala
 
 jdk:
