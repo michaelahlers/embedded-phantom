@@ -12,6 +12,8 @@ import de.flapdoodle.embed.process.config.IExecutableProcessConfig;
 public interface IPhantomConfig
         extends IExecutableProcessConfig {
 
+    IPhantomCommandFormatter formatter();
+
     Optional<Boolean> debug();
 
     Optional<IPhantomScript> script();

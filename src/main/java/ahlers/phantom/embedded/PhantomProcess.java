@@ -41,10 +41,10 @@ public class PhantomProcess
             final IPhantomConfig config,
             final IExtractedFileSet files
     ) throws IOException {
-        return PhantomCommandFormatter.getInstance().format(files, config);
+        return config.formatter().format(files, config);
     }
 
-    private Writer getStandardInput() {
+    Writer getStandardInput() {
         try {
             final Field processControlField = AbstractProcess.class.getDeclaredField("process");
             processControlField.setAccessible(true);
