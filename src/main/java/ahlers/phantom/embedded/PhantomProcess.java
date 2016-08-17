@@ -67,7 +67,7 @@ public class PhantomProcess
             logger.info("Sending exit command.");
             final Writer standardInput = getStandardInput();
             standardInput.flush();
-            standardInput.write("\r\n;phantom.exit();r\n");
+            standardInput.write("\r\n;phantom.exit();\r\n");
             standardInput.flush();
             standardInput.close();
         } catch (final Throwable t) {
