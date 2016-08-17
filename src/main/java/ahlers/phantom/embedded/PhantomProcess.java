@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -44,7 +45,7 @@ public class PhantomProcess
         return config.formatter().format(files, config);
     }
 
-    Writer getStandardInput() {
+    PrintWriter getStandardInput() {
         try {
             final Field processControlField = AbstractProcess.class.getDeclaredField("process");
             processControlField.setAccessible(true);
@@ -54,7 +55,7 @@ public class PhantomProcess
             processField.setAccessible(true);
             final Process process = (Process) processField.get(processControl);
 
-            return new OutputStreamWriter(process.getOutputStream());
+            return new PrintWriter(new OutputStreamWriter(process.getOutputStream()));
         } catch (final Throwable t) {
             throw new RuntimeException("Error creating standard input processor.", t);
         }
