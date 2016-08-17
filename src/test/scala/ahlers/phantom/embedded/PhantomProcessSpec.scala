@@ -61,9 +61,12 @@ class PhantomProcessSpec
 
         val blocks: mutable.Buffer[String] = mutable.Buffer.empty
 
+        /** Inefficient, but it's only a test. */
         override def process(block: String): Unit = {
-          blocks ++= block.split('\n')
-          if (expected.size == blocks.size) actual.success(blocks.toList)
+          /* Cross-platform line terminator removal.*/
+          blocks += block.replaceAll("\r\n?|\n", "")
+          val tokens = blocks.mkString.split(";").map(_.trim).filter(_.nonEmpty).toList
+          if (expected.lastOption == tokens.lastOption) actual.success(tokens)
         }
 
         override def onProcessed(): Unit = ()
@@ -96,10 +99,14 @@ class PhantomProcessSpec
 
     val input = process.getStandardInput
 
-    expected.map(_ + '\n').foreach(input.write)
-    input.flush()
+    expected.mkString(";").grouped(15) foreach { message =>
+      input.println(message)
+      input.flush()
+    }
 
     actual.future.futureValue should contain theSameElementsInOrderAs expected
+
+    process.stop()
   }
 
 }
