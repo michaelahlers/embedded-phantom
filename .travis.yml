@@ -1,3 +1,8 @@
+language: scala
+
+dist: trusty
+sudo: required
+
 matrix:
   include:
   - os: linux
@@ -6,11 +11,6 @@ matrix:
   - os: osx
     jdk:
     - oraclejdk8
-
-dist: trusty
-sudo: required
-
-language: scala
 
 script:
 - sbt test it:test
