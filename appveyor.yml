@@ -1,5 +1,14 @@
 version: '{build}'
 
+platform:
+  - x86
+  - x64
+
+environment:
+  matrix:
+    - JAVA_HOME: C:\Program Files\Java\jdk1.7.0
+    - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+
 build_script:
 - bin\activator clean compile
 
