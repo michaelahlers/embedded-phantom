@@ -16,7 +16,7 @@ import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 
 import scala.collection.convert.WrapAsJava._
-import scala.collection.mutable
+import scala.collection.mutable.StringBuilder
 import scala.concurrent.Promise
 
 /**
@@ -59,14 +59,14 @@ class PhantomProcessSpec
     val processOutput = new ProcessOutput(
       new IStreamProcessor {
 
-        val blocks: mutable.Buffer[String] = mutable.Buffer.empty
+        val blocks: StringBuilder = new StringBuilder
 
         /** Inefficient, but it's only a test. */
         override def process(block: String): Unit = {
           /* Cross-platform line terminator removal.*/
-          blocks += block.replaceAll("\r\n?|\n", "")
-          val tokens = blocks.mkString.split(";").map(_.trim).filter(_.nonEmpty).toList
-          if (expected.lastOption == tokens.lastOption) actual.success(tokens)
+          blocks.append(block.replaceAll("\r\n?|\n", ""))
+          val tokens = blocks.toString.split(";").map(_.trim).filter(_.nonEmpty).toList
+          if (!actual.isCompleted && expected.lastOption == tokens.lastOption) actual.success(tokens)
         }
 
         override def onProcessed(): Unit = ()
