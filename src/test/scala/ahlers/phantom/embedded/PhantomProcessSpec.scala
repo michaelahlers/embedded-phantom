@@ -15,6 +15,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 
+import scala.collection.convert.WrapAsJava._
 import scala.collection.mutable
 import scala.concurrent.Promise
 
@@ -34,14 +35,16 @@ class PhantomProcessSpec
 
     val distribution = Distribution.detectFor(mock[IVersion])
 
-    val executable =
+    val (executable, arguments: List[String]) =
       distribution.getPlatform match {
-        case Windows => new File("more")
-        case _ => new File("cat")
+        case Windows =>
+          new File("cmd") -> List("/c", "more")
+        case _ => new File("cat") -> Nil
       }
 
+
     val commandFormatter = mock[IPhantomCommandFormatter]
-    (commandFormatter.format _).expects(*, *).returns(ImmutableList.of(executable.getPath)).atLeastOnce()
+    (commandFormatter.format _).expects(*, *).returns(ImmutableList.copyOf(Iterable(executable.getPath) ++ arguments)).atLeastOnce()
 
     val config = mock[IPhantomConfig]
     (config.formatter _).expects().returns(commandFormatter).atLeastOnce()
