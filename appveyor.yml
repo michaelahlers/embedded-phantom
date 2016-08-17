@@ -1,7 +1,5 @@
 version: '{build}'
 
-image: Visual Studio 2008
-
 build_script:
 - bin\activator clean compile
 
