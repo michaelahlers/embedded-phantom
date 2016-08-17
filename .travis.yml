@@ -6,6 +6,8 @@ sudo: required
 matrix:
   include:
   - os: linux
+    jdk: openjdk7
+  - os: linux
     jdk: oraclejdk7
   - os: linux
     jdk: oraclejdk8
