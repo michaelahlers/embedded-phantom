@@ -118,17 +118,18 @@ class PhantomProcessSpec
   it must "send exit command on stop" in {
 
     val wasShutdown: Promise[Boolean] = Promise()
-    val wasZombied: Promise[Boolean] = Promise()
+    val wasClosed: Promise[Boolean] = Promise()
+    val isZombie: Promise[Boolean] = Promise()
 
     val consumer = new IStreamProcessor {
       override def process(block: String): Unit =
         block.replaceAll("\r\n?|\n", "") match {
           case ";phantom.exit();" => wasShutdown.success(true)
-          case "zombie" => wasZombied.success(true)
+          case "zombie" => isZombie.success(true)
         }
 
-
-      override def onProcessed(): Unit = ()
+      override def onProcessed(): Unit =
+        wasClosed.success(true)
     }
 
     withEchoCommand(standardOut = consumer) { process =>
@@ -136,6 +137,7 @@ class PhantomProcessSpec
 
       /* An exit command should have been sent. */
       wasShutdown.future.futureValue should be(true)
+      wasClosed.future.futureValue should be(true)
       process.isProcessRunning should be(false)
 
       val standardInput = process.getStandardInput
@@ -143,7 +145,7 @@ class PhantomProcessSpec
       standardInput.flush()
 
       /* Of course, "cat" and "cmd /c more" won't have anything to do with the exit command. In that event, the process should be forcibly killed. If that works successfully, the following future will never complete. */
-      an[Exception] should be thrownBy wasZombied.future.futureValue
+      an[Exception] should be thrownBy isZombie.future.futureValue
     }
   }
 
