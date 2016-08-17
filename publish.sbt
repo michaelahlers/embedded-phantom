@@ -1,6 +1,8 @@
 import com.amazonaws.auth.EnvironmentVariableCredentialsProvider
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 
+crossPaths := false
+
 publishMavenStyle := true
 
 publishArtifact in Test := false
