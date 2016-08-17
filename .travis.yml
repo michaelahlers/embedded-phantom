@@ -1,7 +1,11 @@
+os:
+  - linux
+    dist: trusty
+    sudo: required
+  - osx
+    sudo: required
+    
 language: scala
-
-dist: trusty
-sudo: required
 
 jdk:
 - oraclejdk8
