@@ -2,9 +2,11 @@ version: '{build}'
 
 os: Windows Server 2012
 
-build_script: "%APPVEYOR_BUILD_FOLDER%\bin\activator" clean compile
+build_script:
+- bin\activator clean compile
 
-test_script: "%APPVEYOR_BUILD_FOLDER%\bin\activator" test it:test
+test_script:
+- bin\activator test it:test
 
 cache:
 - C:\Users\appveyor\.m2
