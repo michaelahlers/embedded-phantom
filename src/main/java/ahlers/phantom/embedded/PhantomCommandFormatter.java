@@ -1,8 +1,6 @@
 package ahlers.phantom.embedded;
 
-import ahlers.phantom.embedded.parameters.DebugParameter;
-import ahlers.phantom.embedded.parameters.IParameter;
-import ahlers.phantom.embedded.parameters.ScriptParameter;
+import ahlers.phantom.embedded.parameters.*;
 import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
@@ -22,6 +20,20 @@ public enum PhantomCommandFormatter
 
     private final ImmutableList<IParameter> arguments = ImmutableList.<IParameter>of(
             DebugParameter.getInstance(),
+            DiskCacheParameter.getInstance(),
+            DiskCachePathParameter.getInstance(),
+            IgnoreSSLErrorsParameter.getInstance(),
+            LoadImagesParameter.getInstance(),
+            LocalStoragePathParameter.getInstance(),
+            LocalStorageQuotaParameter.getInstance(),
+            LocalToRemoteURLAccessParameter.getInstance(),
+            LocalURLAccessParameter.getInstance(),
+            MaximumDiskCacheSizeParameter.getInstance(),
+            OfflineStoragePathParameter.getInstance(),
+            OfflineStorageQuotaParameter.getInstance(),
+            OutputEncodingParameter.getInstance(),
+            ProxyParameter.getInstance(),
+            RemoteDebuggerPortParameter.getInstance(),
             ScriptParameter.getInstance()
     );
 
