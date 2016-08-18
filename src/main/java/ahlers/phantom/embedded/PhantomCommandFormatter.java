@@ -1,8 +1,6 @@
 package ahlers.phantom.embedded;
 
-import ahlers.phantom.embedded.parameters.DebugParameter;
-import ahlers.phantom.embedded.parameters.IParameter;
-import ahlers.phantom.embedded.parameters.ScriptParameter;
+import ahlers.phantom.embedded.parameters.*;
 import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
@@ -22,25 +20,41 @@ public enum PhantomCommandFormatter
 
     private final ImmutableList<IParameter> arguments = ImmutableList.<IParameter>of(
             DebugParameter.getInstance(),
+            RemoteDebuggerPortParameter.getInstance(),
+            CookiesFileParameter.getInstance(),
+            DiskCacheParameter.getInstance(),
+            DiskCachePathParameter.getInstance(),
+            IgnoreSSLErrorsParameter.getInstance(),
+            LoadImagesParameter.getInstance(),
+            LocalStoragePathParameter.getInstance(),
+            LocalStorageQuotaParameter.getInstance(),
+            LocalToRemoteURLAccessParameter.getInstance(),
+            LocalURLAccessParameter.getInstance(),
+            MaximumDiskCacheSizeParameter.getInstance(),
+            OfflineStoragePathParameter.getInstance(),
+            OfflineStorageQuotaParameter.getInstance(),
+            OutputEncodingParameter.getInstance(),
+            ProxyParameter.getInstance(),
+            WebSecurityParameter.getInstance(),
             ScriptParameter.getInstance()
     );
 
     @Override
-    public ImmutableList<String> format(final IExtractedFileSet files, final IPhantomConfig config) {
-        return format(arguments, files, config);
+    public ImmutableList<String> format(final IExtractedFileSet files, final IPhantomProcessConfig processConfig) {
+        return format(arguments, files, processConfig);
     }
 
     static ImmutableList<String> format(
             final List<IParameter> arguments,
             final IExtractedFileSet files,
-            final IPhantomConfig config
+            final IPhantomProcessConfig processConfig
     ) {
         final ImmutableList.Builder<String> builder = ImmutableList.builder();
 
         builder.add(files.executable().getAbsolutePath());
 
         for (final IParameter argument : arguments) {
-            builder.addAll(argument.format(config));
+            builder.addAll(argument.format(processConfig));
         }
 
         return builder.build();

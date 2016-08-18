@@ -1,6 +1,6 @@
 package ahlers.phantom.embedded.parameters
 
-import ahlers.phantom.embedded.{IPhantomConfig, PhantomVersion}
+import ahlers.phantom.embedded.{IPhantomProcessConfig, PhantomVersion}
 import de.flapdoodle.embed.process.distribution.IVersion
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Matchers, WordSpec}
@@ -19,7 +19,7 @@ trait ParameterSpec[V]
 
   def formats: PartialFunction[IVersion, List[(V, List[String])]]
 
-  def config(version: IVersion, values: V): IPhantomConfig
+  def config(version: IVersion, values: V): IPhantomProcessConfig
 
   "Value formatter" when {
 

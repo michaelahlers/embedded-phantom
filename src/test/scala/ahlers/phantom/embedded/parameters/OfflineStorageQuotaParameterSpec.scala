@@ -9,24 +9,23 @@ import scala.language.implicitConversions
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-class DebugParameterSpec
-  extends ParameterSpec[Option[Boolean]] {
+class OfflineStorageQuotaParameterSpec
+  extends ParameterSpec[Option[Long]] {
 
-  override def parameter: IParameter = DebugParameter.getInstance
+  override def parameter: IParameter = OfflineStorageQuotaParameter.getInstance
 
-  override def formats: PartialFunction[IVersion, List[(Option[Boolean], List[String])]] = {
+  override def formats: PartialFunction[IVersion, List[(Option[Long], List[String])]] = {
     case _ =>
-      Some(true) -> List("--debug=true") ::
-        Some(false) -> List("--debug=false") ::
+      Some(0L) -> List("--offline-storage-quota=0") ::
         None -> List.empty ::
         Nil
   }
 
-  override def config(version: IVersion, value: Option[Boolean]): IPhantomProcessConfig = {
+  override def config(version: IVersion, value: Option[Long]): IPhantomProcessConfig = {
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
-    (config.debug _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
+    (config.offlineStorageQuota _).expects().returns(value.map(Long.box).asJava).anyNumberOfTimes()
 
     config
   }

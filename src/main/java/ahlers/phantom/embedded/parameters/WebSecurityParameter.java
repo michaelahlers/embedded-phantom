@@ -8,18 +8,18 @@ import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum DebugParameter
+public enum WebSecurityParameter
         implements IParameter {
 
     INSTANCE;
 
-    public static DebugParameter getInstance() {
+    public static WebSecurityParameter getInstance() {
         return INSTANCE;
     }
 
     @Override
     public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
-        return usingTemplate("--debug=%s", processConfig.debug());
+        return usingTemplate("--web-security=%s", processConfig.webSecurity());
     }
 
 }

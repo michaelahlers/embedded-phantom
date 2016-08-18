@@ -14,29 +14,33 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomExecutable
-        extends Executable<IPhantomConfig, PhantomProcess> {
+        extends Executable<IPhantomProcessConfig, PhantomProcess> {
 
     private final static Logger logger = getLogger(PhantomExecutable.class);
 
-    private final IExtractedFileSet files;
+    private final IPhantomCommandFormatter commandFormatter;
 
     PhantomExecutable(
             final Distribution distribution,
-            final IPhantomConfig config,
+            final IPhantomProcessConfig processConfig,
             final IRuntimeConfig runtimeConfig,
-            final IExtractedFileSet files
+            final IExtractedFileSet files,
+            final IPhantomCommandFormatter commandFormatter
     ) {
-        super(distribution, config, runtimeConfig, files);
-        this.files = files;
+        super(distribution, processConfig, runtimeConfig, files);
+        this.commandFormatter = commandFormatter;
     }
 
     @Override
     protected PhantomProcess start(
             final Distribution distribution,
-            final IPhantomConfig config,
+            final IPhantomProcessConfig processConfig,
             final IRuntimeConfig runtimeConfig
     ) throws IOException {
-        return new PhantomProcess(distribution, config, runtimeConfig, this);
+        return new PhantomProcess(distribution, processConfig, runtimeConfig, this);
     }
 
+    public IPhantomCommandFormatter commandFormatter() {
+        return commandFormatter;
+    }
 }

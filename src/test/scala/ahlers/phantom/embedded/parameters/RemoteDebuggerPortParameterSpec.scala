@@ -9,24 +9,23 @@ import scala.language.implicitConversions
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-class DebugParameterSpec
-  extends ParameterSpec[Option[Boolean]] {
+class RemoteDebuggerPortParameterSpec
+  extends ParameterSpec[Option[Int]] {
 
-  override def parameter: IParameter = DebugParameter.getInstance
+  override def parameter: IParameter = RemoteDebuggerPortParameter.getInstance
 
-  override def formats: PartialFunction[IVersion, List[(Option[Boolean], List[String])]] = {
+  override def formats: PartialFunction[IVersion, List[(Option[Int], List[String])]] = {
     case _ =>
-      Some(true) -> List("--debug=true") ::
-        Some(false) -> List("--debug=false") ::
+      Some(0) -> List("--remote-debugger-port=0") ::
         None -> List.empty ::
         Nil
   }
 
-  override def config(version: IVersion, value: Option[Boolean]): IPhantomProcessConfig = {
+  override def config(version: IVersion, value: Option[Int]): IPhantomProcessConfig = {
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
-    (config.debug _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
+    (config.remoteDebuggerPort _).expects().returns(value.map(Int.box).asJava).anyNumberOfTimes()
 
     config
   }

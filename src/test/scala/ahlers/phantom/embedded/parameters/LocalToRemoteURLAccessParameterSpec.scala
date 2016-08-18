@@ -9,15 +9,15 @@ import scala.language.implicitConversions
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-class DebugParameterSpec
+class LocalToRemoteURLAccessParameterSpec
   extends ParameterSpec[Option[Boolean]] {
 
-  override def parameter: IParameter = DebugParameter.getInstance
+  override def parameter: IParameter = LocalToRemoteURLAccessParameter.getInstance
 
   override def formats: PartialFunction[IVersion, List[(Option[Boolean], List[String])]] = {
     case _ =>
-      Some(true) -> List("--debug=true") ::
-        Some(false) -> List("--debug=false") ::
+      Some(true) -> List("--local-to-remote-url-access=true") ::
+        Some(false) -> List("--local-to-remote-url-access=false") ::
         None -> List.empty ::
         Nil
   }
@@ -26,7 +26,7 @@ class DebugParameterSpec
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
-    (config.debug _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
+    (config.localToRemoteURLAccess _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
 
     config
   }

@@ -8,18 +8,18 @@ import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum DebugParameter
+public enum LocalToRemoteURLAccessParameter
         implements IParameter {
 
     INSTANCE;
 
-    public static DebugParameter getInstance() {
+    public static LocalToRemoteURLAccessParameter getInstance() {
         return INSTANCE;
     }
 
     @Override
     public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
-        return usingTemplate("--debug=%s", processConfig.debug());
+        return usingTemplate("--local-to-remote-url-access=%s", processConfig.localToRemoteURLAccess());
     }
 
 }

@@ -2,7 +2,7 @@ package ahlers.phantom.embedded.parameters
 
 import java.io.File
 
-import ahlers.phantom.embedded.{IPhantomConfig, IPhantomScript, PhantomScriptBuilder}
+import ahlers.phantom.embedded.{IPhantomProcessConfig, IPhantomScript, PhantomScriptBuilder}
 import de.flapdoodle.embed.process.distribution.IVersion
 import org.feijoas.mango.common.base.Optional._
 
@@ -19,22 +19,39 @@ class ScriptParameterSpec
 
   override def formats: PartialFunction[IVersion, List[(Option[IPhantomScript], List[String])]] = {
     case _ =>
+      def script(encoding: Option[String], language: Option[String], source: File, arguments: List[String]): IPhantomScript = {
+        val builder = new PhantomScriptBuilder()
+
+        encoding.foreach(builder.encoding)
+        language.foreach(builder.language)
+        builder.source(source)
+        builder.arguments(arguments)
+
+        builder.build()
+      }
+
+      val encoding = "encoding"
+      val language = "language"
       val source = new File("source.js")
       val arguments = List("source-one", "source-two")
 
-      val builder = new PhantomScriptBuilder().source(source)
+      val path: String = source.getAbsolutePath
 
-      Some(builder.build()) -> List(source.getAbsolutePath) ::
-        Some(builder.arguments(arguments).build()) -> (source.getAbsolutePath +: arguments) ::
-        None -> List.empty ::
-        Nil
+      val scenarios =
+        for {
+          (e, ea) <- List(Some(encoding) -> List(s"--script-encoding=$encoding"), None -> Nil)
+          (l, la) <- List(Some(language) -> List(s"--script-language=$language"), None -> Nil)
+          (a, aa) <- List(arguments -> arguments, Nil -> Nil)
+        } yield Some(script(e, l, source, a)) -> (ea ++ la ++ List(path) ++ aa)
+
+      scenarios ++ List(None -> Nil)
   }
 
-  override def config(version: IVersion, script: Option[IPhantomScript]): IPhantomConfig = {
-    val config = mock[IPhantomConfig]
+  override def config(version: IVersion, value: Option[IPhantomScript]): IPhantomProcessConfig = {
+    val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
-    (config.script _).expects().returns(script.asJava).anyNumberOfTimes()
+    (config.script _).expects().returns(value.asJava).anyNumberOfTimes()
 
     config
   }

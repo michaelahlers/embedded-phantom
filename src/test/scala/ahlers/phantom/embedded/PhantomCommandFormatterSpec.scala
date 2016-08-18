@@ -22,7 +22,7 @@ class PhantomCommandFormatterSpec
     val files = mock[IExtractedFileSet]
     (files.executable _).expects().returns(executable)
 
-    val config = mock[IPhantomConfig]
+    val config = mock[IPhantomProcessConfig]
 
     val applicable = mock[IParameter]
     (applicable.format _).expects(config).returns(ImmutableList.of("applies"))

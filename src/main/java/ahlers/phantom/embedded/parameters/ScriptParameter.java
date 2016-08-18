@@ -1,8 +1,10 @@
 package ahlers.phantom.embedded.parameters;
 
-import ahlers.phantom.embedded.IPhantomConfig;
+import ahlers.phantom.embedded.IPhantomProcessConfig;
 import ahlers.phantom.embedded.IPhantomScript;
 import com.google.common.collect.ImmutableList;
+
+import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
@@ -18,6 +20,8 @@ public enum ScriptParameter
     private ImmutableList<String> format(final IPhantomScript script) {
         final ImmutableList.Builder<String> builder = ImmutableList.builder();
 
+        builder.addAll(usingTemplate("--script-encoding=%s", script.encoding()));
+        builder.addAll(usingTemplate("--script-language=%s", script.language()));
         builder.add(script.source().getAbsolutePath());
         builder.addAll(script.arguments());
 
@@ -25,9 +29,9 @@ public enum ScriptParameter
     }
 
     @Override
-    public ImmutableList<String> format(final IPhantomConfig config) {
-        if (config.script().isPresent()) {
-            return format(config.script().get());
+    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+        if (processConfig.script().isPresent()) {
+            return format(processConfig.script().get());
         }
 
         return ImmutableList.of();

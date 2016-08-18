@@ -8,18 +8,17 @@ import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum DebugParameter
+public enum OfflineStorageQuotaParameter
         implements IParameter {
 
     INSTANCE;
 
-    public static DebugParameter getInstance() {
+    public static OfflineStorageQuotaParameter getInstance() {
         return INSTANCE;
     }
 
     @Override
     public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
-        return usingTemplate("--debug=%s", processConfig.debug());
+        return usingTemplate("--offline-storage-quota=%s", processConfig.offlineStorageQuota());
     }
-
 }
