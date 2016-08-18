@@ -19,6 +19,8 @@ public interface IPhantomProcessConfig
 
     Optional<Integer> remoteDebuggerPort();
 
+    Optional<File> cookiesFile();
+
     Optional<Boolean> diskCache();
 
     Optional<File> diskCachePath();
@@ -44,6 +46,8 @@ public interface IPhantomProcessConfig
     Optional<String> outputEncoding();
 
     Optional<IProxy> proxy();
+
+    Optional<Boolean> webSecurity();
 
     Optional<IPhantomScript> script();
 

@@ -20,6 +20,8 @@ public enum PhantomCommandFormatter
 
     private final ImmutableList<IParameter> arguments = ImmutableList.<IParameter>of(
             DebugParameter.getInstance(),
+            RemoteDebuggerPortParameter.getInstance(),
+            CookiesFileParameter.getInstance(),
             DiskCacheParameter.getInstance(),
             DiskCachePathParameter.getInstance(),
             IgnoreSSLErrorsParameter.getInstance(),
@@ -33,7 +35,7 @@ public enum PhantomCommandFormatter
             OfflineStorageQuotaParameter.getInstance(),
             OutputEncodingParameter.getInstance(),
             ProxyParameter.getInstance(),
-            RemoteDebuggerPortParameter.getInstance(),
+            WebSecurityParameter.getInstance(),
             ScriptParameter.getInstance()
     );
 

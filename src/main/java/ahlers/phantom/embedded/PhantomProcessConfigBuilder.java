@@ -20,28 +20,32 @@ public class PhantomProcessConfigBuilder
     protected static final TypedProperty<IVersion> VERSION = TypedProperty.with("version", IVersion.class);
 
     protected static final TypedProperty<Boolean> DEBUG = TypedProperty.with("debug", Boolean.class);
+    protected static final TypedProperty<Integer> REMOTE_DEBUGGER_PORT = TypedProperty.with("remote-debugging-port", Integer.class);
+
+    protected static final TypedProperty<File> COOKIES_FILE = TypedProperty.with("cookies-file", File.class);
 
     protected static final TypedProperty<Boolean> DISK_CACHE = TypedProperty.with("disk-cache", Boolean.class);
     protected static final TypedProperty<File> DISK_CACHE_PATH = TypedProperty.with("disk-cache-path", File.class);
+
     protected static final TypedProperty<Long> MAXIMUM_DISK_CACHE_SIZE = TypedProperty.with("maximum-disk-cache-size", Long.class);
 
     protected static final TypedProperty<Boolean> IGNORE_SSL_ERRORS = TypedProperty.with("ignore-SSL-errors", Boolean.class);
 
     protected static final TypedProperty<Boolean> LOAD_IMAGES = TypedProperty.with("load-images", Boolean.class);
-
     protected static final TypedProperty<File> LOCAL_STORAGE_PATH = TypedProperty.with("local-storage-path", File.class);
+
     protected static final TypedProperty<Long> LOCAL_STORAGE_QUOTA = TypedProperty.with("local-storage-quota", Long.class);
-
     protected static final TypedProperty<Boolean> LOCAL_URL_ACCESS = TypedProperty.with("local-URL-access", Boolean.class);
+
     protected static final TypedProperty<Boolean> LOCAL_TO_REMOTE_URL_ACCESS = TypedProperty.with("local-to-remote-URL-access", Boolean.class);
-
     protected static final TypedProperty<File> OFFLINE_STORAGE_PATH = TypedProperty.with("offline-storage-path", File.class);
-    protected static final TypedProperty<Long> OFFLINE_STORAGE_QUOTA = TypedProperty.with("offline-storage-quota", Long.class);
 
+    protected static final TypedProperty<Long> OFFLINE_STORAGE_QUOTA = TypedProperty.with("offline-storage-quota", Long.class);
     protected static final TypedProperty<String> OUTPUT_ENCODING = TypedProperty.with("output-encoding", String.class);
-    protected static final TypedProperty<Integer> REMOTE_DEBUGGER_PORT = TypedProperty.with("remote-debugging-port", Integer.class);
 
     protected static final TypedProperty<IProxy> PROXY = TypedProperty.with("proxy", IProxy.class);
+
+    protected static final TypedProperty<Boolean> WEB_SECURITY = TypedProperty.with("web-security", Boolean.class);
 
     protected static final TypedProperty<IPhantomScript> SCRIPT = TypedProperty.with("script", IPhantomScript.class);
 
@@ -66,6 +70,24 @@ public class PhantomProcessConfigBuilder
 
     public PhantomProcessConfigBuilder debug(final Boolean value) {
         debug().set(value);
+        return this;
+    }
+
+    protected IProperty<Integer> remoteDebuggerPort() {
+        return property(REMOTE_DEBUGGER_PORT);
+    }
+
+    public PhantomProcessConfigBuilder remoteDebuggerPort(final Integer value) {
+        remoteDebuggerPort().set(value);
+        return this;
+    }
+
+    protected IProperty<File> cookiesFile() {
+        return property(COOKIES_FILE);
+    }
+
+    public PhantomProcessConfigBuilder cookiesFile(final File value) {
+        cookiesFile().set(value);
         return this;
     }
 
@@ -177,21 +199,21 @@ public class PhantomProcessConfigBuilder
         return this;
     }
 
-    protected IProperty<Integer> remoteDebuggerPort() {
-        return property(REMOTE_DEBUGGER_PORT);
-    }
-
-    public PhantomProcessConfigBuilder remoteDebuggerPort(final Integer value) {
-        remoteDebuggerPort().set(value);
-        return this;
-    }
-
     protected IProperty<IProxy> proxy() {
         return property(PROXY);
     }
 
     public PhantomProcessConfigBuilder proxy(final IProxy value) {
         proxy().set(value);
+        return this;
+    }
+
+    protected IProperty<Boolean> webSecurity() {
+        return property(WEB_SECURITY);
+    }
+
+    public PhantomProcessConfigBuilder webSecurity(final Boolean value) {
+        webSecurity().set(value);
         return this;
     }
 
@@ -210,6 +232,7 @@ public class PhantomProcessConfigBuilder
 
         final Optional<Boolean> debug = Optional.fromNullable(get(DEBUG, null));
         final Optional<Integer> remoteDebuggerPort = Optional.fromNullable(get(REMOTE_DEBUGGER_PORT, null));
+        final Optional<File> cookiesFile = Optional.fromNullable(get(COOKIES_FILE, null));
         final Optional<Boolean> diskCache = Optional.fromNullable(get(DISK_CACHE, null));
         final Optional<File> diskCachePath = Optional.fromNullable(get(DISK_CACHE_PATH, null));
         final Optional<Long> maximumDiskCacheSize = Optional.fromNullable(get(MAXIMUM_DISK_CACHE_SIZE, null));
@@ -223,12 +246,14 @@ public class PhantomProcessConfigBuilder
         final Optional<Long> offlineStorageQuota = Optional.fromNullable(get(OFFLINE_STORAGE_QUOTA, null));
         final Optional<String> outputEncoding = Optional.fromNullable(get(OUTPUT_ENCODING, null));
         final Optional<IProxy> proxy = Optional.fromNullable(get(PROXY, null));
+        final Optional<Boolean> webSecurity = Optional.fromNullable(get(WEB_SECURITY, null));
         final Optional<IPhantomScript> script = Optional.fromNullable(get(SCRIPT, null));
 
         return new ImmutablePhantomProcessConfig(
                 version,
                 debug,
                 remoteDebuggerPort,
+                cookiesFile,
                 diskCache,
                 diskCachePath,
                 maximumDiskCacheSize,
@@ -242,6 +267,7 @@ public class PhantomProcessConfigBuilder
                 offlineStorageQuota,
                 outputEncoding,
                 proxy,
+                webSecurity,
                 script
         );
     }
@@ -253,6 +279,8 @@ public class PhantomProcessConfigBuilder
         private final Optional<Boolean> debug;
 
         private final Optional<Integer> remoteDebuggerPort;
+
+        private final Optional<File> cookiesFile;
 
         private final Optional<Boolean> diskCache;
 
@@ -280,12 +308,15 @@ public class PhantomProcessConfigBuilder
 
         private final Optional<IProxy> proxy;
 
+        private final Optional<Boolean> webSecurity;
+
         private final Optional<IPhantomScript> script;
 
         protected ImmutablePhantomProcessConfig(
                 final IVersion version,
                 final Optional<Boolean> debug,
                 final Optional<Integer> remoteDebuggerPort,
+                final Optional<File> cookiesFile,
                 final Optional<Boolean> diskCache,
                 final Optional<File> diskCachePath,
                 final Optional<Long> maximumDiskCacheSize,
@@ -299,6 +330,7 @@ public class PhantomProcessConfigBuilder
                 final Optional<Long> offlineStorageQuota,
                 final Optional<String> outputEncoding,
                 final Optional<IProxy> proxy,
+                final Optional<Boolean> webSecurity,
                 final Optional<IPhantomScript> script
         ) {
             super(version, new ISupportConfig() {
@@ -321,6 +353,8 @@ public class PhantomProcessConfigBuilder
             this.debug = debug;
 
             this.remoteDebuggerPort = remoteDebuggerPort;
+
+            this.cookiesFile = cookiesFile;
 
             this.diskCache = diskCache;
 
@@ -348,6 +382,8 @@ public class PhantomProcessConfigBuilder
 
             this.proxy = proxy;
 
+            this.webSecurity = webSecurity;
+
             this.script = script;
         }
 
@@ -359,6 +395,11 @@ public class PhantomProcessConfigBuilder
         @Override
         public Optional<Integer> remoteDebuggerPort() {
             return remoteDebuggerPort;
+        }
+
+        @Override
+        public Optional<File> cookiesFile() {
+            return cookiesFile;
         }
 
         @Override
@@ -424,6 +465,11 @@ public class PhantomProcessConfigBuilder
         @Override
         public Optional<IProxy> proxy() {
             return proxy;
+        }
+
+        @Override
+        public Optional<Boolean> webSecurity() {
+            return webSecurity;
         }
 
         @Override

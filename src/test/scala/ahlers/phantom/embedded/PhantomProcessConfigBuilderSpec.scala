@@ -25,6 +25,7 @@ class PhantomProcessConfigBuilderSpec
 
     actual.debug should be(Optional.absent)
     actual.remoteDebuggerPort should be(Optional.absent)
+    actual.cookiesFile should be(Optional.absent)
     actual.diskCache should be(Optional.absent)
     actual.diskCachePath should be(Optional.absent)
     actual.maximumDiskCacheSize should be(Optional.absent)
@@ -46,19 +47,21 @@ class PhantomProcessConfigBuilderSpec
 
     val debug = true
     val remoteDebuggerPort = 0
+    val cookiesFile = new File("cookies")
     val diskCache = true
-    val diskCachePath = new File("")
+    val diskCachePath = new File("disk-cache")
     val maximumDiskCacheSize = 0L
     val ignoreSSLErrors = true
     val loadImages = true
-    val localStoragePath = new File("")
+    val localStoragePath = new File("local-storage")
     val localStorageQuota = 0L
     val localURLAccess = true
     val localToRemoteURLAccess = true
-    val offlineStoragePath = new File("")
+    val offlineStoragePath = new File("offline-storage")
     val offlineStorageQuota = 0L
     val outputEncoding = "encoding"
     val proxy = mock[IProxy]
+    val webSecurity = true
     val script = mock[IPhantomScript]
 
     val actual =
@@ -66,6 +69,7 @@ class PhantomProcessConfigBuilderSpec
         .version(version)
         .debug(debug)
         .remoteDebuggerPort(remoteDebuggerPort)
+        .cookiesFile(cookiesFile)
         .diskCache(diskCache)
         .diskCachePath(diskCachePath)
         .maximumDiskCacheSize(maximumDiskCacheSize)
@@ -80,6 +84,7 @@ class PhantomProcessConfigBuilderSpec
         .outputEncoding(outputEncoding)
         .proxy(proxy)
         .script(script)
+        .webSecurity(webSecurity)
         .build()
 
     actual.version() should be(version)
@@ -99,6 +104,7 @@ class PhantomProcessConfigBuilderSpec
     actual.offlineStorageQuota should be(Optional.of(offlineStorageQuota))
     actual.outputEncoding should be(Optional.of(outputEncoding))
     actual.proxy should be(Optional.of(proxy))
+    actual.webSecurity should be(Optional.of(webSecurity))
     actual.script should be(Optional.of(script))
   }
 
