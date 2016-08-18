@@ -23,7 +23,7 @@ class ProxyBuilderSpec
 
     actual.host should be(host)
     actual.port should be(Optional.absent)
-    actual.`type` should be(ProxyType.NONE)
+    actual.`type` should be(Optional.absent)
     actual.credential should be(Optional.absent)
   }
 

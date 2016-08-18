@@ -11,7 +11,7 @@ public interface IProxy {
 
     Optional<Integer> port();
 
-    IProxyType type();
+    Optional<IProxyType> type();
 
     Optional<IProxyCredential> credential();
 

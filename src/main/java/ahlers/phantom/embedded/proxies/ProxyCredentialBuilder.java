@@ -3,6 +3,8 @@ package ahlers.phantom.embedded.proxies;
 import de.flapdoodle.embed.process.builder.AbstractBuilder;
 import de.flapdoodle.embed.process.builder.IProperty;
 import de.flapdoodle.embed.process.builder.TypedProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
@@ -65,6 +67,11 @@ public class ProxyCredentialBuilder
         @Override
         public String password() {
             return password;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
         }
 
     }

@@ -42,7 +42,6 @@ class ScriptParameterSpec
           (e, ea) <- List(Some(encoding) -> List(s"--script-encoding=$encoding"), None -> Nil)
           (l, la) <- List(Some(language) -> List(s"--script-language=$language"), None -> Nil)
           (a, aa) <- List(arguments -> arguments, Nil -> Nil)
-          _ = println(s"$e -> $ea; $l -> $la; $a -> $la")
         } yield Some(script(e, l, source, a)) -> (ea ++ la ++ List(path) ++ aa)
 
       scenarios ++ List(None -> Nil)
