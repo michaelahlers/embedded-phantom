@@ -4,6 +4,8 @@ import com.google.common.base.Optional;
 import de.flapdoodle.embed.process.builder.AbstractBuilder;
 import de.flapdoodle.embed.process.builder.IProperty;
 import de.flapdoodle.embed.process.builder.TypedProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
@@ -18,7 +20,6 @@ public class ProxyBuilder
     protected static final TypedProperty<IProxyCredential> CREDENTIAL = TypedProperty.with("credential", IProxyCredential.class);
 
     public ProxyBuilder defaults() {
-        setDefault(TYPE, ProxyType.NONE);
         return this;
     }
 
@@ -62,7 +63,7 @@ public class ProxyBuilder
     public IProxy build() {
         final String host = get(HOST);
         final Optional<Integer> port = Optional.fromNullable(get(PORT, null));
-        final IProxyType type = get(TYPE);
+        final Optional<IProxyType> type = Optional.fromNullable(get(TYPE, null));
         final Optional<IProxyCredential> credential = Optional.fromNullable(get(CREDENTIAL, null));
 
         return new ImmutableProxy(
@@ -80,14 +81,14 @@ public class ProxyBuilder
 
         private final Optional<Integer> port;
 
-        private final IProxyType type;
+        private final Optional<IProxyType> type;
 
         private final Optional<IProxyCredential> credential;
 
         public ImmutableProxy(
                 final String host,
                 final Optional<Integer> port,
-                final IProxyType type,
+                final Optional<IProxyType> type,
                 final Optional<IProxyCredential> credential
         ) {
             this.host = host;
@@ -107,13 +108,18 @@ public class ProxyBuilder
         }
 
         @Override
-        public IProxyType type() {
+        public Optional<IProxyType> type() {
             return type;
         }
 
         @Override
         public Optional<IProxyCredential> credential() {
             return credential;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
         }
 
     }
