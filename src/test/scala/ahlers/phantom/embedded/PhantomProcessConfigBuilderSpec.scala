@@ -14,12 +14,12 @@ class PhantomProcessConfigBuilderSpec
 
   it must "assign defaults" in {
     val actual =
-      new PhantomConfigBuilder()
+      new PhantomProcessConfigBuilder()
         .defaults()
         .build()
 
     actual.version() should be(PhantomVersion.LATEST)
-    actual.formatter() should be(PhantomCommandFormatter.getInstance)
+
     actual.debug() should be(Optional.absent[Boolean])
     actual.script() should be(Optional.absent[IPhantomScript])
   }
@@ -27,20 +27,18 @@ class PhantomProcessConfigBuilderSpec
   it must "preserve all values" in {
     val version = PhantomVersion.V211
 
-    val formatter = mock[IPhantomCommandFormatter]
-
     val debug = true
     val script = mock[IPhantomScript]
 
     val actual =
-      new PhantomConfigBuilder()
+      new PhantomProcessConfigBuilder()
         .version(version)
-        .formatter(formatter)
         .debug(debug)
         .script(script)
         .build()
 
     actual.version() should be(version)
+
     actual.debug().get should equal(debug)
     actual.script().get should be(script)
   }

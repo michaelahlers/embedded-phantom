@@ -18,16 +18,17 @@ public class PhantomExecutable
 
     private final static Logger logger = getLogger(PhantomExecutable.class);
 
-    private final IExtractedFileSet files;
+    private final IPhantomCommandFormatter commandFormatter;
 
     PhantomExecutable(
             final Distribution distribution,
             final IPhantomProcessConfig processConfig,
             final IRuntimeConfig runtimeConfig,
-            final IExtractedFileSet files
+            final IExtractedFileSet files,
+            final IPhantomCommandFormatter commandFormatter
     ) {
         super(distribution, processConfig, runtimeConfig, files);
-        this.files = files;
+        this.commandFormatter = commandFormatter;
     }
 
     @Override
@@ -39,4 +40,7 @@ public class PhantomExecutable
         return new PhantomProcess(distribution, processConfig, runtimeConfig, this);
     }
 
+    public IPhantomCommandFormatter commandFormatter() {
+        return commandFormatter;
+    }
 }

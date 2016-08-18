@@ -34,7 +34,8 @@ public class PhantomStarter
                 distribution,
                 processConfig,
                 runtimeConfig,
-                files
+                files,
+                PhantomCommandFormatter.getInstance()
         );
     }
 

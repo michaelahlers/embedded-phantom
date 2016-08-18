@@ -11,20 +11,16 @@ import de.flapdoodle.embed.process.distribution.IVersion;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public class PhantomConfigBuilder
+public class PhantomProcessConfigBuilder
         extends AbstractBuilder<IPhantomProcessConfig> {
 
     protected static final TypedProperty<IVersion> VERSION = TypedProperty.with("version", IVersion.class);
 
-    protected static final TypedProperty<IPhantomCommandFormatter> COMMAND_FORMATTER = TypedProperty.with("command-formatter", IPhantomCommandFormatter.class);
-
     protected static final TypedProperty<Boolean> DEBUG = TypedProperty.with("debug", Boolean.class);
     protected static final TypedProperty<IPhantomScript> SCRIPT = TypedProperty.with("script", IPhantomScript.class);
 
-    public PhantomConfigBuilder defaults() {
+    public PhantomProcessConfigBuilder defaults() {
         property(VERSION).setDefault(PhantomVersion.LATEST);
-
-        property(COMMAND_FORMATTER).setDefault(PhantomCommandFormatter.getInstance());
 
         return this;
     }
@@ -33,17 +29,8 @@ public class PhantomConfigBuilder
         return property(VERSION);
     }
 
-    public PhantomConfigBuilder version(final IVersion value) {
+    public PhantomProcessConfigBuilder version(final IVersion value) {
         version().set(value);
-        return this;
-    }
-
-    protected IProperty<IPhantomCommandFormatter> formatter() {
-        return property(COMMAND_FORMATTER);
-    }
-
-    public PhantomConfigBuilder formatter(final IPhantomCommandFormatter value) {
-        formatter().set(value);
         return this;
     }
 
@@ -51,7 +38,7 @@ public class PhantomConfigBuilder
         return property(DEBUG);
     }
 
-    public PhantomConfigBuilder debug(final Boolean value) {
+    public PhantomProcessConfigBuilder debug(final Boolean value) {
         debug().set(value);
         return this;
     }
@@ -60,7 +47,7 @@ public class PhantomConfigBuilder
         return property(SCRIPT);
     }
 
-    public PhantomConfigBuilder script(final IPhantomScript value) {
+    public PhantomProcessConfigBuilder script(final IPhantomScript value) {
         script().set(value);
         return this;
     }
@@ -69,14 +56,11 @@ public class PhantomConfigBuilder
     public IPhantomProcessConfig build() {
         final IVersion version = get(VERSION);
 
-        final IPhantomCommandFormatter formatter = get(COMMAND_FORMATTER);
-
         final Optional<Boolean> debug = Optional.fromNullable(get(DEBUG, null));
         final Optional<IPhantomScript> script = Optional.fromNullable(get(SCRIPT, null));
 
         return new ImmutablePhantomProcessConfig(
                 version,
-                formatter,
                 debug,
                 script
         );
@@ -86,15 +70,12 @@ public class PhantomConfigBuilder
             extends ExecutableProcessConfig
             implements IPhantomProcessConfig {
 
-        private final IPhantomCommandFormatter formatter;
-
         private final Optional<Boolean> debug;
 
         private final Optional<IPhantomScript> script;
 
         protected ImmutablePhantomProcessConfig(
                 final IVersion version,
-                final IPhantomCommandFormatter formatter,
                 final Optional<Boolean> debug,
                 final Optional<IPhantomScript> script
         ) {
@@ -115,15 +96,8 @@ public class PhantomConfigBuilder
                 }
             });
 
-            this.formatter = formatter;
-
             this.debug = debug;
             this.script = script;
-        }
-
-        @Override
-        public IPhantomCommandFormatter formatter() {
-            return formatter;
         }
 
         @Override
@@ -137,4 +111,5 @@ public class PhantomConfigBuilder
         }
 
     }
+
 }

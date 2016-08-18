@@ -33,6 +33,41 @@ public class PhantomProcess
         super(distribution, processConfig, runtimeConfig, executable);
     }
 
+    /*
+     * About reflective access to private members.
+     *
+     * AbstractProcess makes a glaring mistake in calling overridden (virtual) methods from its constructor. This defeats the ability of subclasses to provide additional details to those methods, which this implementation needs (<em>e.g.</em>, IPhantomCommandFormatter
+     *
+     * For more information see these answers on Stack Overflow:
+     *
+     * - http://stackoverflow.com/a/2529618/700420
+     * - http://stackoverflow.com/a/2529661/700420
+     *
+     * These explain the issue, and refer to work by Joshua Bloch and Neal Grafter.
+     */
+
+    private ProcessControl processControl() throws Exception {
+        return (ProcessControl) FieldUtils
+                .getDeclaredField(AbstractProcess.class, "process", true)
+                .get(this);
+    }
+
+    private Process nativeProcess() throws Exception {
+        return (Process) FieldUtils
+                .getDeclaredField(ProcessControl.class, "process", true)
+                .get(processControl());
+    }
+
+    private PhantomExecutable executable() throws Exception {
+        return (PhantomExecutable) FieldUtils
+                .getDeclaredField(AbstractProcess.class, "executable", true)
+                .get(this);
+    }
+
+    private IPhantomCommandFormatter commandFormatter() throws Exception {
+        return executable().commandFormatter();
+    }
+
     /**
      * Internal API.
      */
@@ -42,22 +77,16 @@ public class PhantomProcess
             final IPhantomProcessConfig processConfig,
             final IExtractedFileSet files
     ) throws IOException {
-        return processConfig.formatter().format(files, processConfig);
+        try {
+            return commandFormatter().format(files, processConfig);
+        } catch (final Throwable t) {
+            throw new IOException("Error retrieving command formatter from executable.", t);
+        }
     }
 
     PrintWriter getStandardInput() throws Exception {
         try {
-            final ProcessControl processControl =
-                    (ProcessControl) FieldUtils
-                            .getDeclaredField(AbstractProcess.class, "process", true)
-                            .get(this);
-
-            final Process underlyingProcess =
-                    (Process) FieldUtils
-                            .getDeclaredField(ProcessControl.class, "process", true)
-                            .get(processControl);
-
-            return new PrintWriter(new OutputStreamWriter(underlyingProcess.getOutputStream()));
+            return new PrintWriter(new OutputStreamWriter(nativeProcess().getOutputStream()));
         } catch (final Throwable t) {
             throw new Exception("Error creating standard input processor.", t);
         }
