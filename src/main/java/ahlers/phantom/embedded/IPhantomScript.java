@@ -1,5 +1,6 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import java.io.File;
@@ -10,6 +11,10 @@ import java.io.File;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public interface IPhantomScript {
+
+    Optional<String> encoding();
+
+    Optional<String> language();
 
     File source();
 
