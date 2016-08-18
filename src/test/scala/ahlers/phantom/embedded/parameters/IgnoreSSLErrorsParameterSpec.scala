@@ -26,7 +26,7 @@ class IgnoreSSLErrorsParameterSpec
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
-    (config.diskCache _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
+    (config.ignoreSSLErrors _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
 
     config
   }

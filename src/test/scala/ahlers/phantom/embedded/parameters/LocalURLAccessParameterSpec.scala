@@ -26,7 +26,7 @@ class LocalURLAccessParameterSpec
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
-    (config.debug _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
+    (config.localURLAccess _).expects().returns(value.map(Boolean.box).asJava).anyNumberOfTimes()
 
     config
   }
