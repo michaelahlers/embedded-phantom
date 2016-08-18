@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.File;
 
 /**
- * Complements {@link IPhantomConfig} in providing arguments to the command line interface, but only the portion dealing with external scripts.
+ * Complements {@link IPhantomProcessConfig} in providing arguments to the command line interface, but only the portion dealing with external scripts.
  *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */

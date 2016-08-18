@@ -1,6 +1,6 @@
 package ahlers.phantom.embedded.parameters;
 
-import ahlers.phantom.embedded.IPhantomConfig;
+import ahlers.phantom.embedded.IPhantomProcessConfig;
 import ahlers.phantom.embedded.IPhantomScript;
 import com.google.common.collect.ImmutableList;
 
@@ -25,9 +25,9 @@ public enum ScriptParameter
     }
 
     @Override
-    public ImmutableList<String> format(final IPhantomConfig config) {
-        if (config.script().isPresent()) {
-            return format(config.script().get());
+    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+        if (processConfig.script().isPresent()) {
+            return format(processConfig.script().get());
         }
 
         return ImmutableList.of();

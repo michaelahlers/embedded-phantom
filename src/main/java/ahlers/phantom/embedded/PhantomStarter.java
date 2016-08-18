@@ -9,7 +9,7 @@ import de.flapdoodle.embed.process.runtime.Starter;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomStarter
-        extends Starter<IPhantomConfig, PhantomExecutable, PhantomProcess> {
+        extends Starter<IPhantomProcessConfig, PhantomExecutable, PhantomProcess> {
 
     private PhantomStarter(final IRuntimeConfig config) {
         super(config);
@@ -25,14 +25,14 @@ public class PhantomStarter
 
     @Override
     protected PhantomExecutable newExecutable(
-            final IPhantomConfig config,
+            final IPhantomProcessConfig processConfig,
             final Distribution distribution,
             final IRuntimeConfig runtimeConfig,
             final IExtractedFileSet files
     ) {
         return new PhantomExecutable(
                 distribution,
-                config,
+                processConfig,
                 runtimeConfig,
                 files
         );

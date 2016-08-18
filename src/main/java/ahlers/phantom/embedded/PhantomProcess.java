@@ -20,17 +20,17 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomProcess
-        extends AbstractProcess<IPhantomConfig, PhantomExecutable, PhantomProcess> {
+        extends AbstractProcess<IPhantomProcessConfig, PhantomExecutable, PhantomProcess> {
 
     private final static Logger logger = getLogger(PhantomProcess.class);
 
     public PhantomProcess(
             final Distribution distribution,
-            final IPhantomConfig config,
+            final IPhantomProcessConfig processConfig,
             final IRuntimeConfig runtimeConfig,
             final PhantomExecutable executable
     ) throws IOException {
-        super(distribution, config, runtimeConfig, executable);
+        super(distribution, processConfig, runtimeConfig, executable);
     }
 
     /**
@@ -39,10 +39,10 @@ public class PhantomProcess
     @Override
     protected List<String> getCommandLine(
             final Distribution distribution,
-            final IPhantomConfig config,
+            final IPhantomProcessConfig processConfig,
             final IExtractedFileSet files
     ) throws IOException {
-        return config.formatter().format(files, config);
+        return processConfig.formatter().format(files, processConfig);
     }
 
     PrintWriter getStandardInput() throws Exception {

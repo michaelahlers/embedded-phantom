@@ -9,7 +9,7 @@ import de.flapdoodle.embed.process.config.IExecutableProcessConfig;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  * @see <a href="http://phantomjs.org/api/command-line.html"><em>Command Line Interface</em></a>
  */
-public interface IPhantomConfig
+public interface IPhantomProcessConfig
         extends IExecutableProcessConfig {
 
     IPhantomCommandFormatter formatter();

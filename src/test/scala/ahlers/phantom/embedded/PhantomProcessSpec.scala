@@ -48,7 +48,7 @@ class PhantomProcessSpec
     val commandFormatter = mock[IPhantomCommandFormatter]
     (commandFormatter.format _).expects(*, *).returns(ImmutableList.copyOf(Iterable(executable.getPath) ++ arguments)).atLeastOnce()
 
-    val config = mock[IPhantomConfig]
+    val config = mock[IPhantomProcessConfig]
     (config.formatter _).expects().returns(commandFormatter).atLeastOnce()
     (config.debug _).expects().never()
     (config.script _).expects().never()

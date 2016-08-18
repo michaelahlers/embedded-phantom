@@ -1,6 +1,6 @@
 package ahlers.phantom.embedded.parameters;
 
-import ahlers.phantom.embedded.IPhantomConfig;
+import ahlers.phantom.embedded.IPhantomProcessConfig;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -8,6 +8,6 @@ import com.google.common.collect.ImmutableList;
  */
 public interface IParameter {
 
-    ImmutableList<String> format(IPhantomConfig config);
+    ImmutableList<String> format(IPhantomProcessConfig processConfig);
 
 }

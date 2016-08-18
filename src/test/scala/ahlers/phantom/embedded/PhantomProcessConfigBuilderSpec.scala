@@ -7,7 +7,7 @@ import org.scalatest._
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-class PhantomConfigBuilderSpec
+class PhantomProcessConfigBuilderSpec
   extends FlatSpec
           with Matchers
           with MockFactory {

@@ -12,7 +12,7 @@ import de.flapdoodle.embed.process.distribution.IVersion;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomConfigBuilder
-        extends AbstractBuilder<IPhantomConfig> {
+        extends AbstractBuilder<IPhantomProcessConfig> {
 
     protected static final TypedProperty<IVersion> VERSION = TypedProperty.with("version", IVersion.class);
 
@@ -66,7 +66,7 @@ public class PhantomConfigBuilder
     }
 
     @Override
-    public IPhantomConfig build() {
+    public IPhantomProcessConfig build() {
         final IVersion version = get(VERSION);
 
         final IPhantomCommandFormatter formatter = get(COMMAND_FORMATTER);
@@ -74,7 +74,7 @@ public class PhantomConfigBuilder
         final Optional<Boolean> debug = Optional.fromNullable(get(DEBUG, null));
         final Optional<IPhantomScript> script = Optional.fromNullable(get(SCRIPT, null));
 
-        return new ImmutablePhantomConfig(
+        return new ImmutablePhantomProcessConfig(
                 version,
                 formatter,
                 debug,
@@ -82,9 +82,9 @@ public class PhantomConfigBuilder
         );
     }
 
-    static class ImmutablePhantomConfig
+    static class ImmutablePhantomProcessConfig
             extends ExecutableProcessConfig
-            implements IPhantomConfig {
+            implements IPhantomProcessConfig {
 
         private final IPhantomCommandFormatter formatter;
 
@@ -92,7 +92,7 @@ public class PhantomConfigBuilder
 
         private final Optional<IPhantomScript> script;
 
-        protected ImmutablePhantomConfig(
+        protected ImmutablePhantomProcessConfig(
                 final IVersion version,
                 final IPhantomCommandFormatter formatter,
                 final Optional<Boolean> debug,

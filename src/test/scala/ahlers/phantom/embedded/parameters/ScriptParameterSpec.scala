@@ -2,7 +2,7 @@ package ahlers.phantom.embedded.parameters
 
 import java.io.File
 
-import ahlers.phantom.embedded.{IPhantomConfig, IPhantomScript, PhantomScriptBuilder}
+import ahlers.phantom.embedded.{IPhantomProcessConfig, IPhantomScript, PhantomScriptBuilder}
 import de.flapdoodle.embed.process.distribution.IVersion
 import org.feijoas.mango.common.base.Optional._
 
@@ -30,8 +30,8 @@ class ScriptParameterSpec
         Nil
   }
 
-  override def config(version: IVersion, script: Option[IPhantomScript]): IPhantomConfig = {
-    val config = mock[IPhantomConfig]
+  override def config(version: IVersion, script: Option[IPhantomScript]): IPhantomProcessConfig = {
+    val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
     (config.script _).expects().returns(script.asJava).anyNumberOfTimes()

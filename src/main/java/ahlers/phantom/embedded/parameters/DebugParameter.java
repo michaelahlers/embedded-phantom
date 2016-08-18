@@ -1,6 +1,6 @@
 package ahlers.phantom.embedded.parameters;
 
-import ahlers.phantom.embedded.IPhantomConfig;
+import ahlers.phantom.embedded.IPhantomProcessConfig;
 import com.google.common.collect.ImmutableList;
 
 import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
@@ -18,8 +18,8 @@ public enum DebugParameter
     }
 
     @Override
-    public ImmutableList<String> format(final IPhantomConfig config) {
-        return usingTemplate("--debug=%s", config.debug());
+    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+        return usingTemplate("--debug=%s", processConfig.debug());
     }
 
 }

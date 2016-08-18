@@ -26,21 +26,21 @@ public enum PhantomCommandFormatter
     );
 
     @Override
-    public ImmutableList<String> format(final IExtractedFileSet files, final IPhantomConfig config) {
-        return format(arguments, files, config);
+    public ImmutableList<String> format(final IExtractedFileSet files, final IPhantomProcessConfig processConfig) {
+        return format(arguments, files, processConfig);
     }
 
     static ImmutableList<String> format(
             final List<IParameter> arguments,
             final IExtractedFileSet files,
-            final IPhantomConfig config
+            final IPhantomProcessConfig processConfig
     ) {
         final ImmutableList.Builder<String> builder = ImmutableList.builder();
 
         builder.add(files.executable().getAbsolutePath());
 
         for (final IParameter argument : arguments) {
-            builder.addAll(argument.format(config));
+            builder.addAll(argument.format(processConfig));
         }
 
         return builder.build();

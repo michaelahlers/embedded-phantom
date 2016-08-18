@@ -1,6 +1,6 @@
 package ahlers.phantom.embedded.parameters
 
-import ahlers.phantom.embedded.IPhantomConfig
+import ahlers.phantom.embedded.IPhantomProcessConfig
 import de.flapdoodle.embed.process.distribution.IVersion
 import org.feijoas.mango.common.base.Optional._
 
@@ -22,8 +22,8 @@ class DebugParameterSpec
         Nil
   }
 
-  override def config(version: IVersion, debug: Option[Boolean]): IPhantomConfig = {
-    val config = mock[IPhantomConfig]
+  override def config(version: IVersion, debug: Option[Boolean]): IPhantomProcessConfig = {
+    val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
     (config.debug _).expects().returns(debug.map(Boolean.box).asJava).anyNumberOfTimes()
