@@ -6,12 +6,12 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum DiskCacheParameter
+public enum IgnoreSSLErrorsParameter
         implements IParameter {
 
     INSTANCE;
 
-    public static DiskCacheParameter getInstance() {
+    public static IgnoreSSLErrorsParameter getInstance() {
         return INSTANCE;
     }
 

@@ -6,12 +6,12 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum DiskCacheParameter
+public enum OfflineStoragePathParameter
         implements IParameter {
 
     INSTANCE;
 
-    public static DiskCacheParameter getInstance() {
+    public static OfflineStoragePathParameter getInstance() {
         return INSTANCE;
     }
 
@@ -19,4 +19,5 @@ public enum DiskCacheParameter
     public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
         return ImmutableList.of();
     }
+
 }

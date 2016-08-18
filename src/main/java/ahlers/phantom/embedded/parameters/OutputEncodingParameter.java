@@ -6,12 +6,12 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum DiskCacheParameter
+public enum OutputEncodingParameter
         implements IParameter {
 
     INSTANCE;
 
-    public static DiskCacheParameter getInstance() {
+    public static OutputEncodingParameter getInstance() {
         return INSTANCE;
     }
 

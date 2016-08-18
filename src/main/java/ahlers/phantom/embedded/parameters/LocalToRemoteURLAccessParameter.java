@@ -6,12 +6,12 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public enum DiskCacheParameter
+public enum LocalToRemoteURLAccessParameter
         implements IParameter {
 
     INSTANCE;
 
-    public static DiskCacheParameter getInstance() {
+    public static LocalToRemoteURLAccessParameter getInstance() {
         return INSTANCE;
     }
 
@@ -19,4 +19,5 @@ public enum DiskCacheParameter
     public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
         return ImmutableList.of();
     }
+
 }
