@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.builder.AbstractBuilder;
 import de.flapdoodle.embed.process.builder.IProperty;
 import de.flapdoodle.embed.process.builder.TypedProperty;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.File;
 
@@ -127,7 +129,7 @@ public class PhantomScriptBuilder
 
         @Override
         public String toString() {
-            return String.format("%s %s", source(), arguments());
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
         }
 
     }
