@@ -43,7 +43,7 @@ class ProxyBuilderSpec
 
     actual.host should be(host)
     actual.port should be(Optional.of(port))
-    actual.`type` should be(`type`)
+    actual.`type` should be(Optional.of(`type`))
     actual.credential should be(Optional.of(credential))
   }
 
