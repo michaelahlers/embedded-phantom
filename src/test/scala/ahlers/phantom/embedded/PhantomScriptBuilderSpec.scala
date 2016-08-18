@@ -29,12 +29,12 @@ class PhantomScriptBuilderSpec
     actual.encoding should be(Optional.absent)
     actual.language should be(Optional.absent)
     actual.source should be(source)
-    actual.arguments should be(arguments)
+    actual.arguments should contain theSameElementsInOrderAs arguments
   }
 
   it must "preserve all values" in {
     val encoding = "encoding"
-    val language = "langage"
+    val language = "language"
     val source = new File("source")
     val arguments = List("argument", "argument")
 
@@ -46,10 +46,10 @@ class PhantomScriptBuilderSpec
         .arguments(arguments)
         .build()
 
-    actual.encoding should be(encoding)
-    actual.language should be(language)
+    actual.encoding should be(Optional.of(encoding))
+    actual.language should be(Optional.of(language))
     actual.source should be(source)
-    actual.arguments should be(arguments)
+    actual.arguments should contain theSameElementsInOrderAs arguments
   }
 
 }
