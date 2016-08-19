@@ -3,9 +3,12 @@ package ahlers.phantom.embedded;
 import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.config.io.ProcessOutput;
+import de.flapdoodle.embed.process.config.store.IDownloadConfig;
 import de.flapdoodle.embed.process.distribution.IVersion;
 import de.flapdoodle.embed.process.io.IStreamProcessor;
 import de.flapdoodle.embed.process.io.Processors;
+import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir;
+import de.flapdoodle.embed.process.store.IArtifactStore;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +52,7 @@ public class PhantomTest {
                 new PhantomRuntimeConfigBuilder()
                         .defaults()
                         .processOutput(processOutput)
+                        .artifactStore(artifactStore)
                         .build();
 
         final PhantomStarter starter = PhantomStarter.getInstance(runtimeConfig);
@@ -117,5 +121,19 @@ public class PhantomTest {
         }
 
     }
+
+    final IDownloadConfig downloadConfig =
+            new PhantomDownloadConfigBuilder()
+                    .defaults()
+                    .artifactStorePath(new TempDirInPlatformTempDir())
+                    .build();
+
+    final IArtifactStore artifactStore =
+            new PhantomExtractedArtifactStoreBuilder()
+                    .defaults()
+                    .extractDir(new TempDirInPlatformTempDir())
+                    .download(downloadConfig)
+                    .build();
+
 
 }

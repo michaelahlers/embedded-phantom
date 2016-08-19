@@ -1,6 +1,7 @@
 package ahlers.phantom.embedded
 
 import de.flapdoodle.embed.process.config.io.ProcessOutput
+import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir
 import de.flapdoodle.embed.process.io.{IStreamProcessor, Processors}
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
@@ -36,6 +37,7 @@ class PhantomSpec
       val runtimeConfig =
         new PhantomRuntimeConfigBuilder()
           .defaults()
+          .artifactStore(artifactStore)
           .processOutput(processOutput)
           .build()
 
@@ -66,7 +68,7 @@ class PhantomSpec
     }
   }
 
-  private class FutureStreamProcessor(message: String)
+  class FutureStreamProcessor(message: String)
     extends IStreamProcessor {
 
     private val output: Promise[String] = Promise()
@@ -80,5 +82,18 @@ class PhantomSpec
       output.future
 
   }
+
+  val downloadConfig =
+    new PhantomDownloadConfigBuilder()
+      .defaults()
+      .artifactStorePath(new TempDirInPlatformTempDir)
+      .build()
+
+  val artifactStore =
+    new PhantomExtractedArtifactStoreBuilder()
+      .defaults()
+      .extractDir(new TempDirInPlatformTempDir)
+      .download(downloadConfig)
+      .build()
 
 }
