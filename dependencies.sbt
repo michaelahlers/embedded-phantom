@@ -26,7 +26,10 @@ libraryDependencies ++=
  * Integration test dependencies.
  */
 libraryDependencies ++=
-  "org.scalatest" %% "scalatest" % versionScalaTest % IntegrationTest ::
+  "com.novocode" % "junit-interface" % "0.11" % IntegrationTest ::
+    "junit" % "junit" % "4.12" % IntegrationTest ::
+    "org.hamcrest" % "hamcrest-core" % "1.3" % IntegrationTest ::
+    "org.scalatest" %% "scalatest" % versionScalaTest % IntegrationTest ::
     Nil
 
 

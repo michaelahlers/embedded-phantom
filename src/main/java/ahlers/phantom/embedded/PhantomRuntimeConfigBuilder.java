@@ -11,11 +11,8 @@ public class PhantomRuntimeConfigBuilder
 
     public RuntimeConfigBuilder defaults() {
         processOutput().setDefault(PhantomProcessOutputConfig.getDefaultInstance());
-
         commandLinePostProcessor().setDefault(new ICommandLinePostProcessor.Noop());
-
         artifactStore().setDefault(new PhantomExtractedArtifactStoreBuilder().defaults().build());
-
         return this;
     }
 

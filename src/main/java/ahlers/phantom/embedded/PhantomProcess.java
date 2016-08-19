@@ -1,17 +1,18 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 import de.flapdoodle.embed.process.runtime.AbstractProcess;
 import de.flapdoodle.embed.process.runtime.ProcessControl;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -24,6 +25,8 @@ public class PhantomProcess
 
     private final static Logger logger = getLogger(PhantomProcess.class);
 
+    private final ImmutableList<String> command;
+
     public PhantomProcess(
             final Distribution distribution,
             final IPhantomProcessConfig processConfig,
@@ -31,6 +34,7 @@ public class PhantomProcess
             final PhantomExecutable executable
     ) throws IOException {
         super(distribution, processConfig, runtimeConfig, executable);
+        this.command = ImmutableList.copyOf(getCommandLine(distribution, processConfig, executable.getFile()));
     }
 
     /*
@@ -84,7 +88,10 @@ public class PhantomProcess
         }
     }
 
-    PrintWriter getStandardInput() throws Exception {
+    /**
+     * This API is proof-of-concept only, and will be replaced soon.
+     */
+    public PrintWriter getStandardInput() throws Exception {
         try {
             return new PrintWriter(new OutputStreamWriter(nativeProcess().getOutputStream()));
         } catch (final Throwable t) {
@@ -96,18 +103,37 @@ public class PhantomProcess
     protected void stopInternal() {
         try {
             logger.info("Sending exit command.");
-            final Writer standardInput = getStandardInput();
+
+            final PrintWriter standardInput = getStandardInput();
+
             standardInput.flush();
-            standardInput.write("\r\n;phantom.exit();\r\n");
+            standardInput.println();
+            standardInput.println(";console.log('WTF!?');");
+            standardInput.println(";phantom.exit();");
             standardInput.flush();
             standardInput.close();
+
         } catch (final Throwable t) {
             logger.warn("Error issuing exit command (will attempt to kill the process).", t);
+        } finally {
             sendKillToProcess();
             tryKillToProcess();
-        } finally {
+
             logger.info("Waiting for process to exit.");
-            stopProcess();
+
+            try {
+                final Process process = nativeProcess();
+                process.waitFor();
+                logger.info(String.format("Received exit code %s (command was: %s).",
+                        process.exitValue(),
+                        StringUtils.join(command)
+                ));
+            } catch (final Throwable t) {
+                logger.warn("Error waiting for process to exit.", t);
+            }
+
+            /* Almost always throws an exception, even if the process successfully terminated. */
+            // stopProcess();
         }
     }
 
