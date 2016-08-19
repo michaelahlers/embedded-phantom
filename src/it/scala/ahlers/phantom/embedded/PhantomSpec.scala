@@ -1,7 +1,6 @@
 package ahlers.phantom.embedded
 
 import de.flapdoodle.embed.process.config.io.ProcessOutput
-import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir
 import de.flapdoodle.embed.process.io.{IStreamProcessor, Processors}
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
@@ -86,13 +85,25 @@ class PhantomSpec
   val downloadConfig =
     new PhantomDownloadConfigBuilder()
       .defaults()
-      .artifactStorePath(new TempDirInPlatformTempDir)
+      //.artifactStorePath(new TempDirInPlatformTempDir{
+      //  override def asFile(): File = {
+      //    val file = super.asFile()
+      //    println("Downloaded artifact store path: " + file.getAbsolutePath + ".")
+      //    return file
+      //  }
+      //})
       .build()
 
   val artifactStore =
     new PhantomExtractedArtifactStoreBuilder()
       .defaults()
-      .extractDir(new TempDirInPlatformTempDir)
+      //.extractDir(new TempDirInPlatformTempDir{
+      //  override def asFile(): File = {
+      //    val file = super.asFile()
+      //    println("Extracted artifact store path: " + file.getAbsolutePath + ".")
+      //    return file
+      //  }
+      //})
       .download(downloadConfig)
       .build()
 
