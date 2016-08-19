@@ -108,7 +108,6 @@ public class PhantomProcess
 
             standardInput.flush();
             standardInput.println();
-            standardInput.println(";console.log('WTF!?');");
             standardInput.println(";phantom.exit();");
             standardInput.flush();
             standardInput.close();
