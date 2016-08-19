@@ -2,7 +2,7 @@ package ahlers.phantom.embedded;
 
 import de.flapdoodle.embed.process.config.store.DownloadConfigBuilder;
 import de.flapdoodle.embed.process.config.store.DownloadPath;
-import de.flapdoodle.embed.process.extract.UserTempNaming;
+import de.flapdoodle.embed.process.extract.UUIDTempNaming;
 import de.flapdoodle.embed.process.io.directories.UserHome;
 import de.flapdoodle.embed.process.io.progress.StandardConsoleProgressListener;
 
@@ -17,8 +17,8 @@ public class PhantomDownloadConfigBuilder
     public PhantomDownloadConfigBuilder defaults() {
         /* Names temporary, in-progress downloads. */
 
-        // fileNaming().setDefault(new UUIDTempNaming());
-        fileNaming().setDefault(new UserTempNaming());
+        fileNaming().setDefault(new UUIDTempNaming());
+        // fileNaming().setDefault(new UserTempNaming());
 
         downloadPrefix().setDefault(new DownloadPrefix("downloads"));
 
