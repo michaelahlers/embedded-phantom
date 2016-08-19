@@ -39,13 +39,15 @@ pomPostProcess := {
 
         /** See http://stackoverflow.com/a/27853219/700420 for source. There's no clear SBT config. allowing for a Java-only artifact sans Scala and test libraries. As an alternative, simply remove from resulting POM any dependencies not relevant to clients. */
         case dependencyEl: Elem
-          if dependencyEl.label == "dependency" && dependencyEl.child.exists(_.text.contains("scala")) =>
+          if dependencyEl.label == "dependency" &&
+            (dependencyEl \ "scope").text.contains("test") ||
+            (dependencyEl \ "artifactId").text.contains("scala") =>
 
           val organization = (dependencyEl \ "groupId").text
           val artifact = (dependencyEl \ "artifactId").text
           val version = (dependencyEl \ "version").text
 
-          Comment(s"Provided dependency $organization#$artifact;$version has been omitted.")
+          Comment(s"Provided dependency $organization:$artifact:$version has been omitted.")
 
         case _ => node
 
