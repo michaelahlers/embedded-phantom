@@ -32,7 +32,7 @@ class PhantomProcessSpec
 
   private val logger = LoggerFactory.getLogger(classOf[PhantomProcessSpec])
 
-  override implicit def patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(5, Seconds), interval = Span(500, Millis))
+  override implicit def patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(10, Seconds), interval = Span(500, Millis))
 
   def withEchoCommand[T](standardOut: IStreamProcessor = Processors.silent, standardError: IStreamProcessor = Processors.silent)(block: (PhantomProcess) => T): Unit = {
 

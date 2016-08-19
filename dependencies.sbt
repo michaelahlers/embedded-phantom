@@ -6,7 +6,7 @@ val versionScalaTest = "(,2.3["
  * - Includes Google's JSR-305 library as a workaround for [https://issues.scala-lang.org/browse/SI-8978 SI-8978].
  */
 libraryDependencies ++=
-  "ch.qos.logback" % "logback-classic" % "1.1.5" % Provided ::
+  "ch.qos.logback" % "logback-classic" % "1.1.7" ::
     "com.google.guava" % "guava" % "19.0" ::
     "com.google.code.findbugs" % "jsr305" % "(,3.1[" ::
     "de.flapdoodle.embed" % "de.flapdoodle.embed.process" % "1.50.2" ::
