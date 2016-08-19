@@ -7,7 +7,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.tagobjects.{Disk, Network}
 import org.scalatest.time.{Millis, Seconds, Span}
 
-import scala.concurrent.Promise
+import scala.concurrent.{Future, Promise}
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
@@ -24,20 +24,11 @@ class PhantomSpec
 
       val message = "Hello, World!"
 
-      val output: Promise[String] = Promise()
+      val outputProcessor = new FutureStreamProcessor(message)
 
       val processOutput =
         new ProcessOutput(
-          new IStreamProcessor {
-
-            override def process(block: String): Unit = {
-              println(s"""block: "$block"""")
-              if (block.contains(message)) output.success(message)
-            }
-
-            override def onProcessed(): Unit = ()
-
-          },
+          outputProcessor,
           Processors.silent,
           Processors.silent
         )
@@ -58,9 +49,9 @@ class PhantomSpec
           .version(version)
           .build()
 
-      val executablePath = starter.prepare(config)
+      val executable = starter.prepare(config)
 
-      val process = executablePath.start()
+      val process = executable.start()
 
       val console = process.getStandardInput
 
@@ -68,10 +59,26 @@ class PhantomSpec
       console.flush()
       console.close()
 
-      output.future.futureValue should include(message)
+      outputProcessor.getOutput().futureValue should include(message)
+
       process.stop()
 
     }
+  }
+
+  private class FutureStreamProcessor(message: String)
+    extends IStreamProcessor {
+
+    private val output: Promise[String] = Promise()
+
+    override def process(block: String): Unit =
+      if (block.contains(message)) output.success(block)
+
+    override def onProcessed(): Unit = ()
+
+    def getOutput(): Future[String] =
+      output.future
+
   }
 
 }
