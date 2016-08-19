@@ -12,7 +12,8 @@ jdk:
 #- oraclejdk8
 
 script:
-- sbt test it:test
+#- sbt test it:test
+- sbt it:test
 # Following recommendations from http://scala-sbt.org/1.0/docs/Travis-CI-with-sbt.html.
 - find $HOME/.sbt -name "*.lock" | xargs rm
 - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
