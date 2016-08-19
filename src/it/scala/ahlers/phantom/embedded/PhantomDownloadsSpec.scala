@@ -1,8 +1,10 @@
 package ahlers.phantom.embedded
 
+import de.flapdoodle.embed.process.distribution.BitSize._
+import de.flapdoodle.embed.process.distribution.Distribution
 import de.flapdoodle.embed.process.distribution.Platform._
-import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
 import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir
+import de.flapdoodle.embed.process.store.MockLocalArtifactStore
 import org.scalatest._
 import org.scalatest.tagobjects.{Disk, Network, Slow}
 
@@ -28,7 +30,8 @@ class PhantomDownloadsSpec
       .download(downloadConfig)
       .build()
 
-  for (version <- PhantomVersion.values; platform <- Platform.values; bitsize <- BitSize.values) {
+  //for (version <- PhantomVersion.values; platform <- Platform.values; bitsize <- BitSize.values) {
+  for (version <- PhantomVersion.values; platform <- List(Linux); bitsize <- List(B64)) {
     val distribution = new Distribution(version, platform, bitsize)
 
     s"""Distribution "$distribution"""" must {
@@ -38,6 +41,7 @@ class PhantomDownloadsSpec
         case Linux | OS_X | Windows =>
           s"""download and verify artifacts""" taggedAs(Slow, Network, Disk) in {
             artifactStore.checkDistribution(distribution) should be(true)
+            MockLocalArtifactStore.getArtifact(downloadConfig, distribution) should not be null
           }
 
         case _ =>
