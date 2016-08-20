@@ -24,24 +24,27 @@ public class StableTransientDirectory
 
     private static final Logger logger = LoggerFactory.getLogger(StableTransientDirectory.class);
 
+    private static final DateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+
+    static {
+        timestampFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
     private final Path location;
 
     private StableTransientDirectory(final Path location) {
         this.location = location;
+
+        logger.info("Initialized with location \"{}\".", location);
     }
 
     public StableTransientDirectory() {
-        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        this.location =
-                new UserHome(".embedded-phantom")
-                        .asFile()
-                        .toPath()
-                        .resolve("transients")
-                        .resolve(String.format("%s_%s", dateFormat.format(new Date()), UUID.randomUUID()));
-
-        logger.info("Initialized with location \"{}\".", location);
+        this(new UserHome(".embedded-phantom")
+                .asFile()
+                .toPath()
+                .resolve("transients")
+                .resolve(String.format("%s_%s", timestampFormat.format(new Date()), UUID.randomUUID()))
+        );
     }
 
     public StableTransientDirectory withTail(final Path tail) {
