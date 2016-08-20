@@ -20,11 +20,12 @@ script:
 # TODO: Employ whatever solution from travis-ci/travis-ci#929 to perform these tasks once.
 # TODO: Enable once Coveralls supports Jacoco reports.
 # Only publish (snapshots) when on master or a maintenance branch.
+# Do not publish on tags.
 after_success:
 - jdk_switcher use oraclejdk8
 - 'echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"'
 - 'echo "TRAVIS_TAG: $TRAVIS_TAG"'
-- "[[ $TRAVIS_BRANCH =~ (master|^v[0-9]+.[0-9]+) ]] && sbt publish"
+- '[[ "$TRAVIS_BRANCH" =~ (master|^v[0-9]+.[0-9]+) ]] && [ -z "$TRAVIS_TAG" ] && sbt publish'
 
 cache:
   directories:
