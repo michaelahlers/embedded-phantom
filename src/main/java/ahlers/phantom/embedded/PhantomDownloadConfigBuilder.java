@@ -16,7 +16,10 @@ public class PhantomDownloadConfigBuilder
 
     public PhantomDownloadConfigBuilder defaults() {
         /* Names temporary, in-progress downloads. */
+
         fileNaming().setDefault(new UUIDTempNaming());
+        // fileNaming().setDefault(new UserTempNaming());
+
         downloadPrefix().setDefault(new DownloadPrefix("downloads"));
 
         /* Official download site appears problematic for programmatic user agents. See michaelahlers/specter#1 (and ariya/phantomjs#13951). */

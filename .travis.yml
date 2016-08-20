@@ -22,8 +22,8 @@ script:
 # Only publish (snapshots) when on master or a maintenance branch.
 after_success:
 - jdk_switcher use oraclejdk8
-- echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
-- echo "TRAVIS_TAG: $TRAVIS_TAG"
+- 'echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"'
+- 'echo "TRAVIS_TAG: $TRAVIS_TAG"'
 - "[[ $TRAVIS_BRANCH =~ (master|^v[0-9]+.[0-9]+) ]] && sbt publish"
 
 cache:

@@ -1,8 +1,8 @@
 package ahlers.phantom.embedded
 
-import de.flapdoodle.embed.process.distribution.Platform._
+import ahlers.phantom.embedded.MockArtifactStores.newArtifactStore
 import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
-import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir
+import de.flapdoodle.embed.process.distribution.Platform._
 import org.scalatest._
 import org.scalatest.tagobjects.{Disk, Network, Slow}
 
@@ -15,21 +15,9 @@ class PhantomDownloadsSpec
   extends WordSpec
           with Matchers {
 
-  val downloadConfig =
-    new PhantomDownloadConfigBuilder()
-      .defaults()
-      .artifactStorePath(new TempDirInPlatformTempDir)
-      .build()
-
-  val artifactStore =
-    new PhantomExtractedArtifactStoreBuilder()
-      .defaults()
-      .extractDir(new TempDirInPlatformTempDir)
-      .download(downloadConfig)
-      .build()
-
   for (version <- PhantomVersion.values; platform <- Platform.values; bitsize <- BitSize.values) {
     val distribution = new Distribution(version, platform, bitsize)
+    val artifactStore = newArtifactStore()
 
     s"""Distribution "$distribution"""" must {
       platform match {
