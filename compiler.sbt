@@ -1,4 +1,4 @@
-javacOptions ++=
+javacOptions in(Compile, compile) ++=
   "-source" :: "1.7" ::
     "-target" :: "1.7" ::
     Nil
