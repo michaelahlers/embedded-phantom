@@ -24,7 +24,7 @@ public class StableTransientDirectory
 
     private static final Logger logger = LoggerFactory.getLogger(StableTransientDirectory.class);
 
-    private static final DateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private static final DateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
 
     static {
         timestampFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
