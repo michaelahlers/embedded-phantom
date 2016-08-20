@@ -22,7 +22,7 @@ public class PhantomExtractedArtifactStoreBuilder
         tempDir().setDefault(new TempDirInPlatformTempDir());
 
         /* Defines where successfully-extracted files will land. */
-        extractDir().setDefault(new UserHome(Paths.get(".embedded-phantom", "artifacts").toString()));
+        extractDir().setDefault(new UserHome(Paths.get(".embedded-phantom", "extractions").toString()));
         extractExecutableNaming().setDefault(new NoopTempNaming());
 
         /* Incorporates the user's name into the executable file name. */
