@@ -1,6 +1,5 @@
 package ahlers.phantom.embedded;
 
-import de.flapdoodle.embed.process.io.directories.PlatformTemporaryDirectory;
 import de.flapdoodle.embed.process.store.IArtifactStore;
 
 /**
@@ -11,11 +10,11 @@ public interface MockArtifactStores {
     IArtifactStore artifactStore =
             new PhantomExtractedArtifactStoreBuilder()
                     .defaults()
-                    .extractDir(new PlatformTemporaryDirectory())
-                    .download(new PhantomDownloadConfigBuilder()
-                            .defaults()
-                            .artifactStorePath(new PlatformTemporaryDirectory())
-                            .build())
+//.extractDir(new PlatformTemporaryDirectory())
+//.download(new PhantomDownloadConfigBuilder()
+//        .defaults()
+//        .artifactStorePath(new PlatformTemporaryDirectory())
+//        .build())
                     .build();
 
 
