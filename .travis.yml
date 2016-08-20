@@ -8,12 +8,11 @@ os:
 
 jdk:
 - openjdk7
-#- oraclejdk7
-#- oraclejdk8
+- oraclejdk7
+- oraclejdk8
 
 script:
-#- sbt test it:test
-- sbt it:test
+- sbt test it:test
 # Following recommendations from http://scala-sbt.org/1.0/docs/Travis-CI-with-sbt.html.
 - find $HOME/.sbt -name "*.lock" | xargs rm
 - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
@@ -23,8 +22,8 @@ script:
 # Only publish (snapshots) when on master or a maintenance branch.
 after_success:
 - jdk_switcher use oraclejdk8
-- echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
-- echo "TRAVIS_TAG: $TRAVIS_TAG"
+- 'echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"'
+- 'echo "TRAVIS_TAG: $TRAVIS_TAG"'
 - "[[ $TRAVIS_BRANCH =~ (master|^v[0-9]+.[0-9]+) ]] && sbt publish"
 
 cache:
