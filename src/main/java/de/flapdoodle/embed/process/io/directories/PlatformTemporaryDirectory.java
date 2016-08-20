@@ -25,7 +25,7 @@ public class PlatformTemporaryDirectory
     @Override
     public File asFile() {
         final File directory = delegate.asFile();
-        logger.info("Requested temporary directory created at \"{0}\".", directory);
+        logger.info("Requested temporary directory created at \"{}\".", directory);
         return directory;
     }
 
