@@ -1,6 +1,6 @@
 package ahlers.phantom.embedded
 
-import ahlers.phantom.embedded.MockArtifactStores.artifactStore
+import ahlers.phantom.embedded.MockArtifactStores.newArtifactStore
 import de.flapdoodle.embed.process.config.io.ProcessOutput
 import de.flapdoodle.embed.process.io.{IStreamProcessor, Processors}
 import org.scalatest._
@@ -37,7 +37,7 @@ class PhantomSpec
       val runtimeConfig =
         new PhantomRuntimeConfigBuilder()
           .defaults()
-          .artifactStore(artifactStore)
+          .artifactStore(newArtifactStore)
           .processOutput(processOutput)
           .build()
 

@@ -6,17 +6,22 @@ import de.flapdoodle.embed.process.store.IArtifactStore;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public interface MockArtifactStores {
+public class MockArtifactStores {
 
-    IArtifactStore artifactStore =
-            new PhantomExtractedArtifactStoreBuilder()
-                    .defaults()
-                    .extractDir(new StableTransientDirectory().withTail("extractions"))
-                    .download(new PhantomDownloadConfigBuilder()
-                            .defaults()
-                            .artifactStorePath(new StableTransientDirectory().withTail("downloads"))
-                            .build())
-                    .build();
+    private MockArtifactStores() {
+    }
 
+    static IArtifactStore newArtifactStore() {
+        final StableTransientDirectory directory = new StableTransientDirectory();
+
+        return new PhantomExtractedArtifactStoreBuilder()
+                .defaults()
+                .extractDir(directory.withTail("extractions"))
+                .download(new PhantomDownloadConfigBuilder()
+                        .defaults()
+                        .artifactStorePath(directory.withTail("downloads"))
+                        .build())
+                .build();
+    }
 
 }

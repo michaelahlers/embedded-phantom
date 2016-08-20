@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static ahlers.phantom.embedded.MockArtifactStores.newArtifactStore;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.runners.Parameterized.Parameters;
 
@@ -23,8 +24,7 @@ import static org.junit.runners.Parameterized.Parameters;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 @RunWith(Parameterized.class)
-public class PhantomTest
-        implements MockArtifactStores {
+public class PhantomTest {
 
     private final IVersion version;
 
@@ -50,7 +50,7 @@ public class PhantomTest
                 new PhantomRuntimeConfigBuilder()
                         .defaults()
                         .processOutput(processOutput)
-                        .artifactStore(artifactStore)
+                        .artifactStore(newArtifactStore())
                         .build();
 
         final PhantomStarter starter = PhantomStarter.getInstance(runtimeConfig);
