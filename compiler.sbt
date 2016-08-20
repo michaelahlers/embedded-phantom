@@ -1,6 +1,11 @@
 javacOptions ++=
   "-source" :: "1.7" ::
+    "-target" :: "1.7" ::
     Nil
+
+compileOrder in Compile := CompileOrder.JavaThenScala
+
+compileOrder in Test := CompileOrder.Mixed
 
 scalaVersion := "2.11.8"
 
@@ -11,7 +16,7 @@ scalacOptions ++=
   "-feature" ::
     "-unchecked" ::
     "-deprecation" ::
-    // "-target:jvm-1.8" ::
+    "-target:jvm-1.7" ::
     "-Xfatal-warnings" ::
     "-Xmax-classfile-name" :: "150" ::
     Nil
