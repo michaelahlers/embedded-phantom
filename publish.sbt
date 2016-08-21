@@ -8,6 +8,8 @@ publishMavenStyle := true
 /** Test artifacts are desired (as additional examples). */
 publishArtifact in Test := true
 
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
+
 awsProfile := "default"
 
 s3credentials :=
