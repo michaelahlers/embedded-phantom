@@ -3,7 +3,7 @@ package ahlers.phantom.embedded.parameters
 import ahlers.phantom.embedded.IPhantomProcessConfig
 import ahlers.phantom.embedded.proxies.ProxyType._
 import ahlers.phantom.embedded.proxies._
-import de.flapdoodle.embed.process.distribution.IVersion
+import de.flapdoodle.embed.process.distribution.Distribution
 import org.feijoas.mango.common.base.Optional._
 
 import scala.language.implicitConversions
@@ -16,7 +16,7 @@ class ProxyParameterSpec
 
   override def parameter: IParameter = ProxyParameter.getInstance
 
-  override def formats: PartialFunction[IVersion, List[(Option[IProxy], List[String])]] = {
+  override def formats: PartialFunction[Distribution, List[(Option[IProxy], List[String])]] = {
     case _ =>
       def proxy(host: String, port: Option[Int], proxyType: Option[IProxyType], credential: Option[IProxyCredential]): IProxy = {
         val builder = new ProxyBuilder()
@@ -50,7 +50,8 @@ class ProxyParameterSpec
       scenarios ++ List(None -> Nil)
   }
 
-  override def config(version: IVersion, value: Option[IProxy]): IPhantomProcessConfig = {
+  override def config(distribution: Distribution, value: Option[IProxy]): IPhantomProcessConfig = {
+    import distribution.{getVersion => version}
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()

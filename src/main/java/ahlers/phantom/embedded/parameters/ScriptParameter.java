@@ -3,17 +3,17 @@ package ahlers.phantom.embedded.parameters;
 import ahlers.phantom.embedded.IPhantomProcessConfig;
 import ahlers.phantom.embedded.IPhantomScript;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.Distribution;
 
 import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
 
 /**
- * {@inheritDoc}
- *
- * @see IPhantomScript
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
+ * @see IPhantomScript
  */
 public enum ScriptParameter
         implements IParameter {
+
     INSTANCE;
 
     public static ScriptParameter getInstance() {
@@ -31,8 +31,11 @@ public enum ScriptParameter
         return builder.build();
     }
 
+    /**
+     * Emits several values for {@link IPhantomProcessConfig#script()}: an absolute path from {@link IPhantomScript#source()} appended with {@link IPhantomScript#arguments()}.
+     */
     @Override
-    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+    public ImmutableList<String> format(final Distribution distribution, final IPhantomProcessConfig processConfig) {
         if (processConfig.script().isPresent()) {
             return format(processConfig.script().get());
         }

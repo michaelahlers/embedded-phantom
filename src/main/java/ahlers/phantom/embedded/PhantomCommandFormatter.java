@@ -2,6 +2,7 @@ package ahlers.phantom.embedded;
 
 import ahlers.phantom.embedded.parameters.*;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public enum PhantomCommandFormatter
         return INSTANCE;
     }
 
-    private final ImmutableList<IParameter> arguments = ImmutableList.<IParameter>of(
+    private final ImmutableList<IParameter> parameters = ImmutableList.<IParameter>of(
             DebugParameter.getInstance(),
             RemoteDebuggerPortParameter.getInstance(),
             CookiesFileParameter.getInstance(),
@@ -40,12 +41,13 @@ public enum PhantomCommandFormatter
     );
 
     @Override
-    public ImmutableList<String> format(final IExtractedFileSet files, final IPhantomProcessConfig processConfig) {
-        return format(arguments, files, processConfig);
+    public ImmutableList<String> format(final Distribution distribution, final IExtractedFileSet files, final IPhantomProcessConfig processConfig) {
+        return format(parameters, distribution, files, processConfig);
     }
 
     static ImmutableList<String> format(
-            final List<IParameter> arguments,
+            final List<IParameter> parameters,
+            final Distribution distribution,
             final IExtractedFileSet files,
             final IPhantomProcessConfig processConfig
     ) {
@@ -53,8 +55,8 @@ public enum PhantomCommandFormatter
 
         builder.add(files.executable().getAbsolutePath());
 
-        for (final IParameter argument : arguments) {
-            builder.addAll(argument.format(processConfig));
+        for (final IParameter parameter : parameters) {
+            builder.addAll(parameter.format(distribution, processConfig));
         }
 
         return builder.build();

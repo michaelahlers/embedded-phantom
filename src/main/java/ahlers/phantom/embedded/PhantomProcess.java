@@ -82,7 +82,7 @@ public class PhantomProcess
             final IExtractedFileSet files
     ) throws IOException {
         try {
-            return commandFormatter().format(files, processConfig);
+            return commandFormatter().format(distribution, files, processConfig);
         } catch (final Throwable t) {
             throw new IOException("Error retrieving command formatter from executable.", t);
         }

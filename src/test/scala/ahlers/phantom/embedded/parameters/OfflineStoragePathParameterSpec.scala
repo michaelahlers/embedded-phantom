@@ -3,7 +3,7 @@ package ahlers.phantom.embedded.parameters
 import java.io.File
 
 import ahlers.phantom.embedded.IPhantomProcessConfig
-import de.flapdoodle.embed.process.distribution.IVersion
+import de.flapdoodle.embed.process.distribution.Distribution
 import org.feijoas.mango.common.base.Optional._
 
 import scala.language.implicitConversions
@@ -16,7 +16,7 @@ class OfflineStoragePathParameterSpec
 
   override def parameter: IParameter = OfflineStoragePathParameter.getInstance
 
-  override def formats: PartialFunction[IVersion, List[(Option[File], List[String])]] = {
+  override def formats: PartialFunction[Distribution, List[(Option[File], List[String])]] = {
     case _ =>
       val file = new File("")
 
@@ -25,7 +25,8 @@ class OfflineStoragePathParameterSpec
         Nil
   }
 
-  override def config(version: IVersion, value: Option[File]): IPhantomProcessConfig = {
+  override def config(distribution: Distribution, value: Option[File]): IPhantomProcessConfig = {
+    import distribution.{getVersion => version}
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()
