@@ -11,6 +11,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.File;
 
 /**
+ * Standard {@link IPhantomScript} factory.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomScriptBuilder
@@ -31,6 +33,9 @@ public class PhantomScriptBuilder
         return property(ENCODING);
     }
 
+    /**
+     * @see IPhantomScript#encoding()
+     */
     public PhantomScriptBuilder encoding(final String value) {
         encoding().set(value);
         return this;
@@ -40,6 +45,9 @@ public class PhantomScriptBuilder
         return property(LANGUAGE);
     }
 
+    /**
+     * @see IPhantomScript#language()
+     */
     public PhantomScriptBuilder language(final String value) {
         language().set(value);
         return this;
@@ -49,6 +57,9 @@ public class PhantomScriptBuilder
         return property(SOURCE);
     }
 
+    /**
+     * @see IPhantomScript#source()
+     */
     public PhantomScriptBuilder source(final File value) {
         source().set(value);
         return this;
@@ -58,12 +69,22 @@ public class PhantomScriptBuilder
         return arguments;
     }
 
+    /**
+     * Replaces all arguments on this builder.
+     *
+     * @see IPhantomScript#arguments()
+     */
     public PhantomScriptBuilder arguments(final Iterable<String> value) {
         this.arguments = ImmutableList.builder();
         this.arguments.addAll(value);
         return this;
     }
 
+    /**
+     * Appends the given value to the existing arguments.
+     *
+     * @see #arguments(Iterable)
+     */
     public PhantomScriptBuilder argument(final String value) {
         this.arguments.add(value);
         return this;

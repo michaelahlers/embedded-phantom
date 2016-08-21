@@ -12,6 +12,8 @@ import de.flapdoodle.embed.process.distribution.IVersion;
 import java.io.File;
 
 /**
+ * Standard {@link IPhantomProcessConfig} factory.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomProcessConfigBuilder
@@ -49,6 +51,9 @@ public class PhantomProcessConfigBuilder
 
     protected static final TypedProperty<IPhantomScript> SCRIPT = TypedProperty.with("script", IPhantomScript.class);
 
+    /**
+     * Initializes the builder to use the {@link PhantomVersion#LATEST} version.
+     */
     public PhantomProcessConfigBuilder defaults() {
         property(VERSION).setDefault(PhantomVersion.LATEST);
 
@@ -59,6 +64,9 @@ public class PhantomProcessConfigBuilder
         return property(VERSION);
     }
 
+    /**
+     * @see IPhantomProcessConfig#version()
+     */
     public PhantomProcessConfigBuilder version(final IVersion value) {
         version().set(value);
         return this;
@@ -68,6 +76,9 @@ public class PhantomProcessConfigBuilder
         return property(DEBUG);
     }
 
+    /**
+     * @see IPhantomProcessConfig#debug()
+     */
     public PhantomProcessConfigBuilder debug(final Boolean value) {
         debug().set(value);
         return this;
@@ -77,6 +88,9 @@ public class PhantomProcessConfigBuilder
         return property(REMOTE_DEBUGGER_PORT);
     }
 
+    /**
+     * @see IPhantomProcessConfig#remoteDebuggerPort()
+     */
     public PhantomProcessConfigBuilder remoteDebuggerPort(final Integer value) {
         remoteDebuggerPort().set(value);
         return this;
@@ -86,6 +100,9 @@ public class PhantomProcessConfigBuilder
         return property(COOKIES_FILE);
     }
 
+    /**
+     * @see IPhantomProcessConfig#cookiesFile()
+     */
     public PhantomProcessConfigBuilder cookiesFile(final File value) {
         cookiesFile().set(value);
         return this;
@@ -95,6 +112,9 @@ public class PhantomProcessConfigBuilder
         return property(DISK_CACHE);
     }
 
+    /**
+     * @see IPhantomProcessConfig#diskCache()
+     */
     public PhantomProcessConfigBuilder diskCache(final Boolean value) {
         diskCache().set(value);
         return this;
@@ -104,6 +124,9 @@ public class PhantomProcessConfigBuilder
         return property(DISK_CACHE_PATH);
     }
 
+    /**
+     * @see IPhantomProcessConfig#diskCachePath()
+     */
     public PhantomProcessConfigBuilder diskCachePath(final File value) {
         diskCachePath().set(value);
         return this;
@@ -113,6 +136,9 @@ public class PhantomProcessConfigBuilder
         return property(MAXIMUM_DISK_CACHE_SIZE);
     }
 
+    /**
+     * @see IPhantomProcessConfig#maximumDiskCacheSize()
+     */
     public PhantomProcessConfigBuilder maximumDiskCacheSize(final Long value) {
         maximumDiskCacheSize().set(value);
         return this;
@@ -122,6 +148,9 @@ public class PhantomProcessConfigBuilder
         return property(IGNORE_SSL_ERRORS);
     }
 
+    /**
+     * @see IPhantomProcessConfig#ignoreSSLErrors()
+     */
     public PhantomProcessConfigBuilder ignoreSSLErrors(final Boolean value) {
         ignoreSSLErrors().set(value);
         return this;
@@ -131,6 +160,9 @@ public class PhantomProcessConfigBuilder
         return property(LOAD_IMAGES);
     }
 
+    /**
+     * @see IPhantomProcessConfig#loadImages()
+     */
     public PhantomProcessConfigBuilder loadImages(final Boolean value) {
         loadImages().set(value);
         return this;
@@ -140,6 +172,9 @@ public class PhantomProcessConfigBuilder
         return property(LOCAL_STORAGE_PATH);
     }
 
+    /**
+     * @see IPhantomProcessConfig#localStoragePath()
+     */
     public PhantomProcessConfigBuilder localStoragePath(final File value) {
         localStoragePath().set(value);
         return this;
@@ -149,6 +184,9 @@ public class PhantomProcessConfigBuilder
         return property(LOCAL_STORAGE_QUOTA);
     }
 
+    /**
+     * @see IPhantomProcessConfig#localStorageQuota()
+     */
     public PhantomProcessConfigBuilder localStorageQuota(final Long value) {
         localStorageQuota().set(value);
         return this;
@@ -158,6 +196,9 @@ public class PhantomProcessConfigBuilder
         return property(LOCAL_URL_ACCESS);
     }
 
+    /**
+     * @see IPhantomProcessConfig#localURLAccess()
+     */
     public PhantomProcessConfigBuilder localURLAccess(final Boolean value) {
         localURLAccess().set(value);
         return this;
@@ -167,6 +208,9 @@ public class PhantomProcessConfigBuilder
         return property(LOCAL_TO_REMOTE_URL_ACCESS);
     }
 
+    /**
+     * @see IPhantomProcessConfig#localToRemoteURLAccess()
+     */
     public PhantomProcessConfigBuilder localToRemoteURLAccess(final Boolean value) {
         localToRemoteURLAccess().set(value);
         return this;
@@ -176,6 +220,9 @@ public class PhantomProcessConfigBuilder
         return property(OFFLINE_STORAGE_PATH);
     }
 
+    /**
+     * @see IPhantomProcessConfig#offlineStoragePath()
+     */
     public PhantomProcessConfigBuilder offlineStoragePath(final File value) {
         offlineStoragePath().set(value);
         return this;
@@ -185,6 +232,9 @@ public class PhantomProcessConfigBuilder
         return property(OFFLINE_STORAGE_QUOTA);
     }
 
+    /**
+     * @see IPhantomProcessConfig#offlineStorageQuota()
+     */
     public PhantomProcessConfigBuilder offlineStorageQuota(final Long value) {
         offlineStorageQuota().set(value);
         return this;
@@ -194,6 +244,9 @@ public class PhantomProcessConfigBuilder
         return property(OUTPUT_ENCODING);
     }
 
+    /**
+     * @see IPhantomProcessConfig#outputEncoding()
+     */
     public PhantomProcessConfigBuilder outputEncoding(final String value) {
         outputEncoding().set(value);
         return this;
@@ -203,6 +256,9 @@ public class PhantomProcessConfigBuilder
         return property(PROXY);
     }
 
+    /**
+     * @see IPhantomProcessConfig#proxy()
+     */
     public PhantomProcessConfigBuilder proxy(final IProxy value) {
         proxy().set(value);
         return this;
@@ -212,6 +268,9 @@ public class PhantomProcessConfigBuilder
         return property(WEB_SECURITY);
     }
 
+    /**
+     * @see IPhantomProcessConfig#webSecurity()
+     */
     public PhantomProcessConfigBuilder webSecurity(final Boolean value) {
         webSecurity().set(value);
         return this;
@@ -221,6 +280,9 @@ public class PhantomProcessConfigBuilder
         return property(SCRIPT);
     }
 
+    /**
+     * @see IPhantomProcessConfig#script()
+     */
     public PhantomProcessConfigBuilder script(final IPhantomScript value) {
         script().set(value);
         return this;

@@ -32,7 +32,7 @@ public enum ScriptParameter
     }
 
     /**
-     * Emits several values for {@link IPhantomProcessConfig#script()}: an absolute path from {@link IPhantomScript#source()} appended with {@link IPhantomScript#arguments()}.
+     * Emits several values for {@link IPhantomProcessConfig#script()}: applicable {@link IPhantomScript#encoding()} and {@link IPhantomScript#language()} arguments, followed by an absolute path from {@link IPhantomScript#source()} and verbatim {@link IPhantomScript#arguments()}.
      */
     @Override
     public ImmutableList<String> format(final Distribution distribution, final IPhantomProcessConfig processConfig) {

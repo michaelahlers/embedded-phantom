@@ -6,6 +6,8 @@ import de.flapdoodle.embed.process.distribution.Distribution;
 import static java.lang.String.format;
 
 /**
+ * Declares an {@link ArchiveType} is not supported by this library.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class UnsupportedArchiveException

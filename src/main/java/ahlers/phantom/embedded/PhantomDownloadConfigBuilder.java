@@ -2,6 +2,7 @@ package ahlers.phantom.embedded;
 
 import de.flapdoodle.embed.process.config.store.DownloadConfigBuilder;
 import de.flapdoodle.embed.process.config.store.DownloadPath;
+import de.flapdoodle.embed.process.config.store.IDownloadConfig;
 import de.flapdoodle.embed.process.extract.UUIDTempNaming;
 import de.flapdoodle.embed.process.io.directories.UserHome;
 import de.flapdoodle.embed.process.io.progress.StandardConsoleProgressListener;
@@ -9,11 +10,18 @@ import de.flapdoodle.embed.process.io.progress.StandardConsoleProgressListener;
 import java.nio.file.Paths;
 
 /**
+ * Standard {@link IDownloadConfig} factory.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomDownloadConfigBuilder
         extends DownloadConfigBuilder {
 
+    /**
+     * Temporary files are given random and unique names, sourced from Ahlers Consulting's artifact repository (at {@code http://artifacts.ahlers.consulting/phantomjs/}), and ultimately stored in {@code downloads} under {@code .embedded-platform}.
+     *
+     * @return A typical builder, requiring no additional details to produce a configuration instance.
+     */
     public PhantomDownloadConfigBuilder defaults() {
         /* Names temporary, in-progress downloads. */
 

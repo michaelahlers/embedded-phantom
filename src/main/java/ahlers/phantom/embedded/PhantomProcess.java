@@ -18,6 +18,8 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
+ *  Represents a running instance of PhantomJS, created by {@link PhantomExecutable}.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomProcess

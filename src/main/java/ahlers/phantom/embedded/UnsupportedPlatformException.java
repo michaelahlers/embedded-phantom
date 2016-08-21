@@ -1,9 +1,12 @@
 package ahlers.phantom.embedded;
 
 import de.flapdoodle.embed.process.distribution.Distribution;
+import de.flapdoodle.embed.process.distribution.Platform;
 
 import static java.lang.String.format;
 /**
+ * Declares an {@link Platform} is not supported by this library.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class UnsupportedPlatformException

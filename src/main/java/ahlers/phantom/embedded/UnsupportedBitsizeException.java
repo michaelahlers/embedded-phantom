@@ -1,10 +1,13 @@
 package ahlers.phantom.embedded;
 
+import de.flapdoodle.embed.process.distribution.BitSize;
 import de.flapdoodle.embed.process.distribution.Distribution;
 
 import static java.lang.String.format;
 
 /**
+ * Declares an {@link BitSize} is not supported by this library.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class UnsupportedBitsizeException

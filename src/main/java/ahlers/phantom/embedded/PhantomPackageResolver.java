@@ -13,9 +13,10 @@ import static de.flapdoodle.embed.process.distribution.Platform.Linux;
 import static java.lang.String.format;
 
 /**
- * Uses {{enum}} singleton pattern described by <em>Item 3</em> from <em>Effective Java</em>.
+ * Translates components of {@link Distribution} into literal components of PhantomJS's distributed files.
  *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
+ * @see <a href="http://phantomjs.org/download.html">PhantomJS: Download</a>
  */
 public enum PhantomPackageResolver
         implements IPackageResolver {

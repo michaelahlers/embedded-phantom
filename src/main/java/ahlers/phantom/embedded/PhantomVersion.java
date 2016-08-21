@@ -14,15 +14,19 @@ public enum PhantomVersion
 
     public static final PhantomVersion LATEST = V211;
 
-    private final String name;
+    private final String label;
 
-    PhantomVersion(final String name) {
-        this.name = name;
+    PhantomVersion(final String label) {
+        this.label = label;
     }
 
     @Override
     public String asInDownloadPath() {
-        return name;
+        return label;
     }
 
+    @Override
+    public String toString() {
+        return label;
+    }
 }

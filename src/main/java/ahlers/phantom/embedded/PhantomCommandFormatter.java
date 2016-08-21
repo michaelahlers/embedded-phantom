@@ -8,6 +8,8 @@ import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 import java.util.List;
 
 /**
+ * Standard command factory.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public enum PhantomCommandFormatter
