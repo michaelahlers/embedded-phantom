@@ -3,7 +3,7 @@ package ahlers.phantom.embedded.parameters
 import java.io.File
 
 import ahlers.phantom.embedded.{IPhantomProcessConfig, IPhantomScript, PhantomScriptBuilder}
-import de.flapdoodle.embed.process.distribution.IVersion
+import de.flapdoodle.embed.process.distribution.Distribution
 import org.feijoas.mango.common.base.Optional._
 
 import scala.collection.convert.WrapAsJava._
@@ -17,7 +17,7 @@ class ScriptParameterSpec
 
   override def parameter: IParameter = ScriptParameter.getInstance
 
-  override def formats: PartialFunction[IVersion, List[(Option[IPhantomScript], List[String])]] = {
+  override def formats: PartialFunction[Distribution, List[(Option[IPhantomScript], List[String])]] = {
     case _ =>
       def script(encoding: Option[String], language: Option[String], source: File, arguments: List[String]): IPhantomScript = {
         val builder = new PhantomScriptBuilder()
@@ -47,7 +47,8 @@ class ScriptParameterSpec
       scenarios ++ List(None -> Nil)
   }
 
-  override def config(version: IVersion, value: Option[IPhantomScript]): IPhantomProcessConfig = {
+  override def config(distribution: Distribution, value: Option[IPhantomScript]): IPhantomProcessConfig = {
+    import distribution.{getVersion => version}
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()

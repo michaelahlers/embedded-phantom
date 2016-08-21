@@ -2,6 +2,7 @@ package ahlers.phantom.embedded.parameters;
 
 import ahlers.phantom.embedded.IPhantomProcessConfig;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.Distribution;
 
 import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
 
@@ -17,8 +18,11 @@ public enum MaximumDiskCacheSizeParameter
         return INSTANCE;
     }
 
+    /**
+     * Emits a value for {@link IPhantomProcessConfig#maximumDiskCacheSize()}.
+     */
     @Override
-    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+    public ImmutableList<String> format(final Distribution distribution, final IPhantomProcessConfig processConfig) {
         return usingTemplate("--max-disk-cache-size=%s", processConfig.maximumDiskCacheSize());
     }
 

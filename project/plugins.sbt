@@ -1,6 +1,13 @@
-resolvers += "Era7 (releases)" at "https://s3-eu-west-1.amazonaws.com/releases.era7.com"
+resolvers ++=
+  ("Era7 (releases)" at "https://s3-eu-west-1.amazonaws.com/releases.era7.com") ::
+    ("JGit" at "http://download.eclipse.org/jgit/maven") ::
+    Nil
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.3")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.4")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.0.0")
 
 /** Covers all languages with byte code instrumentation. */
 addSbtPlugin("de.johoop" % "jacoco4sbt" % "2.1.6")

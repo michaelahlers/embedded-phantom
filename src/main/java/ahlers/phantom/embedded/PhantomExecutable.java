@@ -11,6 +11,8 @@ import java.io.IOException;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
+ * Represents a ready-for-execution setup, created by {@link PhantomStarter} and produces {@link PhantomProcess}.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomExecutable

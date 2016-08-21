@@ -5,10 +5,6 @@ crossPaths := false
 
 publishMavenStyle := true
 
-publishArtifact in Test := false
-
-publishMavenStyle := true
-
 /** Test artifacts are desired (as additional examples). */
 publishArtifact in Test := true
 

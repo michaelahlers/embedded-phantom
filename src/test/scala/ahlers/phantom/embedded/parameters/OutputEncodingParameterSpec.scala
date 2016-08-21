@@ -1,7 +1,7 @@
 package ahlers.phantom.embedded.parameters
 
 import ahlers.phantom.embedded.IPhantomProcessConfig
-import de.flapdoodle.embed.process.distribution.IVersion
+import de.flapdoodle.embed.process.distribution.Distribution
 import org.feijoas.mango.common.base.Optional._
 
 import scala.language.implicitConversions
@@ -14,7 +14,7 @@ class OutputEncodingParameterSpec
 
   override def parameter: IParameter = OutputEncodingParameter.getInstance
 
-  override def formats: PartialFunction[IVersion, List[(Option[String], List[String])]] = {
+  override def formats: PartialFunction[Distribution, List[(Option[String], List[String])]] = {
     case _ =>
       val encoding = "encoding"
 
@@ -23,7 +23,8 @@ class OutputEncodingParameterSpec
         Nil
   }
 
-  override def config(version: IVersion, value: Option[String]): IPhantomProcessConfig = {
+  override def config(distribution: Distribution, value: Option[String]): IPhantomProcessConfig = {
+    import distribution.{getVersion => version}
     val config = mock[IPhantomProcessConfig]
 
     (config.version _).expects().returns(version).anyNumberOfTimes()

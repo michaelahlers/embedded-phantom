@@ -3,6 +3,7 @@ package ahlers.phantom.embedded.parameters;
 import ahlers.phantom.embedded.IPhantomProcessConfig;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.Distribution;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -21,8 +22,11 @@ public enum LocalStoragePathParameter
         return INSTANCE;
     }
 
+    /**
+     * Emits a value for {@link IPhantomProcessConfig#localStoragePath()}.
+     */
     @Override
-    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+    public ImmutableList<String> format(final Distribution distribution, final IPhantomProcessConfig processConfig) {
         return usingTemplate("--local-storage-path=%s", processConfig.localStoragePath().transform(new Function<File, String>() {
             @Nullable
             @Override

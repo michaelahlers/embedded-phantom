@@ -8,6 +8,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
+ * Standard {@link IProxy} factory.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class ProxyBuilder
@@ -27,6 +29,9 @@ public class ProxyBuilder
         return property(HOST);
     }
 
+    /**
+     * @see IProxy#host()
+     */
     public ProxyBuilder host(final String value) {
         host().set(value);
         return this;
@@ -36,6 +41,9 @@ public class ProxyBuilder
         return property(PORT);
     }
 
+    /**
+     * @see IProxy#port()
+     */
     public ProxyBuilder port(final Integer value) {
         port().set(value);
         return this;
@@ -45,6 +53,9 @@ public class ProxyBuilder
         return property(TYPE);
     }
 
+    /**
+     * @see IProxy#port()
+     */
     public ProxyBuilder type(final IProxyType value) {
         type().set(value);
         return this;
@@ -54,6 +65,9 @@ public class ProxyBuilder
         return property(CREDENTIAL);
     }
 
+    /**
+     * @see IProxy#credential()
+     */
     public ProxyBuilder credential(final IProxyCredential value) {
         credential().set(value);
         return this;

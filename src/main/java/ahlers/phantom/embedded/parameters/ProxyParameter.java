@@ -6,6 +6,7 @@ import ahlers.phantom.embedded.proxies.IProxyCredential;
 import ahlers.phantom.embedded.proxies.IProxyType;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.Distribution;
 
 import javax.annotation.Nullable;
 
@@ -54,8 +55,15 @@ public enum ProxyParameter
         return builder.build();
     }
 
+    /**
+     * Emits (potentially) several arguments derived from {@link IPhantomProcessConfig#proxy()}.
+     *
+     * @see IProxy
+     * @see IProxyType
+     * @see IProxyCredential
+     */
     @Override
-    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+    public ImmutableList<String> format(final Distribution distribution, final IPhantomProcessConfig processConfig) {
         if (processConfig.proxy().isPresent()) {
             return format(processConfig.proxy().get());
         }

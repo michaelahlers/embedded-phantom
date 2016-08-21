@@ -4,6 +4,7 @@ import de.flapdoodle.embed.process.extract.NoopTempNaming;
 import de.flapdoodle.embed.process.extract.UserTempNaming;
 import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir;
 import de.flapdoodle.embed.process.io.directories.UserHome;
+import de.flapdoodle.embed.process.store.ArtifactStore;
 import de.flapdoodle.embed.process.store.Downloader;
 import de.flapdoodle.embed.process.store.ExtractedArtifactStoreBuilder;
 
@@ -17,6 +18,11 @@ import java.nio.file.Paths;
 public class PhantomExtractedArtifactStoreBuilder
         extends ExtractedArtifactStoreBuilder {
 
+    /**
+     * Temporary files are stored in the operating system's standard temporary location, ultimately stored in {@code extractions} under {@code .embedded-platform}, and executables named with the user's id. or name.
+     *
+     * @return A typical builder, requiring no additional details to produce an {@link ArtifactStore} instance.
+     */
     public PhantomExtractedArtifactStoreBuilder defaults() {
         /* Temporary directory used for extracting files (which, if extraction fails, these incomplete files should not be found in the artifact store). */
         tempDir().setDefault(new TempDirInPlatformTempDir());

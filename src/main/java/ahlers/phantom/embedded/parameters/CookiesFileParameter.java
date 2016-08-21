@@ -3,6 +3,7 @@ package ahlers.phantom.embedded.parameters;
 import ahlers.phantom.embedded.IPhantomProcessConfig;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import de.flapdoodle.embed.process.distribution.Distribution;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -21,8 +22,11 @@ public enum CookiesFileParameter
         return INSTANCE;
     }
 
+    /**
+     * Emits a value for {@link IPhantomProcessConfig#cookiesFile()}.
+     */
     @Override
-    public ImmutableList<String> format(final IPhantomProcessConfig processConfig) {
+    public ImmutableList<String> format(final Distribution distribution, final IPhantomProcessConfig processConfig) {
         return usingTemplate("--cookies-file=%s", processConfig.cookiesFile().transform(new Function<File, String>() {
             @Nullable
             @Override
