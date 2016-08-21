@@ -6,12 +6,12 @@ import com.google.common.collect.ImmutableList;
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
-public class Parameters {
+class Parameters {
 
     private Parameters() {
     }
 
-    public static <T> ImmutableList<String> usingTemplate(final String template, final Optional<T> value) {
+    static <T> ImmutableList<String> usingTemplate(final String template, final Optional<T> value) {
         final ImmutableList.Builder<String> builder = ImmutableList.builder();
 
         if (value.isPresent()) {
