@@ -7,7 +7,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
+ * Standard {@link IProxyCredential} factory.
+ *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
+ * @see IProxy#credential()
  */
 public class ProxyCredentialBuilder
         extends AbstractBuilder<IProxyCredential> {
@@ -19,6 +22,9 @@ public class ProxyCredentialBuilder
         return property(USERNAME);
     }
 
+    /**
+     * @see IProxyCredential#username()
+     */
     public ProxyCredentialBuilder username(final String value) {
         username().set(value);
         return this;
@@ -28,6 +34,9 @@ public class ProxyCredentialBuilder
         return property(PASSWORD);
     }
 
+    /**
+     * @see IProxyCredential#password()
+     */
     public ProxyCredentialBuilder password(final String value) {
         password().set(value);
         return this;
