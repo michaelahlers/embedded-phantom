@@ -7,6 +7,9 @@ import com.google.common.collect.ImmutableList;
 import static ahlers.phantom.embedded.parameters.Parameters.usingTemplate;
 
 /**
+ * {@inheritDoc}
+ *
+ * @see IPhantomScript
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public enum ScriptParameter
