@@ -13,7 +13,7 @@ import de.flapdoodle.embed.process.runtime.ICommandLinePostProcessor
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
+import org.scalatest.{FlatSpec, GivenWhenThen, Matchers, PrivateMethodTester}
 import org.slf4j.LoggerFactory
 
 import scala.collection.convert.WrapAsJava._
@@ -28,7 +28,8 @@ class PhantomProcessSpec
           with PrivateMethodTester
           with Matchers
           with ScalaFutures
-          with MockFactory {
+          with MockFactory
+          with GivenWhenThen {
 
   private val logger = LoggerFactory.getLogger(classOf[PhantomProcessSpec])
 
@@ -82,7 +83,7 @@ class PhantomProcessSpec
 
   it must "provide standard input" in {
 
-    val expected = (0 until 10) map { i => s"Message number $i." }
+    val expected = (0 until 10) map { i => s"message-number-$i." }
     val actual: Promise[List[String]] = Promise()
 
     val consumer = new IStreamProcessor {
@@ -90,8 +91,7 @@ class PhantomProcessSpec
 
       /** Inefficient, but it's only a test. */
       override def process(block: String): Unit = {
-        /* Cross-platform line terminator removal.*/
-        blocks.append(block.trim) // replaceAll("\r\n?|\n", ""))
+        blocks.append(block)
         val tokens = blocks.toString.split(";").map(_.trim).filter(_.nonEmpty).toList
         if (!actual.isCompleted && expected.lastOption == tokens.lastOption) actual.success(tokens)
       }
@@ -123,10 +123,9 @@ class PhantomProcessSpec
 
     val consumer = new IStreamProcessor {
       override def process(block: String): Unit =
-      // block.replaceAll("^(\r\n?|\n)", "") match {
         block.trim + "\n" match {
           case "//\n;phantom.exit();\n" => wasShutdown.success(true)
-          case "zombie" => isZombie.success(true)
+          case "zombie\n" => isZombie.success(true)
         }
 
       override def onProcessed(): Unit =
@@ -142,12 +141,15 @@ class PhantomProcessSpec
       process.isProcessRunning should be(false)
 
       val console = process.getConsole
+      an[IllegalStateException] should be thrownBy console.write("lost\n")
 
-      an[Exception] should be thrownBy console.write("zombie")
-      an[Exception] should be thrownBy console.flush()
+      /* Internal API. */
+      val writer = process.standardInputWriter()
+      writer.write("zombie")
+      writer.flush()
 
-      /* Of course, "cat" and "cmd /c more" won't have anything to do with the exit command. In that event, the process should be forcibly killed. If that works successfully, the following future will never complete. */
-      //an[Exception] should be thrownBy isZombie.future.futureValue
+      /* Of course, "cat" and "cmd /c more" won't have anything to do with the exit command. In that event, the process should be forcibly killed. If that works successfully, this future will never complete. */
+      an[Exception] should be thrownBy isZombie.future.futureValue
     }
   }
 
