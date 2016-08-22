@@ -1,5 +1,7 @@
 package ahlers.phantom.embedded;
 
+import ahlers.phantom.embedded.processes.IPhantomConsole;
+import ahlers.phantom.embedded.processes.WriterPhantomConsole;
 import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.distribution.Distribution;
@@ -7,18 +9,23 @@ import de.flapdoodle.embed.process.extract.IExtractedFileSet;
 import de.flapdoodle.embed.process.runtime.AbstractProcess;
 import de.flapdoodle.embed.process.runtime.ProcessControl;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.concurrent.AtomicSafeInitializer;
+import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- *  Represents a running instance of PhantomJS, created by {@link PhantomExecutable}.
+ * Represents a running instance of PhantomJS, created by {@link PhantomExecutable}.
  *
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
@@ -27,8 +34,6 @@ public class PhantomProcess
 
     private final static Logger logger = getLogger(PhantomProcess.class);
 
-    private final ImmutableList<String> command;
-
     public PhantomProcess(
             final Distribution distribution,
             final IPhantomProcessConfig processConfig,
@@ -36,13 +41,13 @@ public class PhantomProcess
             final PhantomExecutable executable
     ) throws IOException {
         super(distribution, processConfig, runtimeConfig, executable);
-        this.command = ImmutableList.copyOf(getCommandLine(distribution, processConfig, executable.getFile()));
+        /* Throw no exceptions here unless finally terminating the process created by the super class. */
     }
 
     /*
-     * About reflective access to private members.
+     * About reflective access to private members:
      *
-     * AbstractProcess makes a glaring mistake in calling overridden (virtual) methods from its constructor. This defeats the ability of subclasses to provide additional details to those methods, which this implementation needs (<em>e.g.</em>, IPhantomCommandFormatter
+     * AbstractProcess makes a mistake in calling overridden (virtual) methods from its constructor. This defeats the ability of subclasses to provide additional details to those methods, which this implementation needs to do (<em>e.g.</em>, IPhantomCommandFormatter).
      *
      * For more information see these answers on Stack Overflow:
      *
@@ -64,6 +69,9 @@ public class PhantomProcess
                 .get(processControl());
     }
 
+    /**
+     * Even though the <em>constructor</em> has access to the provided {@link PhantomExecutable} instance, any field initializer would not be called until <em>after</em> {@link #getCommandLine(Distribution, IPhantomProcessConfig, IExtractedFileSet)}. Therefore, it's necessary to reflect into the superclass for a reference that has been initialized so its properties can be provided to the command line generator.
+     */
     private PhantomExecutable executable() throws Exception {
         return (PhantomExecutable) FieldUtils
                 .getDeclaredField(AbstractProcess.class, "executable", true)
@@ -75,6 +83,11 @@ public class PhantomProcess
     }
 
     /**
+     * Provided for debugging. <del>Guaranteed to be set only once.</del> Will be {@code null} until {@link #getCommandLine(Distribution, IPhantomProcessConfig, IExtractedFileSet)} is called by the super constructor.
+     */
+    private ImmutableList<String> command;
+
+    /**
      * Internal API.
      */
     @Override
@@ -84,16 +97,22 @@ public class PhantomProcess
             final IExtractedFileSet files
     ) throws IOException {
         try {
-            return commandFormatter().format(distribution, files, processConfig);
+            final ImmutableList<String> command = commandFormatter().format(distribution, files, processConfig);
+            this.command = command;
+            return command;
         } catch (final Throwable t) {
             throw new IOException("Error retrieving command formatter from executable.", t);
         }
     }
 
     /**
-     * This API is proof-of-concept only, and will be replaced soon.
+     * @deprecated As of 1.0.0, replaced by {@link #getConsole()}.
      */
     public PrintWriter getStandardInput() throws Exception {
+        return standardInputWriter();
+    }
+
+    PrintWriter standardInputWriter() throws Exception {
         try {
             return new PrintWriter(new OutputStreamWriter(nativeProcess().getOutputStream()));
         } catch (final Throwable t) {
@@ -101,18 +120,78 @@ public class PhantomProcess
         }
     }
 
+    /**
+     * Internal API, typically delegates to another instance.
+     */
+    private interface ILocalPhantomConsole extends IPhantomConsole {
+
+        /**
+         * Provides access to underlying writing to allow clean up on stop.
+         */
+        void destroy() throws Exception;
+
+    }
+
+    private final AtomicSafeInitializer<ILocalPhantomConsole> consoleHolder =
+            new AtomicSafeInitializer<ILocalPhantomConsole>() {
+                @Override
+                protected ILocalPhantomConsole initialize() throws ConcurrentException {
+                    try {
+                        final Writer writer = standardInputWriter();
+                        final IPhantomConsole console = new WriterPhantomConsole(writer);
+
+                        return new ILocalPhantomConsole() {
+
+                            private final AtomicBoolean destroyed = new AtomicBoolean();
+
+                            @Override
+                            public void write(final String block) throws Exception {
+                                if (destroyed.get()) {
+                                    throw new IllegalStateException("Console has been closed (explicit stop of process made).");
+                                }
+
+                                console.write(block);
+                            }
+
+                            @Override
+                            public void flush() throws Exception {
+                                console.flush();
+                            }
+
+                            @Override
+                            public void destroy() throws Exception {
+                                destroyed.set(true);
+                                writer.flush();
+                                writer.close();
+                            }
+                        };
+                    } catch (final Throwable t) {
+                        throw new ConcurrentException("Error initializing console.", t);
+                    }
+                }
+            };
+
+    /**
+     * Provides console access to {@code this} process instance. While {@link IPhantomConsole} describes intent, it's important to understand behaviors given this implementation. There are no guarantees regarding evaluation order when multiple threads use this interface. Ordering (by means of a {@linkplain BlockingQueue queue}, for example) are a higher-level concern. It's possible for blocks sent to {@link IPhantomConsole#write(String)} to interleave, creating invalid expressions or unintended results. There are likewise no guarantees (and cannot be) regarding output order simply by virtue of concurrent features of JavaScript.
+     */
+    public IPhantomConsole getConsole() throws Exception {
+        return consoleHolder.get();
+    }
+
     @Override
     protected void stopInternal() {
         try {
             logger.info("Sending exit command.");
 
-            final PrintWriter standardInput = getStandardInput();
+            final ILocalPhantomConsole console = consoleHolder.get();
 
-            standardInput.flush();
-            standardInput.println();
-            standardInput.println(";phantom.exit();");
-            standardInput.flush();
-            standardInput.close();
+            console.flush();
+            console.write("//\n;phantom.exit();\n");
+            console.flush();
+
+            logger.info("Closing console input (future expressions will fail.");
+
+            console.destroy();
 
         } catch (final Throwable t) {
             logger.warn("Error issuing exit command (will attempt to kill the process).", t);
