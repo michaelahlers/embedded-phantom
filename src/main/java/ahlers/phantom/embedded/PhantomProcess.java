@@ -42,7 +42,7 @@ public class PhantomProcess
     /*
      * About reflective access to private members.
      *
-     * AbstractProcess makes a glaring mistake in calling overridden (virtual) methods from its constructor. This defeats the ability of subclasses to provide additional details to those methods, which this implementation needs (<em>e.g.</em>, IPhantomCommandFormatter
+     * AbstractProcess makes a mistake in calling overridden (virtual) methods from its constructor. This defeats the ability of subclasses to provide additional details to those methods, which this implementation needs to do (<em>e.g.</em>, IPhantomCommandFormatter).
      *
      * For more information see these answers on Stack Overflow:
      *
