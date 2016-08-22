@@ -91,7 +91,7 @@ class PhantomProcessSpec
 
       /** Inefficient, but it's only a test. */
       override def process(block: String): Unit = {
-        blocks.append(block)
+        blocks.append(block.replaceAll("\r\n", ""))
         val tokens = blocks.toString.split(";").map(_.trim).filter(_.nonEmpty).toList
         if (!actual.isCompleted && expected.lastOption == tokens.lastOption) actual.success(tokens)
       }
@@ -104,7 +104,7 @@ class PhantomProcessSpec
       val console = process.getConsole
 
       expected.mkString(";").grouped(25) foreach { message =>
-        console.write(message)
+        console.write(message + "\n")
         console.flush()
       }
 
@@ -123,9 +123,11 @@ class PhantomProcessSpec
 
     val consumer = new IStreamProcessor {
       override def process(block: String): Unit =
-        block.trim + "\n" match {
+        block.replaceAll("\r\n", "\n").trim + "\n" match {
           case "//\n;phantom.exit();\n" => wasShutdown.success(true)
           case "zombie\n" => isZombie.success(true)
+          case _ =>
+            logger.error(s"""Unexpected block "$block".""")
         }
 
       override def onProcessed(): Unit =
@@ -145,7 +147,7 @@ class PhantomProcessSpec
 
       /* Internal API. */
       val writer = process.standardInputWriter()
-      writer.write("zombie")
+      writer.write("zombie\n")
       writer.flush()
 
       /* Of course, "cat" and "cmd /c more" won't have anything to do with the exit command. In that event, the process should be forcibly killed. If that works successfully, this future will never complete. */
