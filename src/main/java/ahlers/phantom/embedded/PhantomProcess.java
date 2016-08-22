@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -108,6 +109,10 @@ public class PhantomProcess
      * @deprecated As of 1.0.0, replaced by {@link #getConsole()}.
      */
     public PrintWriter getStandardInput() throws Exception {
+        return standardInputWriter();
+    }
+
+    PrintWriter standardInputWriter() throws Exception {
         try {
             return new PrintWriter(new OutputStreamWriter(nativeProcess().getOutputStream()));
         } catch (final Throwable t) {
@@ -123,7 +128,7 @@ public class PhantomProcess
         /**
          * Provides access to underlying writing to allow clean up on stop.
          */
-        Writer getWriter();
+        void destroy() throws Exception;
 
     }
 
@@ -132,26 +137,33 @@ public class PhantomProcess
                 @Override
                 protected ILocalPhantomConsole initialize() throws ConcurrentException {
                     try {
-                        final Writer writer = new OutputStreamWriter(nativeProcess().getOutputStream());
+                        final Writer writer = standardInputWriter();
                         final IPhantomConsole console = new WriterPhantomConsole(writer);
 
                         return new ILocalPhantomConsole() {
 
+                            private final AtomicBoolean destroyed = new AtomicBoolean();
+
                             @Override
-                            public void write(final String block) throws IOException {
+                            public void write(final String block) throws Exception {
+                                if (destroyed.get()) {
+                                    throw new IllegalStateException("Console has been closed (explicit stop of process made).");
+                                }
+
                                 console.write(block);
                             }
 
                             @Override
-                            public void flush() throws IOException {
+                            public void flush() throws Exception {
                                 console.flush();
                             }
 
                             @Override
-                            public Writer getWriter() {
-                                return writer;
+                            public void destroy() throws Exception {
+                                destroyed.set(true);
+                                writer.flush();
+                                writer.close();
                             }
-
                         };
                     } catch (final Throwable t) {
                         throw new ConcurrentException("Error initializing console.", t);
@@ -177,7 +189,9 @@ public class PhantomProcess
             console.write("//\n;phantom.exit();\n");
             console.flush();
 
-            console.getWriter().close();
+            logger.info("Closing console input (future expressions will fail.");
+
+            console.destroy();
 
         } catch (final Throwable t) {
             logger.warn("Error issuing exit command (will attempt to kill the process).", t);
