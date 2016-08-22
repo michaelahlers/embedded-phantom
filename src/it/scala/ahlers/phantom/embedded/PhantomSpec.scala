@@ -55,11 +55,9 @@ class PhantomSpec
 
       val process = executable.start()
 
-      val console = process.getStandardInput
+      val console = process.getConsole
 
-      console.println(s"console.log('$message');")
-      console.flush()
-      console.close()
+      console.write(s"console.log('$message')\n;")
 
       outputProcessor.getOutput().futureValue should include(message)
 

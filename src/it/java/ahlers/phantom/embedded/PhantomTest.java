@@ -1,5 +1,6 @@
 package ahlers.phantom.embedded;
 
+import ahlers.phantom.embedded.processes.IPhantomConsole;
 import com.google.common.collect.ImmutableList;
 import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.config.io.ProcessOutput;
@@ -11,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
@@ -65,11 +65,10 @@ public class PhantomTest {
 
         final PhantomProcess process = executable.start();
 
-        final PrintWriter console = process.getStandardInput();
+        final IPhantomConsole console = process.getConsole();
 
-        console.println(String.format("console.log('%s');", message));
+        console.write(String.format("console.log('%s');\n", message));
         console.flush();
-        console.close();
 
         Assert.assertThat(outputProcessor.getOutput(), containsString(message));
 
