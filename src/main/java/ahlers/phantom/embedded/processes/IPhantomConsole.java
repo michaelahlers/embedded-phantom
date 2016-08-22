@@ -28,13 +28,13 @@ public interface IPhantomConsole {
      * @throws IOException Any error from the underlying stream.
      * @see <a href="http://phantomjs.org/repl.html">REPL</a>
      */
-    void write(String block) throws IOException;
+    void write(String block) throws Exception;
 
     /**
      * Causes any underlying buffers to be sent to the console. Does not <em>necessarily</em> cause evaluation, unless a newline is buffered.
      *
      * @throws IOException Any error from the underlying stream.
      */
-    void flush() throws IOException;
+    void flush() throws Exception;
 
 }
