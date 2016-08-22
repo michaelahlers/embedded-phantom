@@ -58,6 +58,7 @@ class PhantomSpec
       val console = process.getConsole
 
       console.write(s"console.log('$message')\n;")
+      console.flush()
 
       outputProcessor.getOutput().futureValue should include(message)
 
