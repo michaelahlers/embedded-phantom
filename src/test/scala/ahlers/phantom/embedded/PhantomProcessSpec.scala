@@ -91,7 +91,7 @@ class PhantomProcessSpec
 
       /** Inefficient, but it's only a test. */
       override def process(block: String): Unit = {
-        blocks.append(block.replaceAll("\r\n", ""))
+        blocks.append(block.replaceAll("\r\n|\n", "").trim)
         val tokens = blocks.toString.split(";").map(_.trim).filter(_.nonEmpty).toList
         if (!actual.isCompleted && expected.lastOption == tokens.lastOption) actual.success(tokens)
       }
@@ -123,9 +123,9 @@ class PhantomProcessSpec
 
     val consumer = new IStreamProcessor {
       override def process(block: String): Unit =
-        block.replaceAll("\r\n", "\n").trim + "\n" match {
-          case "//\n;phantom.exit();\n" => wasShutdown.success(true)
-          case "zombie\n" => isZombie.success(true)
+        block.replaceAll("\r\n|\n", "").trim   match {
+          case "//;phantom.exit();" => wasShutdown.success(true)
+          case "zombie" => isZombie.success(true)
           case _ =>
             logger.error(s"""Unexpected block "$block".""")
         }
