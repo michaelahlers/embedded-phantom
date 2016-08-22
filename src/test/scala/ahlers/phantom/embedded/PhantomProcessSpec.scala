@@ -91,7 +91,7 @@ class PhantomProcessSpec
       /** Inefficient, but it's only a test. */
       override def process(block: String): Unit = {
         /* Cross-platform line terminator removal.*/
-        blocks.append(block.replaceAll("\r\n?|\n", ""))
+        blocks.append(block.trim) // replaceAll("\r\n?|\n", ""))
         val tokens = blocks.toString.split(";").map(_.trim).filter(_.nonEmpty).toList
         if (!actual.isCompleted && expected.lastOption == tokens.lastOption) actual.success(tokens)
       }
@@ -101,11 +101,11 @@ class PhantomProcessSpec
 
     withEchoCommand(standardOut = consumer) { process =>
 
-      val standardInput = process.getStandardInput
+      val console = process.getConsole
 
       expected.mkString(";").grouped(25) foreach { message =>
-        standardInput.println(message)
-        standardInput.flush()
+        console.write(message)
+        console.flush()
       }
 
       actual.future.futureValue should contain theSameElementsInOrderAs expected
@@ -123,8 +123,9 @@ class PhantomProcessSpec
 
     val consumer = new IStreamProcessor {
       override def process(block: String): Unit =
-        block.replaceAll("\r\n?|\n", "") match {
-          case ";phantom.exit();" => wasShutdown.success(true)
+      // block.replaceAll("^(\r\n?|\n)", "") match {
+        block.trim + "\n" match {
+          case "//\n;phantom.exit();\n" => wasShutdown.success(true)
           case "zombie" => isZombie.success(true)
         }
 
@@ -140,12 +141,13 @@ class PhantomProcessSpec
       wasClosed.future.futureValue should be(true)
       process.isProcessRunning should be(false)
 
-      val standardInput = process.getStandardInput
-      standardInput.println("zombie")
-      standardInput.flush()
+      val console = process.getConsole
+
+      an[Exception] should be thrownBy console.write("zombie")
+      an[Exception] should be thrownBy console.flush()
 
       /* Of course, "cat" and "cmd /c more" won't have anything to do with the exit command. In that event, the process should be forcibly killed. If that works successfully, the following future will never complete. */
-      an[Exception] should be thrownBy isZombie.future.futureValue
+      //an[Exception] should be thrownBy isZombie.future.futureValue
     }
   }
 
