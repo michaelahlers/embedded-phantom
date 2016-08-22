@@ -13,7 +13,8 @@ import de.flapdoodle.embed.process.io.IStreamProcessor;
  * @see PhantomRuntimeConfigBuilder#processOutput(ProcessOutput)
  * @see PhantomProcess
  */
-public class ICommandProcessor {
+public interface ICommandProcessor {
+
 
 
 }
