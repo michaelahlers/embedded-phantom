@@ -16,7 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
  */
 public class PhantomExecutable
-        extends Executable<IPhantomProcessConfig, PhantomProcess> {
+        extends Executable<IPhantomProcessConfig, IPhantomProcess> {
 
     private final static Logger logger = getLogger(PhantomExecutable.class);
 
@@ -34,7 +34,7 @@ public class PhantomExecutable
     }
 
     @Override
-    protected PhantomProcess start(
+    protected IPhantomProcess start(
             final Distribution distribution,
             final IPhantomProcessConfig processConfig,
             final IRuntimeConfig runtimeConfig
@@ -45,4 +45,5 @@ public class PhantomExecutable
     public IPhantomCommandFormatter commandFormatter() {
         return commandFormatter;
     }
+
 }
