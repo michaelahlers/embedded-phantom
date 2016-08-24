@@ -63,7 +63,7 @@ public class PhantomTest {
 
         final PhantomExecutable executable = starter.prepare(processConfig);
 
-        final PhantomProcess process = executable.start();
+        final IPhantomProcess process = executable.start();
 
         final IPhantomConsole console = process.getConsole();
 
