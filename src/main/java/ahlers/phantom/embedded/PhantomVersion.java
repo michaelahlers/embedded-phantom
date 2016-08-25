@@ -27,11 +27,17 @@ public enum PhantomVersion
         this.label = label;
     }
 
+    /**
+     * @return A human-readable version number.
+     */
     @Nonnull
     public String getLabel() {
         return label;
     }
 
+    /**
+     * @return Value of {@link #getLabel()}.
+     */
     @Override
     public String asInDownloadPath() {
         return getLabel();
@@ -42,6 +48,11 @@ public enum PhantomVersion
         return getLabel();
     }
 
+    /**
+     * @param label Lookup value for a version.
+     * @return A matching {@link PhantomVersion}.
+     * @throws IllegalArgumentException If the {@code label} is not known.
+     */
     public static PhantomVersion byLabel(final String label) {
         for (final PhantomVersion version : values()) {
             if (label.equals(version.getLabel())) {
@@ -49,13 +60,14 @@ public enum PhantomVersion
             }
         }
 
-        final Iterable<String> labels = Iterables.transform(EnumSet.allOf(PhantomVersion.class), new Function<PhantomVersion, String>() {
-            @Nullable
-            @Override
-            public String apply(@Nullable final PhantomVersion input) {
-                return input.getLabel();
-            }
-        });
+        final Iterable<String> labels =
+                Iterables.transform(EnumSet.allOf(PhantomVersion.class), new Function<PhantomVersion, String>() {
+                    @Nullable
+                    @Override
+                    public String apply(@Nullable final PhantomVersion input) {
+                        return input.getLabel();
+                    }
+                });
 
         throw new IllegalArgumentException(String.format("No version matching \"%s\" (must be among: %s).", label, StringUtils.join(labels)));
     }
