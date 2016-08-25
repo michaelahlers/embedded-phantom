@@ -1,6 +1,13 @@
 package ahlers.phantom.embedded;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import de.flapdoodle.embed.process.distribution.IVersion;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 /**
  * Defines supported PhantomJS versions.
@@ -20,13 +27,37 @@ public enum PhantomVersion
         this.label = label;
     }
 
-    @Override
-    public String asInDownloadPath() {
+    @Nonnull
+    public String getLabel() {
         return label;
     }
 
     @Override
-    public String toString() {
-        return label;
+    public String asInDownloadPath() {
+        return getLabel();
     }
+
+    @Override
+    public String toString() {
+        return getLabel();
+    }
+
+    public static PhantomVersion byLabel(final String label) {
+        for (final PhantomVersion version : values()) {
+            if (label.equals(version.getLabel())) {
+                return version;
+            }
+        }
+
+        final Iterable<String> labels = Iterables.transform(EnumSet.allOf(PhantomVersion.class), new Function<PhantomVersion, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable final PhantomVersion input) {
+                return input.getLabel();
+            }
+        });
+
+        throw new IllegalArgumentException(String.format("No version matching \"%s\" (must be among: %s).", label, StringUtils.join(labels)));
+    }
+
 }
