@@ -26,8 +26,8 @@ class PhantomPackageResolverSpec
 
   val resolver = PhantomPackageResolver.getInstance()
 
-  import resolver._
   import PhantomPackageResolver._
+  import resolver._
 
   /** Exercises all permutations contributing to [[Distribution]] objects, matching supported cases. */
   for (version <- PhantomVersion.values; platform <- Platform.values; bitsize <- BitSize.values) {
