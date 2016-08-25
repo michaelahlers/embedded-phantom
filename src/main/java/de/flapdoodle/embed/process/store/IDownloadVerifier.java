@@ -7,6 +7,6 @@ import java.io.File;
  */
 public interface IDownloadVerifier {
 
-    boolean isValid(File file);
+    boolean isValid(File file) throws Exception;
 
 }
