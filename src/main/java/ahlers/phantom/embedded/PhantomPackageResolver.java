@@ -10,7 +10,6 @@ import de.flapdoodle.embed.process.distribution.Distribution;
 import static de.flapdoodle.embed.process.distribution.ArchiveType.TBZ2;
 import static de.flapdoodle.embed.process.distribution.ArchiveType.ZIP;
 import static de.flapdoodle.embed.process.distribution.Platform.Linux;
-import static java.lang.String.format;
 
 /**
  * Translates components of {@link Distribution} into literal components of PhantomJS's distributed files.
@@ -27,8 +26,7 @@ public enum PhantomPackageResolver
         return INSTANCE;
     }
 
-    @Override
-    public ArchiveType getArchiveType(final Distribution distribution) {
+    public static ArchiveType archiveTypeFor(final Distribution distribution) {
         switch (distribution.getPlatform()) {
             case Linux:
                 return TBZ2;
@@ -38,6 +36,11 @@ public enum PhantomPackageResolver
             default:
                 throw new UnsupportedPlatformException(distribution);
         }
+    }
+
+    @Override
+    public ArchiveType getArchiveType(final Distribution distribution) {
+        return archiveTypeFor(distribution);
     }
 
     static String platformClassifierFor(final Distribution distribution) {
@@ -75,7 +78,9 @@ public enum PhantomPackageResolver
         return String.format("phantomjs-%s-%s%s", version, platformClassifier, bitsizeClassifier.isPresent() ? "-" + bitsizeClassifier.get() : "");
     }
 
-    public static String archiveExtensionFor(final Distribution distribution, final ArchiveType archiveType) {
+    public static String archiveExtensionFor(final Distribution distribution) {
+        final ArchiveType archiveType = archiveTypeFor(distribution);
+
         switch (archiveType) {
             case TBZ2:
                 return "tar.bz2";
@@ -89,7 +94,7 @@ public enum PhantomPackageResolver
     @Override
     public String getPath(final Distribution distribution) {
         final String filename = archiveFilenameFor(distribution);
-        final String extension = archiveExtensionFor(distribution, getArchiveType(distribution));
+        final String extension = archiveExtensionFor(distribution);
         return String.format("%s.%s", filename, extension);
     }
 
