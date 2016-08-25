@@ -36,10 +36,15 @@ public class VerifyingDownloader
     public File download(final IDownloadConfig runtime, final Distribution distribution) throws IOException {
         final File file = delegate.download(runtime, distribution);
 
-        if (!verifier.isValid(file)) {
-            throw new InvalidDownloadException(file);
+        final boolean isValid;
+
+        try {
+            isValid = verifier.isValid(file);
+        } catch (final Exception e) {
+            throw new RuntimeException(String.format("Can't verify downloaded file \"%s\".", file.getAbsolutePath()), e);
         }
 
+        if (!isValid) throw new InvalidDownloadException(file);
         return file;
     }
 
