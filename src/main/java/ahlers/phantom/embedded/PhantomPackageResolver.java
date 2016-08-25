@@ -78,9 +78,7 @@ public enum PhantomPackageResolver
         return String.format("phantomjs-%s-%s%s", version, platformClassifier, bitsizeClassifier.isPresent() ? "-" + bitsizeClassifier.get() : "");
     }
 
-    public static String archiveExtensionFor(final Distribution distribution) {
-        final ArchiveType archiveType = archiveTypeFor(distribution);
-
+    public static String archiveExtensionFor(final Distribution distribution, final ArchiveType archiveType) {
         switch (archiveType) {
             case TBZ2:
                 return "tar.bz2";
@@ -91,11 +89,20 @@ public enum PhantomPackageResolver
         }
     }
 
-    @Override
-    public String getPath(final Distribution distribution) {
+    public static String archiveExtensionFor(final Distribution distribution) {
+        final ArchiveType archiveType = archiveTypeFor(distribution);
+        return archiveExtensionFor(distribution, archiveType);
+    }
+
+    public static String archivePathFor(final Distribution distribution) {
         final String filename = archiveFilenameFor(distribution);
         final String extension = archiveExtensionFor(distribution);
         return String.format("%s.%s", filename, extension);
+    }
+
+    @Override
+    public String getPath(final Distribution distribution) {
+        return archivePathFor(distribution);
     }
 
     @Override
