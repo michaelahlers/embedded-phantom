@@ -40,7 +40,7 @@ public enum PhantomPackageResolver
         }
     }
 
-    String platformClassifierFor(final Distribution distribution) {
+    static String platformClassifierFor(final Distribution distribution) {
         switch (distribution.getPlatform()) {
             case Linux:
                 return "linux";
@@ -53,7 +53,7 @@ public enum PhantomPackageResolver
         }
     }
 
-    Optional<String> bitsizeClassifierFor(final Distribution distribution) {
+    static Optional<String> bitsizeClassifierFor(final Distribution distribution) {
         if (Linux == distribution.getPlatform()) {
             switch (distribution.getBitsize()) {
                 case B32:
@@ -68,7 +68,14 @@ public enum PhantomPackageResolver
         }
     }
 
-    String archiveExtensionFor(final Distribution distribution, final ArchiveType archiveType) {
+    public static String archiveFilenameFor(final Distribution distribution) {
+        final String version = distribution.getVersion().asInDownloadPath();
+        final String platformClassifier = platformClassifierFor(distribution);
+        final Optional<String> bitsizeClassifier = bitsizeClassifierFor(distribution);
+        return String.format("phantomjs-%s-%s%s", version, platformClassifier, bitsizeClassifier.isPresent() ? "-" + bitsizeClassifier.get() : "");
+    }
+
+    public static String archiveExtensionFor(final Distribution distribution, final ArchiveType archiveType) {
         switch (archiveType) {
             case TBZ2:
                 return "tar.bz2";
@@ -81,14 +88,9 @@ public enum PhantomPackageResolver
 
     @Override
     public String getPath(final Distribution distribution) {
-        final String version = distribution.getVersion().asInDownloadPath();
-
-        final String platformClassifier = platformClassifierFor(distribution);
-        final Optional<String> bitsizeClassifier = bitsizeClassifierFor(distribution);
-        final ArchiveType archiveType = getArchiveType(distribution);
-        final String extension = archiveExtensionFor(distribution, archiveType);
-
-        return format("phantomjs-%s-%s%s.%s", version, platformClassifier, bitsizeClassifier.isPresent() ? "-" + bitsizeClassifier.get() : "", extension);
+        final String filename = archiveFilenameFor(distribution);
+        final String extension = archiveExtensionFor(distribution, getArchiveType(distribution));
+        return String.format("%s.%s", filename, extension);
     }
 
     @Override
