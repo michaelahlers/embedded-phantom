@@ -7,6 +7,7 @@ val versionScalaTest = "(,2.3["
  */
 libraryDependencies ++=
   "ch.qos.logback" % "logback-classic" % "1.1.7" ::
+    "com.google.auto.value" % "auto-value" % "1.2" ::
     "com.google.guava" % "guava" % "19.0" ::
     "com.google.code.findbugs" % "jsr305" % "(,3.1[" ::
     "de.flapdoodle.embed" % "de.flapdoodle.embed.process" % "1.50.2" ::
