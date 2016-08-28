@@ -18,7 +18,8 @@ libraryDependencies ++=
  * Unit test dependencies.
  */
 libraryDependencies ++=
-  "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
+  "nl.jqno.equalsverifier" % "equalsverifier" % "2.1.5" % Test ::
+    "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
     "org.scalatest" %% "scalatest" % versionScalaTest % Test ::
     "org.feijoas" %% "mango" % "0.12" % Test ::
     Nil
