@@ -1,8 +1,10 @@
 package ahlers.phantom.embedded
 
 import ahlers.phantom.embedded.PhantomVersion._
+import de.flapdoodle.embed.process.distribution.BitSize._
 import de.flapdoodle.embed.process.distribution.Platform._
 import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
+import nl.jqno.equalsverifier.EqualsVerifier
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -35,6 +37,13 @@ class PhantomSignatureSpec
 
     }
 
+  }
+
+  it should "have  equals and hashCode" in {
+    val first = PhantomSignature.byDistribution(new Distribution(V211, Linux, B32))
+    val second = PhantomSignature.byDistribution(new Distribution(V211, Linux, B32))
+    first should not be theSameInstanceAs(second)
+    EqualsVerifier.forRelaxedEqualExamples(first, second)
   }
 
 }
