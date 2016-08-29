@@ -69,6 +69,8 @@ class PhantomSignatureSpec
     }
 
     signature.digest(sample) should contain theSameElementsInOrderAs expected
+
+    sample.delete()
   }
 
 }
