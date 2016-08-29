@@ -1,4 +1,4 @@
-package de.flapdoodle.embed.process.store;
+package ahlers.phantom.embedded;
 
 import java.io.File;
 import java.io.IOException;

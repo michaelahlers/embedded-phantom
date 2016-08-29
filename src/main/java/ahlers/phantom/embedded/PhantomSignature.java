@@ -2,15 +2,20 @@ package ahlers.phantom.embedded;
 
 import com.google.auto.value.AutoValue;
 import de.flapdoodle.embed.process.distribution.Distribution;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.apache.commons.lang3.concurrent.LazyInitializer;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +42,19 @@ public abstract class PhantomSignature
     abstract public byte[] digest();
 
     @Override
+    public boolean verify(final File file) throws IOException {
+        final InputStream stream = new FileInputStream(file);
+
+        try {
+            final MessageDigest digest = DigestUtils.getDigest(algorithm());
+            DigestUtils.updateDigest(digest, stream);
+            return MessageDigest.isEqual(digest(), digest.digest());
+        } finally {
+            stream.close();
+        }
+    }
+
+    @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("distribution", distribution())
@@ -45,7 +63,7 @@ public abstract class PhantomSignature
                 .toString();
     }
 
-    private static Builder builder() {
+    static Builder builder() {
         return new AutoValue_PhantomSignature.Builder();
     }
 
@@ -90,15 +108,21 @@ public abstract class PhantomSignature
                     try {
                         return parseDigests(getClass().getResource("/ahlers/phantom/embedded/SHA256SUMS").toURI());
                     } catch (final Throwable t) {
-                        throw new ConcurrentException("Couldn't initialize signatures.", t);
+                        throw new ConcurrentException(t);
                     }
                 }
 
             };
 
-    public static IPhantomSignature byDistribution(final Distribution distribution) throws Exception {
+    public static IPhantomSignature byDistribution(final Distribution distribution) {
         final String name = PhantomPackageResolver.archivePathFor(distribution);
-        final byte[] digest = digestByName.get().get(name);
+        final byte[] digest;
+
+        try {
+            digest = digestByName.get().get(name);
+        } catch (final Exception e) {
+            throw new IllegalStateException("Couldn't load digests.", e.getCause());
+        }
 
         if (null == digest) {
             throw new IllegalArgumentException(String.format("No signature available for \"%s\".", distribution));
