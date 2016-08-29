@@ -42,13 +42,13 @@ public abstract class PhantomSignature
     abstract public byte[] digest();
 
     @Override
-    public boolean verify(final File file) throws IOException {
+    public byte[] digest(final File file) throws IOException {
         final InputStream stream = new FileInputStream(file);
 
         try {
             final MessageDigest digest = DigestUtils.getDigest(algorithm());
             DigestUtils.updateDigest(digest, stream);
-            return MessageDigest.isEqual(digest(), digest.digest());
+            return digest.digest();
         } finally {
             stream.close();
         }

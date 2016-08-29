@@ -28,8 +28,8 @@ public interface IPhantomSignature {
     byte[] digest();
 
     /**
-     * Indicates whether the given {@link File} has a digest matching this instance.
+     * Generate a digest of the given {@link File} using this instance's {@linkplain #algorithm() algorithm}.
      */
-    boolean verify(File file) throws IOException;
+    byte[] digest(File file) throws IOException;
 
 }

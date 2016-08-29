@@ -7,6 +7,7 @@ import de.flapdoodle.embed.process.distribution.BitSize._
 import de.flapdoodle.embed.process.distribution.Platform._
 import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
 import nl.jqno.equalsverifier.EqualsVerifier
+import org.apache.commons.codec.binary.Hex
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -48,19 +49,16 @@ class PhantomSignatureSpec
     EqualsVerifier.forRelaxedEqualExamples(first, second)
   }
 
-  it must "accept valid files" in {
-    val digest: Array[Byte] =
-      "7519e1d06d0e0f235540c1a9aa2ddd0e4afa45f3c211a96332f22ae0a97d1ab9"
-        .sliding(2, 2)
-        .toArray
-        .map(Integer.parseInt(_, 16).toByte)
+  it must "digest files using same algorithm" in {
+    /* SHA-256 sum of sample string. */
+    val expected: Array[Byte] = Hex.decodeHex("7519e1d06d0e0f235540c1a9aa2ddd0e4afa45f3c211a96332f22ae0a97d1ab9".toCharArray)
 
     val signature =
       PhantomSignature
         .builder()
         .distribution(new Distribution(null, null, null))
         .algorithm("SHA-256")
-        .digest(digest)
+        .digest(expected)
         .build()
 
     val sample = File.createTempFile(getClass.getSimpleName, "")
@@ -70,36 +68,7 @@ class PhantomSignatureSpec
       close()
     }
 
-    signature.verify(sample) should be(true)
-
-    sample.delete()
-  }
-
-  it must "reject invalid files" in {
-    val digest: Array[Byte] =
-      "7519e1d06d0e0f235540c1a9aa2ddd0e4afa45f3c211a96332f22ae0a97d1ab9"
-        .sliding(2, 2)
-        .toArray
-        .map(Integer.parseInt(_, 16).toByte)
-
-    val signature =
-      PhantomSignature
-        .builder()
-        .distribution(new Distribution(null, null, null))
-        .algorithm("SHA-256")
-        .digest(digest)
-        .build()
-
-    val sample = File.createTempFile(getClass.getSimpleName, "")
-
-    new PrintWriter(sample.getAbsolutePath) {
-      println("The quick red fox jumps over the lazy brown dog?")
-      close()
-    }
-
-    signature.verify(sample) should be(false)
-
-    sample.delete()
+    signature.digest(sample) should contain theSameElementsInOrderAs expected
   }
 
 }
