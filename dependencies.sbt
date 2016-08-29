@@ -10,6 +10,7 @@ libraryDependencies ++=
     "com.google.auto.value" % "auto-value" % "1.2" ::
     "com.google.guava" % "guava" % "19.0" ::
     "com.google.code.findbugs" % "jsr305" % "(,3.1[" ::
+    "commons-codec" % "commons-codec" % "1.10" ::
     "de.flapdoodle.embed" % "de.flapdoodle.embed.process" % "1.50.2" ::
     "org.apache.commons" % "commons-lang3" % "3.4" ::
     Nil
