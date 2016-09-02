@@ -5,7 +5,6 @@ import de.flapdoodle.embed.process.extract.UserTempNaming;
 import de.flapdoodle.embed.process.io.directories.TempDirInPlatformTempDir;
 import de.flapdoodle.embed.process.io.directories.UserHome;
 import de.flapdoodle.embed.process.store.ArtifactStore;
-import de.flapdoodle.embed.process.store.Downloader;
 import de.flapdoodle.embed.process.store.ExtractedArtifactStoreBuilder;
 
 import java.nio.file.Paths;
@@ -35,7 +34,7 @@ public class PhantomExtractedArtifactStoreBuilder
         executableNaming().setDefault(new UserTempNaming());
 
         download().setDefault(new PhantomDownloadConfigBuilder().defaults().build());
-        downloader().setDefault(new Downloader());
+        downloader().setDefault(new PhantomDownloader());
 
         return this;
     }

@@ -7,8 +7,10 @@ val versionScalaTest = "(,2.3["
  */
 libraryDependencies ++=
   "ch.qos.logback" % "logback-classic" % "1.1.7" ::
+    "com.google.auto.value" % "auto-value" % "1.2" ::
     "com.google.guava" % "guava" % "19.0" ::
     "com.google.code.findbugs" % "jsr305" % "(,3.1[" ::
+    "commons-codec" % "commons-codec" % "1.10" ::
     "de.flapdoodle.embed" % "de.flapdoodle.embed.process" % "1.50.2" ::
     "org.apache.commons" % "commons-lang3" % "3.4" ::
     Nil
@@ -17,7 +19,8 @@ libraryDependencies ++=
  * Unit test dependencies.
  */
 libraryDependencies ++=
-  "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
+  "nl.jqno.equalsverifier" % "equalsverifier" % "2.1.5" % Test ::
+    "org.scalamock" %% "scalamock-scalatest-support" % "(,3.3[" % Test ::
     "org.scalatest" %% "scalatest" % versionScalaTest % Test ::
     "org.feijoas" %% "mango" % "0.12" % Test ::
     Nil
