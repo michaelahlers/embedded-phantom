@@ -2,6 +2,7 @@ package ahlers.phantom.embedded;
 
 import com.google.auto.value.AutoValue;
 import de.flapdoodle.embed.process.distribution.Distribution;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.concurrent.ConcurrentException;
@@ -78,7 +79,7 @@ public abstract class PhantomSignature
         abstract PhantomSignature build();
     }
 
-    private static Map<String, byte[]> parseDigests(final Path source) throws IOException {
+    private static Map<String, byte[]> parseDigests(final Path source) throws Exception {
         final List<String> lines = readAllLines(source, defaultCharset());
         final Map<String, byte[]> byName = new HashMap<>();
 
@@ -87,7 +88,7 @@ public abstract class PhantomSignature
 
             if (2 == parts.length) {
                 final String name = parts[1].trim();
-                final byte[] digest = new BigInteger(parts[0], 16).toByteArray();
+                final byte[] digest = Hex.decodeHex(parts[0].toCharArray());
                 byName.put(name, digest);
             }
         }
@@ -95,7 +96,7 @@ public abstract class PhantomSignature
         return byName;
     }
 
-    private static Map<String, byte[]> parseDigests(final URI source) throws IOException {
+    private static Map<String, byte[]> parseDigests(final URI source) throws Exception {
         return parseDigests(Paths.get(source));
     }
 
