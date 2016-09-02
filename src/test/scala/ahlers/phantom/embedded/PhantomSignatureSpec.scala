@@ -6,8 +6,6 @@ import ahlers.phantom.embedded.PhantomVersion._
 import de.flapdoodle.embed.process.distribution.BitSize._
 import de.flapdoodle.embed.process.distribution.Platform._
 import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
-import nl.jqno.equalsverifier.EqualsVerifier
-import org.apache.commons.codec.binary.Hex
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -51,7 +49,7 @@ class PhantomSignatureSpec
 
   it must "digest files using same algorithm" in {
     /* SHA-256 sum of sample string. */
-    val expected: Array[Byte] = Hex.decodeHex("7519e1d06d0e0f235540c1a9aa2ddd0e4afa45f3c211a96332f22ae0a97d1ab9".toCharArray)
+    val expected: Array[Byte] = Hex.decodeHex("dddf0513d96a34c7ed6ad888c5fe5e0ff325205f07d65af8d60b22e0be2906ae".toCharArray)
 
     val signature =
       PhantomSignature
@@ -64,7 +62,7 @@ class PhantomSignatureSpec
     val sample = File.createTempFile(getClass.getSimpleName, "")
 
     new PrintWriter(sample.getAbsolutePath) {
-      println("The quick red fox jumps over the lazy brown dog.")
+      print("The quick red fox jumps over the lazy brown dog.")
       close()
     }
 
