@@ -6,6 +6,8 @@ import ahlers.phantom.embedded.PhantomVersion._
 import de.flapdoodle.embed.process.distribution.BitSize._
 import de.flapdoodle.embed.process.distribution.Platform._
 import de.flapdoodle.embed.process.distribution.{BitSize, Distribution, Platform}
+import nl.jqno.equalsverifier.EqualsVerifier
+import org.apache.commons.codec.binary.Hex
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
