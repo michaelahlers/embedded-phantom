@@ -74,8 +74,11 @@ public abstract class PhantomSignature
         abstract PhantomSignature build();
     }
 
-    private static Map<String, byte[]> parseDigests(final InputStream source) throws Exception {
+    private static Map<String, byte[]> getDigests() throws Exception {
+        final InputStream source = PhantomSignature.class.getResourceAsStream("/ahlers/phantom/embedded/SHA256SUMS");
         final List<String> lines = IOUtils.readLines(source);
+        source.close();
+
         final Map<String, byte[]> byName = new HashMap<>();
 
         for (final String line : lines) {
@@ -98,7 +101,7 @@ public abstract class PhantomSignature
                 @Override
                 protected Map<String, byte[]> initialize() throws ConcurrentException {
                     try {
-                        return parseDigests(getClass().getResourceAsStream("/ahlers/phantom/embedded/SHA256SUMS"));
+                        return getDigests();
                     } catch (final Exception e) {
                         throw new ConcurrentException(e);
                     }
