@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 import de.flapdoodle.embed.process.distribution.Distribution;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.apache.commons.lang3.concurrent.LazyInitializer;
@@ -13,17 +14,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.nio.charset.Charset.defaultCharset;
-import static java.nio.file.Files.readAllLines;
 
 /**
  * @author [[mailto:michael@ahlers.consulting Michael Ahlers]]
@@ -79,8 +74,11 @@ public abstract class PhantomSignature
         abstract PhantomSignature build();
     }
 
-    private static Map<String, byte[]> parseDigests(final Path source) throws Exception {
-        final List<String> lines = readAllLines(source, defaultCharset());
+    private static Map<String, byte[]> getDigests() throws Exception {
+        final InputStream source = PhantomSignature.class.getResourceAsStream("/ahlers/phantom/embedded/SHA256SUMS");
+        final List<String> lines = IOUtils.readLines(source);
+        source.close();
+
         final Map<String, byte[]> byName = new HashMap<>();
 
         for (final String line : lines) {
@@ -96,10 +94,6 @@ public abstract class PhantomSignature
         return byName;
     }
 
-    private static Map<String, byte[]> parseDigests(final URI source) throws Exception {
-        return parseDigests(Paths.get(source));
-    }
-
     /* TODO: Make generic for other signature types as needed. */
     private static LazyInitializer<Map<String, byte[]>> digestByName =
             new LazyInitializer<Map<String, byte[]>>() {
@@ -107,9 +101,9 @@ public abstract class PhantomSignature
                 @Override
                 protected Map<String, byte[]> initialize() throws ConcurrentException {
                     try {
-                        return parseDigests(getClass().getResource("/ahlers/phantom/embedded/SHA256SUMS").toURI());
-                    } catch (final Throwable t) {
-                        throw new ConcurrentException(t);
+                        return getDigests();
+                    } catch (final Exception e) {
+                        throw new ConcurrentException(e);
                     }
                 }
 
@@ -122,7 +116,7 @@ public abstract class PhantomSignature
         try {
             digest = digestByName.get().get(name);
         } catch (final Exception e) {
-            throw new IllegalStateException("Couldn't load digests.", e.getCause());
+            throw new IllegalStateException("Couldn't load digests.", e);
         }
 
         if (null == digest) {
