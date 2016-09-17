@@ -71,7 +71,10 @@ public enum PhantomPackageResolver
         }
     }
 
-    public static String archiveFilenameFor(final Distribution distribution) {
+    /**
+     * Provides the leading filename portion.
+     */
+    public static String archivePrefixFor(final Distribution distribution) {
         final String version = distribution.getVersion().asInDownloadPath();
         final String platformClassifier = platformClassifierFor(distribution);
         final Optional<String> bitsizeClassifier = bitsizeClassifierFor(distribution);
@@ -94,15 +97,29 @@ public enum PhantomPackageResolver
         return archiveExtensionFor(distribution, archiveType);
     }
 
-    public static String archivePathFor(final Distribution distribution) {
-        final String filename = archiveFilenameFor(distribution);
+    /**
+     * Combines the filename {@linkplain #archivePrefixFor(Distribution) prefix} and {@linkplain #archiveExtensionFor(Distribution) extension}.
+     */
+    public static String archiveFilenameFor(final Distribution distribution) {
+        final String filename = archivePrefixFor(distribution);
         final String extension = archiveExtensionFor(distribution);
         return String.format("%s.%s", filename, extension);
     }
 
+    /**
+     * Provides a qualified, <em>relative</em> path to a bundled archive (which may be present, given proper dependencies).
+     */
+    public static String archivePathFor(final Distribution distribution) {
+        return PhantomPackageResolver.class.getPackage().getName().replace('.', '/') +
+                "/" + archiveFilenameFor(distribution);
+    }
+
+    /**
+     * Provides the archive {@linkplain #archiveFilenameFor(Distribution) filename}, not to be confused with any qualified path.
+     */
     @Override
     public String getPath(final Distribution distribution) {
-        return archivePathFor(distribution);
+        return archiveFilenameFor(distribution);
     }
 
     @Override

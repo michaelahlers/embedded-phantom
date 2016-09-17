@@ -110,7 +110,7 @@ public abstract class PhantomSignature
             };
 
     public static IPhantomSignature byDistribution(final Distribution distribution) {
-        final String name = PhantomPackageResolver.archivePathFor(distribution);
+        final String name = PhantomPackageResolver.archiveFilenameFor(distribution);
         final byte[] digest;
 
         try {
