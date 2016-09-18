@@ -66,7 +66,17 @@ public class PhantomDownloader
     @Override
     public final File download(final IDownloadConfig downloadConfig, final Distribution distribution) throws IOException {
 
-        final File file = delegate.download(downloadConfig, distribution);
+        final Optional<File> bundled = bundledArchiveFor(downloadConfig, distribution);
+
+        final File file;
+
+        /* Can't use com.google.common.base.Optional.or(com.google.common.base.Supplier<? extends T>) because of checked exceptions from IDownloader's interface. */
+        if (bundled.isPresent()) {
+            file = bundled.get();
+        } else {
+            file = delegate.download(downloadConfig, distribution);
+        }
+
         final IPhantomSignature signature = signatureFor(distribution);
 
         final byte[] digest;
@@ -80,6 +90,7 @@ public class PhantomDownloader
         final boolean isValid = MessageDigest.isEqual(signature.digest(), digest);
         if (!isValid) throw new InvalidDownloadException(signature, file, digest);
         return file;
+
     }
 
 }
